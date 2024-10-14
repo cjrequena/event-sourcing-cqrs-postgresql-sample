@@ -36,6 +36,7 @@
     </properties>
     <modules>
         <module>command-handler</module>
+        <module>eventstore-rdbms-core</module>
     </modules>
     <dependencyManagement>
         <dependencies>
