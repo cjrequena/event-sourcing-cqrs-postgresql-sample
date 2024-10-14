@@ -1,0 +1,56 @@
+server.servlet.context-path: / # Context path of the application.
+server.port: ${SERVER_PORT:8080} # Server HTTP port.
+spring.application.name: '@project.artifactId@'
+spring.application.version: '@project.version@'
+spring.profiles.active: ${SPRING_PROFILES_ACTIVE:local}
+spring.main.allow-bean-definition-overriding: true # Enable bean override
+
+---
+spring.config.activate.on-profile: local
+
+spring.config.import: "optional:configserver:${CONFIG_SERVER:http://localhost:8888}/"
+spring.cloud.config:
+  # Flag to say that remote configuration is enabled. (default false).
+  enabled: ${SPRING_CLOUD_CONFIG_ENABLED:false}
+  # Flag to indicate that failure to connect to the server is fatal (default false).
+  failFast: ${SPRING_CLOUD_CONFIG_FAIL_FAST:true}
+
+# ----------------------------------------
+# ACTUATOR PROPERTIES
+# ----------------------------------------
+# ENDPOINTS WEB CONFIGURATION
+management.endpoints.web.exposure.include: '*' # Endpoint IDs that should be included or '*' for all.
+management.endpoints.web.exposure.exclude:  # Endpoint IDs that should be excluded or '*' for all.
+management.endpoints.web.base-path: /management # Base path for Web endpoints. Relative to server.servlet.context-path or management.server.servlet.context-path if management.server.port is configured.
+management.endpoints.web.path-mapping.health: healthcheck
+# HEALTH ENDPOINT
+management.endpoint.health.cache.time-to-live: 0ms # Maximum time that a response can be cached.
+management.endpoint.health.enabled: true # Whether to enable the health endpoint.
+management.endpoint.health.roles:  # Roles used to determine whether or not a user is authorized to be shown details. When empty, all authenticated users are authorized.
+management.endpoint.health.show-details: always # When to show full health details.
+management.health.circuitbreakers.enabled: true
+management.health.ratelimiters.enabled: true
+# INFO CONTRIBUTORS (InfoContributorProperties)
+management.info.build.enabled: true # Whether to enable build info.
+management.info.defaults.enabled: true # Whether to enable default info contributors.
+management.info.env.enabled: true # Whether to enable environment info.
+management.info.git.enabled: true # Whether to enable git info.
+management.info.git.mode: full # Mode to use to expose git information.
+
+# LOGGING
+# https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#appendix.application-properties.core
+#logging.config: classpath:log4j2.xml # Location of the logging configuration file. For instance, `classpath:logback.xml` for Logback.
+logging.level: # Log levels severity mapping. For instance, `logging.level.org.springframework: DEBUG`.
+  org.springframework: INFO
+  org.flywaydb: INFO
+  com.cjrequena.sample: DEBUG
+logging.pattern:
+  console:  "%highlight{%-5p|%d{ISO8601}{GMT}|application=${spring.application.name}|traceID=%X{traceId},spanID=%X{spanId}|%c{1}|%m%ex%n}{
+      FATAL=red blink,
+      ERROR=red,
+      WARN=yellow bold,
+      INFO=white,
+      DEBUG=green bold,
+      TRACE=blue
+    }"
+  file: "%-5p|%d{ISO8601}{GMT}|application=${spring.application.name}|traceID=%X{traceId},spanID=%X{spanId}|%c{1}|%m%ex%n"
