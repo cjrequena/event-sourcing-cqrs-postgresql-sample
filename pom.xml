@@ -36,7 +36,7 @@
     </properties>
     <modules>
         <module>command-handler</module>
-        <module>eventstore-rdbms-core</module>
+        <module>eventstore-postgres-core</module>
     </modules>
     <dependencyManagement>
         <dependencies>
