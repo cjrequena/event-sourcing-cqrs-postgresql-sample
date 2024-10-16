@@ -31,12 +31,12 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
     for (int i = 0; i < 100; i++) {
       AccountVO account = AccountVO.builder().id(UUID.randomUUID()).owner("Carlos").balance(BigDecimal.valueOf(i)).version(1L).build();
       AccountCreatedEventEntity accountCreatedEventEntity = new AccountCreatedEventEntity();
-      accountCreatedEventEntity.setEventType("AccountCreated");
+      accountCreatedEventEntity.setEventType("ACCOUNT_CREATED");
       accountCreatedEventEntity.setData(account);
       accountCreatedEventEntity.setDataBase64(Base64Util.objectToJsonBase64(account));
       log.debug(Base64Util.jsonBase64ToObject(Base64Util.objectToJsonBase64(account),AccountVO.class).getClass());
       accountCreatedEventEntity.setEventExtension(EventExtensionVO.builder().traceId(UUID.randomUUID().toString()).build());
-      accountCreatedEventEntity.setAggregateId(UUID.randomUUID());
+      accountCreatedEventEntity.setAggregateId(account.getId());
       accountCreatedEventEntity.setVersion(1L);
       this.eventRepository.save(accountCreatedEventEntity);
     }
