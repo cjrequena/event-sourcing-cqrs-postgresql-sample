@@ -19,6 +19,13 @@
 
     <!-- -->
     <dependencies>
+
+
+        <dependency>
+            <groupId>com.cjrequena.sample</groupId>
+            <artifactId>eventstore-postgresql-core</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
         <!-- spring boot -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -75,6 +82,8 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-config-client</artifactId>
         </dependency>
+
+        <!-- -->
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
