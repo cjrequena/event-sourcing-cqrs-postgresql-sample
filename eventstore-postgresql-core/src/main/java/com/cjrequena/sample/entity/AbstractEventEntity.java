@@ -49,7 +49,7 @@ public abstract class AbstractEventEntity {
   //protected String dataSchema;
 
   // The time the event occurred
-  @Column(name = "offset_date_time")
+  @Column(name = "offset_date_time", insertable = false, updatable = false)
   protected OffsetDateTime offsetDateTime;
 
 }
