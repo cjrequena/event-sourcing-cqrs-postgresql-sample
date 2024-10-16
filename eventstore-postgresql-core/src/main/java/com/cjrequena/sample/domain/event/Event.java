@@ -42,6 +42,6 @@ public abstract class Event<T> {
     //protected String dataSchema;
 
     // The time the event occurred
-    protected OffsetDateTime offsetDateTime;
+    protected OffsetDateTime time;
 
 }

@@ -50,6 +50,6 @@ public abstract class AbstractEventEntity {
 
   // The time the event occurred
   @Column(name = "offset_date_time", insertable = false, updatable = false)
-  protected OffsetDateTime offsetDateTime;
+  protected OffsetDateTime time;
 
 }

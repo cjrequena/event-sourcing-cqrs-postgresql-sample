@@ -38,6 +38,7 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
       accountCreatedEventEntity.setEventExtension(EventExtensionVO.builder().traceId(UUID.randomUUID().toString()).build());
       accountCreatedEventEntity.setAggregateId(account.getId());
       accountCreatedEventEntity.setVersion(1L);
+      accountCreatedEventEntity.setDataContentType("application/json");
       this.eventRepository.save(accountCreatedEventEntity);
     }
 
