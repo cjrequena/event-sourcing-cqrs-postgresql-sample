@@ -12,7 +12,7 @@ import java.util.UUID;
 @MappedSuperclass
 @Data // Lombok generates getters, setters, toString, equals, and hashCode
 @NoArgsConstructor // Lombok generates a no-args constructor
-public abstract class EventEntity {
+public abstract class AbstractEventEntity {
 
   // Unique id for the specific message. This id is globally unique
   @Id

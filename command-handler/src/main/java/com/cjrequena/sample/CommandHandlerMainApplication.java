@@ -1,6 +1,6 @@
 package com.cjrequena.sample;
 
-import com.cjrequena.sample.entity.AccountCratedEventEntity;
+import com.cjrequena.sample.entity.AccountCreatedEventEntity;
 import com.cjrequena.sample.repository.EventRepository;
 import com.cjrequena.sample.vo.AccountVO;
 import com.cjrequena.sample.vo.EventExtensionVO;
@@ -27,13 +27,13 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
   @Override
   public void run(String... args) {
     for (int i = 0; i < 100; i++) {
-      AccountCratedEventEntity accountCratedEventEntity = new AccountCratedEventEntity();
-      accountCratedEventEntity.setEventType("AccountCreated");
-      accountCratedEventEntity.setData(AccountVO.builder().id(UUID.randomUUID()).owner("Carlos").balance(BigDecimal.valueOf(i)).version(1L).build());
-      accountCratedEventEntity.setEventExtension(EventExtensionVO.builder().traceId(UUID.randomUUID().toString()).build());
-      accountCratedEventEntity.setAggregateId(UUID.randomUUID());
-      accountCratedEventEntity.setVersion(1L);
-      this.eventRepository.save(accountCratedEventEntity);
+      AccountCreatedEventEntity accountCreatedEventEntity = new AccountCreatedEventEntity();
+      accountCreatedEventEntity.setEventType("AccountCreated");
+      accountCreatedEventEntity.setData(AccountVO.builder().id(UUID.randomUUID()).owner("Carlos").balance(BigDecimal.valueOf(i)).version(1L).build());
+      accountCreatedEventEntity.setEventExtension(EventExtensionVO.builder().traceId(UUID.randomUUID().toString()).build());
+      accountCreatedEventEntity.setAggregateId(UUID.randomUUID());
+      accountCreatedEventEntity.setVersion(1L);
+      this.eventRepository.save(accountCreatedEventEntity);
     }
 
     log.debug("GOOD");
