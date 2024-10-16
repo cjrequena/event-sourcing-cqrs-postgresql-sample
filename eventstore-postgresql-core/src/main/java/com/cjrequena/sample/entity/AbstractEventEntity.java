@@ -7,6 +7,7 @@ import jakarta.persistence.MappedSuperclass;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @MappedSuperclass
@@ -48,7 +49,7 @@ public abstract class AbstractEventEntity {
   //protected String dataSchema;
 
   // The time the event occurred
-  //    @Column(name = "offset_date_time")
-  //    protected OffsetDateTime offsetDateTime;
+  @Column(name = "offset_date_time")
+  protected OffsetDateTime offsetDateTime;
 
 }
