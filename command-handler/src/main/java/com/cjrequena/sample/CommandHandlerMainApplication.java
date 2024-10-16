@@ -26,10 +26,10 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
 
   @Override
   public void run(String... args) {
-    for (int i = 0; i < 99; i++) {
+    for (int i = 0; i < 100; i++) {
       AccountCratedEventEntity accountCratedEventEntity = new AccountCratedEventEntity();
       accountCratedEventEntity.setEventType("AccountCreated");
-      accountCratedEventEntity.setData(AccountVO.builder().id(UUID.randomUUID()).owner("Carlos").balance(BigDecimal.valueOf(100)).version(1L).build());
+      accountCratedEventEntity.setData(AccountVO.builder().id(UUID.randomUUID()).owner("Carlos").balance(BigDecimal.valueOf(i)).version(1L).build());
       accountCratedEventEntity.setEventExtension(EventExtensionVO.builder().traceId(UUID.randomUUID().toString()).build());
       accountCratedEventEntity.setAggregateId(UUID.randomUUID());
       accountCratedEventEntity.setVersion(1L);
