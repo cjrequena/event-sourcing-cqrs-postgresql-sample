@@ -21,8 +21,8 @@ public abstract class AbstractAggregateEntity {
   private UUID id;
 
   // The aggregate version.
-  @Column(name = "version")
-  private Long version;
+  @Column(name = "aggregate_version")
+  private Long aggregateVersion;
 
   // The aggregate type.
   @Column(name = "aggregate_type")

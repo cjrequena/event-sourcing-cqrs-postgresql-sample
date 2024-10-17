@@ -2,6 +2,8 @@ package com.cjrequena.sample;
 
 import com.cjrequena.sample.common.util.Base64Util;
 import com.cjrequena.sample.entity.AccountCreatedEventEntity;
+import com.cjrequena.sample.entity.AggregateEntity;
+import com.cjrequena.sample.repository.AggregateRepository;
 import com.cjrequena.sample.repository.EventRepository;
 import com.cjrequena.sample.vo.AccountVO;
 import com.cjrequena.sample.vo.EventExtensionVO;
@@ -21,6 +23,7 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
 
   @Autowired
   private EventRepository eventRepository;
+  @Autowired private AggregateRepository aggregateRepository;
 
   public static void main(String... args) {
     SpringApplication.run(CommandHandlerMainApplication.class, args);
@@ -29,14 +32,20 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
   @Override
   public void run(String... args) throws JsonProcessingException {
     for (int i = 0; i < 100; i++) {
-      AccountVO account = AccountVO.builder().id(UUID.randomUUID()).owner("Carlos").balance(BigDecimal.valueOf(i)).version(1L).build();
+
+      AggregateEntity aggregateEntity = new AggregateEntity();
+      aggregateEntity.setAggregateType("ACCOUNT_AGGREGATE");
+      aggregateEntity.setAggregateVersion(1L);
+
+      this.aggregateRepository.save(aggregateEntity);
+      AccountVO account = AccountVO.builder().id(aggregateEntity.getId()).owner("Carlos").balance(BigDecimal.valueOf(i)).version(1L).build();
       AccountCreatedEventEntity accountCreatedEventEntity = new AccountCreatedEventEntity();
+      accountCreatedEventEntity.setAggregateId(account.getId());
       accountCreatedEventEntity.setEventType("ACCOUNT_CREATED");
       accountCreatedEventEntity.setData(account);
       accountCreatedEventEntity.setDataBase64(Base64Util.objectToJsonBase64(account));
       log.debug(Base64Util.jsonBase64ToObject(Base64Util.objectToJsonBase64(account),AccountVO.class).getClass());
       accountCreatedEventEntity.setEventExtension(EventExtensionVO.builder().traceId(UUID.randomUUID().toString()).build());
-      accountCreatedEventEntity.setAggregateId(account.getId());
       accountCreatedEventEntity.setAggregateVersion(1L);
       accountCreatedEventEntity.setDataContentType("application/json");
       this.eventRepository.save(accountCreatedEventEntity);
