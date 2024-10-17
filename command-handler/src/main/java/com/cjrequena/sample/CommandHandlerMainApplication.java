@@ -37,7 +37,7 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
       log.debug(Base64Util.jsonBase64ToObject(Base64Util.objectToJsonBase64(account),AccountVO.class).getClass());
       accountCreatedEventEntity.setEventExtension(EventExtensionVO.builder().traceId(UUID.randomUUID().toString()).build());
       accountCreatedEventEntity.setAggregateId(account.getId());
-      accountCreatedEventEntity.setVersion(1L);
+      accountCreatedEventEntity.setAggregateVersion(1L);
       accountCreatedEventEntity.setDataContentType("application/json");
       this.eventRepository.save(accountCreatedEventEntity);
     }

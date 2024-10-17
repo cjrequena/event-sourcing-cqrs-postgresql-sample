@@ -30,8 +30,8 @@ public abstract class AbstractEventEntity {
   protected UUID aggregateId;
 
   // The event version.
-  @Column(name = "version")
-  protected Long version;
+  @Column(name = "aggregate_version")
+  protected Long aggregateVersion;
 
   // Type of message
   @Column(name = "event_type")

@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS ES_EVENT (
   ID                        UUID        DEFAULT uuid_generate_v4() PRIMARY KEY,
   OFFSET_TXID               XID8        NOT NULL DEFAULT pg_current_xact_id(),
   AGGREGATE_ID              UUID        NOT NULL REFERENCES ES_AGGREGATE (ID),
-  VERSION                   BIGINT      NOT NULL,
+  AGGREGATE_VERSION         BIGINT      NOT NULL,
   EVENT_TYPE                TEXT        NOT NULL,
   DATA_CONTENT_TYPE         TEXT,
   DATA                      JSON        NOT NULL,
