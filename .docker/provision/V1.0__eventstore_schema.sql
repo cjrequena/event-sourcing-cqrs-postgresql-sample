@@ -30,7 +30,8 @@ CREATE TABLE IF NOT EXISTS ES_AGGREGATE_SNAPSHOT (
   ID                        UUID        DEFAULT uuid_generate_v4() PRIMARY KEY,
   AGGREGATE_ID              UUID        NOT NULL REFERENCES ES_AGGREGATE (ID),
   AGGREGATE_VERSION         INTEGER     NOT NULL,
-  JSON_DATA                 JSON        NOT NULL,
+  DATA                      JSON        NOT NULL,
+  DATA_BASE64               TEXT,
   UNIQUE (AGGREGATE_ID, AGGREGATE_VERSION)
 );
 

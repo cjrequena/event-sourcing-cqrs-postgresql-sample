@@ -3,7 +3,9 @@ package com.cjrequena.sample;
 import com.cjrequena.sample.common.util.Base64Util;
 import com.cjrequena.sample.entity.AccountCreatedEventEntity;
 import com.cjrequena.sample.entity.AggregateEntity;
+import com.cjrequena.sample.entity.AggregateSnapshotEntity;
 import com.cjrequena.sample.repository.AggregateRepository;
+import com.cjrequena.sample.repository.AggregateSnapshotRepository;
 import com.cjrequena.sample.repository.EventRepository;
 import com.cjrequena.sample.vo.AccountVO;
 import com.cjrequena.sample.vo.EventExtensionVO;
@@ -23,7 +25,10 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
 
   @Autowired
   private EventRepository eventRepository;
-  @Autowired private AggregateRepository aggregateRepository;
+  @Autowired
+  private AggregateRepository aggregateRepository;
+  @Autowired
+  private AggregateSnapshotRepository aggregateSnapshotRepository;
 
   public static void main(String... args) {
     SpringApplication.run(CommandHandlerMainApplication.class, args);
@@ -31,7 +36,9 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
 
   @Override
   public void run(String... args) throws JsonProcessingException {
-    for (int i = 0; i < 100; i++) {
+    for (int i = 1; i <= 100; i++) {
+
+
 
       AggregateEntity aggregateEntity = new AggregateEntity();
       aggregateEntity.setAggregateType("ACCOUNT_AGGREGATE");
@@ -49,6 +56,17 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
       accountCreatedEventEntity.setAggregateVersion(1L);
       accountCreatedEventEntity.setDataContentType("application/json");
       this.eventRepository.save(accountCreatedEventEntity);
+
+
+      if(i % 10==0){
+        AggregateSnapshotEntity aggregateSnapshotEntity = new AggregateSnapshotEntity();
+        aggregateSnapshotEntity.setAggregateId(aggregateEntity.getId());
+        aggregateSnapshotEntity.setAggregateVersion(aggregateEntity.getAggregateVersion());
+        aggregateSnapshotEntity.setData(Base64Util.objectToJsonString(account));
+        aggregateSnapshotEntity.setDataBase64(Base64Util.objectToJsonBase64(account));
+        this.aggregateSnapshotRepository.save(aggregateSnapshotEntity);
+      }
+
     }
 
     log.debug("GOOD");
