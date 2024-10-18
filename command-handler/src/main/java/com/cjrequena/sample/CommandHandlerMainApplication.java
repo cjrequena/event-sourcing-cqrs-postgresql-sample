@@ -1,6 +1,9 @@
 package com.cjrequena.sample;
 
 import com.cjrequena.sample.common.util.Base64Util;
+import com.cjrequena.sample.domain.command.AbstractCommand;
+import com.cjrequena.sample.domain.command.CommandHandler;
+import com.cjrequena.sample.domain.command.CreateAccountCommand;
 import com.cjrequena.sample.entity.AccountCreatedEventEntity;
 import com.cjrequena.sample.entity.AggregateEntity;
 import com.cjrequena.sample.entity.AggregateSnapshotEntity;
@@ -10,25 +13,26 @@ import com.cjrequena.sample.repository.EventRepository;
 import com.cjrequena.sample.vo.AccountVO;
 import com.cjrequena.sample.vo.EventExtensionVO;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 
 @Log4j2
 @SpringBootApplication
+@RequiredArgsConstructor
 public class CommandHandlerMainApplication implements CommandLineRunner {
 
-  @Autowired
-  private EventRepository eventRepository;
-  @Autowired
-  private AggregateRepository aggregateRepository;
-  @Autowired
-  private AggregateSnapshotRepository aggregateSnapshotRepository;
+  private final EventRepository eventRepository;
+  private final AggregateRepository aggregateRepository;
+  private final AggregateSnapshotRepository aggregateSnapshotRepository;
+  private final List<CommandHandler<? extends AbstractCommand>> commandHandlers;
+
 
   public static void main(String... args) {
     SpringApplication.run(CommandHandlerMainApplication.class, args);
@@ -36,7 +40,11 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
 
   @Override
   public void run(String... args) throws JsonProcessingException {
+
+
+
     for (int i = 1; i <= 100; i++) {
+
 
 
 
@@ -67,7 +75,22 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
         this.aggregateSnapshotRepository.save(aggregateSnapshotEntity);
       }
 
+      AbstractCommand command = new CreateAccountCommand(account);
+
+      commandHandlers.stream()
+        .filter(commandHandler -> commandHandler.getCommandType() == command.getClass())
+        .findFirst()
+        .ifPresentOrElse(commandHandler -> {
+          log.info("Handling command {} with {}", command.getClass().getSimpleName(), commandHandler.getClass().getSimpleName());
+          commandHandler.handle();
+        }, () -> {
+          log.info("No specialized handler found with {}", command.getClass().getSimpleName());
+        });
+
     }
+
+
+
 
     log.debug("GOOD");
   }

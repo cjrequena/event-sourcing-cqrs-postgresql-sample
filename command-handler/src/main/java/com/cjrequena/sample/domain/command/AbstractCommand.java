@@ -22,15 +22,12 @@ import java.util.UUID;
 @Getter
 @ToString
 @JsonNaming(PropertyNamingStrategies.LowerCaseStrategy.class)
-public abstract class Command<T> {
+public abstract class AbstractCommand {
 
   @NotNull
   protected final UUID aggregateId;
 
   @NotNull
   protected final String aggregateType;
-
-  @NotNull
-  protected T data;
 
 }
