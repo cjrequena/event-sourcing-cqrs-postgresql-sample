@@ -14,24 +14,43 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Abstract base class for aggregates in the domain model.
+ * An aggregate is a cluster of domain objects that can be treated as a single unit.
+ * This class manages the state and behavior of the aggregate by handling events
+ * and ensuring consistency of the aggregate's version.
+ */
 @Getter
 @ToString
 @Slf4j
 public abstract class Aggregate {
   protected final UUID aggregateId;
   protected List<Event> changes;
-  // The current version of the aggregate after the latest event has been applied.
-  protected long aggregateVersion;
-  // The version of the aggregate before any changes were applied—essentially the version when the aggregate was originally loaded.
-  protected long reconstitutedAggregateVersion;
+  protected long aggregateVersion; // The current version of the aggregate after the latest event has been applied.
+  protected long reconstitutedAggregateVersion; // The version of the aggregate before any changes were applied.
 
+  /**
+   * Constructs an instance of the Aggregate class.
+   *
+   * @param aggregateId The unique identifier for this aggregate.
+   * @param version The initial version of the aggregate.
+   */
   protected Aggregate(@NonNull UUID aggregateId, long version) {
     this.aggregateId = aggregateId;
     this.aggregateVersion = version;
     this.changes = Collections.emptyList();
   }
 
-  // Reconstitution method to rebuild state from events
+  /**
+   * Reconstitutes the aggregate's state from a list of events.
+   * This method applies the events to the aggregate and updates the
+   * aggregate's version accordingly. If there are uncommitted changes,
+   * an exception will be thrown to prevent inconsistencies.
+   *
+   * @param events The list of events used to reconstitute the aggregate.
+   * @throws IllegalStateException if there are uncommitted changes.
+   * @throws IllegalArgumentException if any event's aggregate version is not greater than the current version.
+   */
   public void reconstituteFromEvents(List<Event> events) {
     // Guard clause to check for unsaved changes
     if (!changes.isEmpty()) {
@@ -44,17 +63,23 @@ public abstract class Aggregate {
         // Validate the event aggregate version before applying
         if (event.getAggregateVersion() <= aggregateVersion) {
           throw new IllegalArgumentException(
-            "Event aggregate version (%s) must be greater than the current aggregate version (%s).".formatted(event.getAggregateVersion(), aggregateVersion)
-          );
+            "Event aggregate version (%s) must be greater than the current aggregate version (%s)."
+              .formatted(event.getAggregateVersion(), aggregateVersion));
         }
       })
       .forEach(this::apply);  // Apply each valid event to the aggregate's state
 
     // Update currentAggregateVersion and reconstitutedAggregateVersion if events are applied successfully
-    events.stream().reduce((first, second) -> second).ifPresent(lastEvent -> reconstitutedAggregateVersion = aggregateVersion = lastEvent.getAggregateVersion());
+    events.stream().reduce((first, second) -> second)
+      .ifPresent(lastEvent -> reconstitutedAggregateVersion = aggregateVersion = lastEvent.getAggregateVersion());
   }
 
-  // Apply change and register event for saving
+  /**
+   * Applies a change represented by the given event and registers it for saving.
+   *
+   * @param event The event representing the change to apply.
+   * @throws IllegalStateException if the event's version does not match the expected version.
+   */
   public void applyChange(Event event) {
     validateEventVersion(event);
     apply(event);
@@ -62,34 +87,64 @@ public abstract class Aggregate {
     aggregateVersion = event.getAggregateVersion();
   }
 
-  // Method to apply an event and modify state
+  /**
+   * Applies the specified event to the aggregate's state.
+   *
+   * @param event The event to apply.
+   */
   private void apply(Event event) {
     log.info("Applying event {}", event);
     invoke(event, "apply");
   }
 
+  /**
+   * Gets the next expected aggregate version.
+   *
+   * @return The next aggregate version.
+   */
   protected long getNextAggregateVersion() {
     return this.aggregateVersion + 1;
   }
 
+  /**
+   * Validates the version of the specified event against the expected version.
+   *
+   * @param event The event to validate.
+   * @throws IllegalStateException if the event's version does not match the expected version.
+   */
   protected void validateEventVersion(Event event) {
     if (event.getAggregateVersion() != getNextAggregateVersion()) {
       throw new IllegalStateException(
-        String.format("Event version %s doesn't match expected version %s. " + "Current state may be inconsistent.", event.getAggregateVersion(), getNextAggregateVersion()));
+        String.format("Event version %s doesn't match expected version %s. " +
+          "Current state may be inconsistent.", event.getAggregateVersion(), getNextAggregateVersion()));
     }
   }
 
-  // Get the uncommitted changes (events)
+  /**
+   * Gets the uncommitted changes (events) that have been applied but not yet saved.
+   *
+   * @return A list of uncommitted changes.
+   */
   public List<Event> getUncommittedChanges() {
     return changes;
   }
 
-  // Clear uncommitted changes after they have been saved
+  /**
+   * Marks the changes as committed, clearing the list of uncommitted changes.
+   */
   public void markChangesAsCommitted() {
     this.changes.clear();
   }
 
- @SneakyThrows
+  /**
+   * Invokes a method on the aggregate with the specified parameter.
+   *
+   * @param parameter The parameter to pass to the method.
+   * @param methodName The name of the method to invoke.
+   * @throws UnsupportedOperationException if the method is not supported or accessible.
+   * @throws RuntimeException if invocation fails due to an exception thrown by the invoked method.
+   */
+  @SneakyThrows
   private void invoke(Object parameter, String methodName) {
     Class<?> parameterType = parameter.getClass();
     try {
@@ -107,7 +162,11 @@ public abstract class Aggregate {
     }
   }
 
+  /**
+   * Returns the type of the aggregate as a string.
+   *
+   * @return The aggregate type.
+   */
   @Nonnull
   public abstract String getAggregateType();
-
 }

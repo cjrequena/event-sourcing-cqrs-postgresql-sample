@@ -15,7 +15,13 @@ public class AccountCreatedEvent extends Event{
   private final AccountVO account;
 
   @Builder
-  public AccountCreatedEvent(UUID aggregateId, long aggregateVersion, AccountVO account){
+  public AccountCreatedEvent(
+    UUID aggregateId,
+    long aggregateVersion,
+    String dataContentType,
+    String dataBase64,
+    AccountVO account
+  ){
     super(aggregateId, aggregateVersion);
     this.account = account;
   }

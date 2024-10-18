@@ -10,7 +10,7 @@ import java.util.UUID;
 
 @Getter
 @ToString(callSuper = true)
-public class CreateAccountCommand extends AbstractCommand{
+public class CreateAccountCommand extends Command {
 
   private final AccountVO accountVO;
 

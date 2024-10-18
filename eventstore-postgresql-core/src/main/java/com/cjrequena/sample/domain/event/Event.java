@@ -31,9 +31,6 @@ public abstract class Event {
     // The content type of the event data. Must adhere to RFC 2046 format.
     public String dataContentType;
 
-    // The actual event data, the event payload.
-    //protected T data;
-
     // Base64 encoded event payload. Must adhere to RFC4648.
     protected String dataBase64;
 
@@ -41,6 +38,6 @@ public abstract class Event {
     //protected String dataSchema;
 
     // The time the event occurred
-    protected final OffsetDateTime time =  OffsetDateTime.now();;
+    protected OffsetDateTime time;;
 
 }

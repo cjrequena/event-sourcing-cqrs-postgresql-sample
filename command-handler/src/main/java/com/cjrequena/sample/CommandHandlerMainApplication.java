@@ -2,7 +2,7 @@ package com.cjrequena.sample;
 
 import com.cjrequena.sample.common.util.Base64Util;
 import com.cjrequena.sample.domain.aggregate.AccountAggregate;
-import com.cjrequena.sample.domain.command.AbstractCommand;
+import com.cjrequena.sample.domain.command.Command;
 import com.cjrequena.sample.domain.command.CommandHandler;
 import com.cjrequena.sample.domain.command.CreateAccountCommand;
 import com.cjrequena.sample.domain.event.AccountCreatedEvent;
@@ -36,7 +36,7 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
   private final EventRepository eventRepository;
   private final AggregateRepository aggregateRepository;
   private final AggregateSnapshotRepository aggregateSnapshotRepository;
-  private final List<CommandHandler<? extends AbstractCommand>> commandHandlers;
+  private final List<CommandHandler<? extends Command>> commandHandlers;
 
 
   public static void main(String... args) {
@@ -80,7 +80,7 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
         this.aggregateSnapshotRepository.save(aggregateSnapshotEntity);
       }
 
-      AbstractCommand command = new CreateAccountCommand(account);
+      Command command = new CreateAccountCommand(account);
 
       commandHandlers.stream()
         .filter(commandHandler -> commandHandler.getCommandType() == command.getClass())
@@ -94,9 +94,11 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
 
       AccountAggregate accountAggregate = new AccountAggregate(accountCreatedEventEntity.getAggregateId(),0);
       Event event = AccountCreatedEvent.builder()
-        .aggregateVersion(accountCreatedEventEntity.getAggregateVersion())
         .aggregateId(accountCreatedEventEntity.getAggregateId())
+        .aggregateVersion(accountCreatedEventEntity.getAggregateVersion())
         .account(accountCreatedEventEntity.getData())
+        .dataBase64(accountCreatedEventEntity.getDataBase64())
+        .dataContentType(accountCreatedEventEntity.dataContentType)
         .build();
       List<Event> events = new ArrayList<>(Collections.singletonList(event));
 
