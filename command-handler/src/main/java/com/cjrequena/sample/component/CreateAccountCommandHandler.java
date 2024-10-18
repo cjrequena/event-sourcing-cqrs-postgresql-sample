@@ -1,5 +1,7 @@
-package com.cjrequena.sample.domain.command;
+package com.cjrequena.sample.component;
 
+import com.cjrequena.sample.domain.command.CommandHandler;
+import com.cjrequena.sample.domain.command.CreateAccountCommand;
 import jakarta.annotation.Nonnull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
