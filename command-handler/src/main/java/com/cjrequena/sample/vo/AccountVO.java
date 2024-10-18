@@ -33,6 +33,6 @@ public class AccountVO implements Serializable {
   private BigDecimal balance;
 
   @JsonProperty(value = "version")
-  private Long version;
+  private long version;
 
 }

@@ -28,7 +28,7 @@ public abstract class AbstractAggregateSnapshotEntity {
 
   // The aggregate version.
   @Column(name = "aggregate_version")
-  private Long aggregateVersion;
+  private long aggregateVersion;
 
   // The actual event data, the event payload.
   @JdbcTypeCode(SqlTypes.JSON)

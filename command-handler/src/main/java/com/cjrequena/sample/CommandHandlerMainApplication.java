@@ -1,9 +1,12 @@
 package com.cjrequena.sample;
 
 import com.cjrequena.sample.common.util.Base64Util;
+import com.cjrequena.sample.domain.aggregate.AccountAggregate;
 import com.cjrequena.sample.domain.command.AbstractCommand;
 import com.cjrequena.sample.domain.command.CommandHandler;
 import com.cjrequena.sample.domain.command.CreateAccountCommand;
+import com.cjrequena.sample.domain.event.AccountCreatedEvent;
+import com.cjrequena.sample.domain.event.Event;
 import com.cjrequena.sample.entity.AccountCreatedEventEntity;
 import com.cjrequena.sample.entity.AggregateEntity;
 import com.cjrequena.sample.entity.AggregateSnapshotEntity;
@@ -20,6 +23,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -86,6 +91,17 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
         }, () -> {
           log.info("No specialized handler found with {}", command.getClass().getSimpleName());
         });
+
+      AccountAggregate accountAggregate = new AccountAggregate(accountCreatedEventEntity.getAggregateId(),0);
+      Event event = AccountCreatedEvent.builder()
+        .aggregateVersion(accountCreatedEventEntity.getAggregateVersion())
+        .aggregateId(accountCreatedEventEntity.getAggregateId())
+        .account(accountCreatedEventEntity.getData())
+        .build();
+      List<Event> events = new ArrayList<>(Collections.singletonList(event));
+
+      accountAggregate.reconstituteFromEvents(events);
+      log.debug(accountAggregate);
 
     }
 

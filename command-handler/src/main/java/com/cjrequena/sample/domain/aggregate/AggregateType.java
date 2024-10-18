@@ -7,10 +7,12 @@ import lombok.RequiredArgsConstructor;
 //@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
-public enum EAggregateType {
+public enum AggregateType {
 
   ACCOUNT_AGGREGATE("ACCOUNT_AGGREGATE");
 
   private final String value;
+
+  //private final Class<? extends Aggregate> aggregateClass;
 
 }

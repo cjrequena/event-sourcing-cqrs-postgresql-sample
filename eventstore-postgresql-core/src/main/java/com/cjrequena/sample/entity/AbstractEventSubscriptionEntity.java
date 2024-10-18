@@ -26,7 +26,7 @@ public abstract class AbstractEventSubscriptionEntity {
 
   // The event offset_txid
   @Column(name = "offset_txid")
-  protected Long offset;
+  protected long offset;
 
   // The event_id
   @Column(name = "event_id")

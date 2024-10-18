@@ -23,7 +23,7 @@ public abstract class AbstractEventEntity {
 
   // The event offset_txid
   @Column(name = "offset_txid", columnDefinition = "xid8", insertable = false, updatable = false)
-  protected Long offset;
+  protected long offset;
 
   // Unique aggregateId for the specific message. This id is globally unique
   @Column(name = "aggregate_id")
@@ -31,7 +31,7 @@ public abstract class AbstractEventEntity {
 
   // The event version.
   @Column(name = "aggregate_version")
-  protected Long aggregateVersion;
+  protected long aggregateVersion;
 
   // Type of message
   @Column(name = "event_type")

@@ -22,7 +22,7 @@ public abstract class AbstractAggregateEntity {
 
   // The aggregate version.
   @Column(name = "aggregate_version")
-  private Long aggregateVersion;
+  private long aggregateVersion;
 
   // The aggregate type.
   @Column(name = "aggregate_type")

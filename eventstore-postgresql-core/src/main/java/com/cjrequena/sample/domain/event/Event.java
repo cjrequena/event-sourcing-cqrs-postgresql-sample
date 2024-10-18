@@ -1,30 +1,29 @@
 package com.cjrequena.sample.domain.event;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 @ToString
-public abstract class Event<T> {
+public abstract class Event {
 
     // Unique id for the specific message. This id is globally unique
     protected UUID id;
 
     // The event offset_txid
-    protected Long offset;
+    protected long offset;
 
     // Unique aggregateId for the specific message. This id is globally unique
-    protected UUID aggregateId;
+    protected final UUID aggregateId;
 
-    // The event version.
-    protected Long version;
+    // The event aggregateVersion.
+    protected final long aggregateVersion;
 
     // Type of message
     protected String eventType;
@@ -33,7 +32,7 @@ public abstract class Event<T> {
     public String dataContentType;
 
     // The actual event data, the event payload.
-    protected T data;
+    //protected T data;
 
     // Base64 encoded event payload. Must adhere to RFC4648.
     protected String dataBase64;
@@ -42,6 +41,6 @@ public abstract class Event<T> {
     //protected String dataSchema;
 
     // The time the event occurred
-    protected OffsetDateTime time;
+    protected final OffsetDateTime time =  OffsetDateTime.now();;
 
 }
