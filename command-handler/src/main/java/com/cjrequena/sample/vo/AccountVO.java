@@ -2,19 +2,18 @@ package com.cjrequena.sample.vo;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-@Data // Lombok generates getters, setters, toString, equals, and hashCode
+
+@Getter
+@Builder
 @NoArgsConstructor // Lombok generates a no-args constructor
 @AllArgsConstructor // Lombok generates an all-args constructor
-@Builder
+@ToString
 @JsonPropertyOrder(value = {
   "id",
   "owner",
@@ -34,5 +33,7 @@ public class AccountVO implements Serializable {
 
   @JsonProperty(value = "version")
   private long version;
+
+  // No setters to maintain immutability
 
 }
