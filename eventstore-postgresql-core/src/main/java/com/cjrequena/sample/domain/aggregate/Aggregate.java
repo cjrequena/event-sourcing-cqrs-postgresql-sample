@@ -25,7 +25,7 @@ import java.util.UUID;
 @Slf4j
 public abstract class Aggregate {
   protected final UUID aggregateId;
-  protected List<Event> changes;
+  protected List<Event> unconfirmedEventsPool;
   protected long aggregateVersion; // The current version of the aggregate after the latest event has been applied.
   protected long reconstitutedAggregateVersion; // The version of the aggregate before any changes were applied.
 
@@ -38,23 +38,23 @@ public abstract class Aggregate {
   protected Aggregate(@NonNull UUID aggregateId, long version) {
     this.aggregateId = aggregateId;
     this.aggregateVersion = version;
-    this.changes = Collections.emptyList();
+    this.unconfirmedEventsPool = Collections.emptyList();
   }
 
   /**
-   * Reconstitutes the aggregate's state from a list of events.
-   * This method applies the events to the aggregate and updates the
-   * aggregate's version accordingly. If there are uncommitted changes,
+   * Reconstitutes the aggregate's state from a list of confirmed events.
+   * This method applies the confirmed events to the aggregate and updates the
+   * aggregate's version accordingly. If there are unconfirmed events,
    * an exception will be thrown to prevent inconsistencies.
    *
    * @param events The list of events used to reconstitute the aggregate.
    * @throws IllegalStateException if there are uncommitted changes.
    * @throws IllegalArgumentException if any event's aggregate version is not greater than the current version.
    */
-  public void reconstituteFromEvents(List<Event> events) {
+  public void reconstituteFromConfirmedEvents(List<Event> events) {
     // Guard clause to check for unsaved changes
-    if (!changes.isEmpty()) {
-      throw new IllegalStateException("Cannot reconstitute from history. The aggregate has uncommitted changes.");
+    if (!unconfirmedEventsPool.isEmpty()) {
+      throw new IllegalStateException("Cannot reconstitute from history. The aggregate has unconfirmed events.");
     }
 
     // Validate and apply events using Stream API
@@ -67,7 +67,7 @@ public abstract class Aggregate {
               .formatted(event.getAggregateVersion(), aggregateVersion));
         }
       })
-      .forEach(this::apply);  // Apply each valid event to the aggregate's state
+      .forEach(this::applyEvent);  // Apply each valid event to the aggregate's state
 
     // Update currentAggregateVersion and reconstitutedAggregateVersion if events are applied successfully
     events.stream().reduce((first, second) -> second)
@@ -75,15 +75,15 @@ public abstract class Aggregate {
   }
 
   /**
-   * Applies a change represented by the given event and registers it for saving.
+   * Applies an unconfirmed event represented by the given event and registers it for saving.
    *
    * @param event The event representing the change to apply.
    * @throws IllegalStateException if the event's version does not match the expected version.
    */
-  public void applyChange(Event event) {
+  public void applyUnconfirmedEvent(Event event) {
     validateEventVersion(event);
-    apply(event);
-    changes.add(event);
+    applyEvent(event);
+    unconfirmedEventsPool.add(event);
     aggregateVersion = event.getAggregateVersion();
   }
 
@@ -92,7 +92,7 @@ public abstract class Aggregate {
    *
    * @param event The event to apply.
    */
-  private void apply(Event event) {
+  private void applyEvent(Event event) {
     log.info("Applying event {}", event);
     invoke(event, "apply");
   }
@@ -121,19 +121,10 @@ public abstract class Aggregate {
   }
 
   /**
-   * Gets the uncommitted changes (events) that have been applied but not yet saved.
-   *
-   * @return A list of uncommitted changes.
+   * Marks the unconfirmed events as confirmed, clearing the unconfirmed events pool.
    */
-  public List<Event> getUncommittedChanges() {
-    return changes;
-  }
-
-  /**
-   * Marks the changes as committed, clearing the list of uncommitted changes.
-   */
-  public void markChangesAsCommitted() {
-    this.changes.clear();
+  public void markUnconfirmedEventsAsConfirmed() {
+    this.unconfirmedEventsPool.clear();
   }
 
   /**

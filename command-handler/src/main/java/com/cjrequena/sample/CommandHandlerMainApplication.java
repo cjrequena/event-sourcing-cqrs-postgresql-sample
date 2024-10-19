@@ -102,7 +102,7 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
         .build();
       List<Event> events = new ArrayList<>(Collections.singletonList(event));
 
-      accountAggregate.reconstituteFromEvents(events);
+      accountAggregate.reconstituteFromConfirmedEvents(events);
       log.debug(accountAggregate);
 
     }
