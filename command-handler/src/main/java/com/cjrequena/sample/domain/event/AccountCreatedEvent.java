@@ -12,7 +12,7 @@ import java.util.UUID;
 @ToString(callSuper = true)
 public class AccountCreatedEvent extends Event{
 
-  private final AccountVO account;
+  private final AccountVO accountVO;
 
   @Builder
   public AccountCreatedEvent(
@@ -20,10 +20,12 @@ public class AccountCreatedEvent extends Event{
     long aggregateVersion,
     String dataContentType,
     String dataBase64,
-    AccountVO account
+    AccountVO data
   ){
     super(aggregateId, aggregateVersion);
-    this.account = account;
+    this.dataContentType = dataContentType;
+    this.dataBase64 = dataBase64;
+    this.accountVO = data;
   }
 
   @Nonnull

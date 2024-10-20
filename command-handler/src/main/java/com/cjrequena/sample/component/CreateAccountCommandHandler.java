@@ -1,18 +1,22 @@
 package com.cjrequena.sample.component;
 
+import com.cjrequena.sample.domain.aggregate.Aggregate;
+import com.cjrequena.sample.domain.command.Command;
 import com.cjrequena.sample.domain.command.CommandHandler;
 import com.cjrequena.sample.domain.command.CreateAccountCommand;
 import jakarta.annotation.Nonnull;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 
 @Component
-@Slf4j
+@Log4j2
 public class CreateAccountCommandHandler implements CommandHandler<CreateAccountCommand> {
 
   @Override
-  public void handle() {
-    log.info("Handling {} ", CreateAccountCommand.class );
+  public void handle(Command command, Aggregate aggregate) {
+    log.trace("Handling {} ", CreateAccountCommand.class );
+    log.trace("Command {}", command);
+    log.trace("Aggregate {}", aggregate);
   }
 
   @Nonnull

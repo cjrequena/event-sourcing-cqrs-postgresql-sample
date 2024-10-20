@@ -43,15 +43,15 @@ management.info.git.mode: full # Mode to use to expose git information.
 logging.level: # Log levels severity mapping. For instance, `logging.level.org.springframework: DEBUG`.
   org.springframework: INFO
   org.flywaydb: INFO
-  com.cjrequena.sample: DEBUG
+  com.cjrequena.sample: TRACE
 logging.pattern:
   console:  "%highlight{%-5p|%d{ISO8601}{GMT}|application=${spring.application.name}|traceID=%X{traceId},spanID=%X{spanId}|%c{1}|%m%ex%n}{
-      FATAL=red blink,
-      ERROR=red,
-      WARN=yellow bold,
-      INFO=white,
-      DEBUG=green bold,
-      TRACE=blue
+      FATAL=bg_red, 
+      ERROR=red, 
+      WARN=yellow, 
+      INFO=green, 
+      DEBUG=blue, 
+      TRACE=cyan
     }"
   file: "%-5p|%d{ISO8601}{GMT}|application=${spring.application.name}|traceID=%X{traceId},spanID=%X{spanId}|%c{1}|%m%ex%n"
 

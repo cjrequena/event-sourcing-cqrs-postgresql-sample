@@ -1,5 +1,6 @@
 package com.cjrequena.sample.domain.aggregate;
 
+import com.cjrequena.sample.domain.command.Command;
 import com.cjrequena.sample.domain.event.Event;
 import jakarta.annotation.Nonnull;
 import lombok.Getter;
@@ -10,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -38,7 +39,7 @@ public abstract class Aggregate {
   protected Aggregate(@NonNull UUID aggregateId, long version) {
     this.aggregateId = aggregateId;
     this.aggregateVersion = version;
-    this.unconfirmedEventsPool = Collections.emptyList();
+    this.unconfirmedEventsPool = new ArrayList<>();
   }
 
   /**
@@ -63,15 +64,13 @@ public abstract class Aggregate {
         // Validate the event aggregate version before applying
         if (event.getAggregateVersion() <= aggregateVersion) {
           throw new IllegalArgumentException(
-            "Event aggregate version (%s) must be greater than the current aggregate version (%s)."
-              .formatted(event.getAggregateVersion(), aggregateVersion));
+            "Event aggregate version (%s) must be greater than the current aggregate version (%s).".formatted(event.getAggregateVersion(), aggregateVersion));
         }
       })
       .forEach(this::applyEvent);  // Apply each valid event to the aggregate's state
 
     // Update currentAggregateVersion and reconstitutedAggregateVersion if events are applied successfully
-    events.stream().reduce((first, second) -> second)
-      .ifPresent(lastEvent -> reconstitutedAggregateVersion = aggregateVersion = lastEvent.getAggregateVersion());
+    events.stream().reduce((first, second) -> second).ifPresent(lastEvent -> reconstitutedAggregateVersion = aggregateVersion = lastEvent.getAggregateVersion());
   }
 
   /**
@@ -97,6 +96,11 @@ public abstract class Aggregate {
     invoke(event, "apply");
   }
 
+  public void applyCommand(Command command) {
+    log.info("Applying command {}", command);
+    invoke(command, "applyCommand");
+  }
+
   /**
    * Gets the next expected aggregate version.
    *
@@ -115,8 +119,7 @@ public abstract class Aggregate {
   protected void validateEventVersion(Event event) {
     if (event.getAggregateVersion() != getNextAggregateVersion()) {
       throw new IllegalStateException(
-        String.format("Event version %s doesn't match expected version %s. " +
-          "Current state may be inconsistent.", event.getAggregateVersion(), getNextAggregateVersion()));
+        String.format("Event version %s doesn't match expected version %s. " + "Current state may be inconsistent.", event.getAggregateVersion(), getNextAggregateVersion()));
     }
   }
 

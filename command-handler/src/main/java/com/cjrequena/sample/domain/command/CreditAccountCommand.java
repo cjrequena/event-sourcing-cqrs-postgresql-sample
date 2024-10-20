@@ -1,7 +1,7 @@
 package com.cjrequena.sample.domain.command;
 
 import com.cjrequena.sample.domain.aggregate.AggregateType;
-import com.cjrequena.sample.vo.AccountVO;
+import com.cjrequena.sample.vo.CreditVO;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,14 +11,14 @@ import java.util.UUID;
 
 @Getter
 @ToString(callSuper = true)
-public class CreateAccountCommand extends Command {
+public class CreditAccountCommand extends Command {
 
-  private final AccountVO accountVO;
+  private final CreditVO creditVO;
 
   @Builder
-  public CreateAccountCommand(@NotNull AccountVO accountVO) {
+  public CreditAccountCommand(@NotNull CreditVO creditVO) {
     super(generateAggregateId(), AggregateType.ACCOUNT_AGGREGATE.getValue());
-    this.accountVO = accountVO;
+    this.creditVO = creditVO;
   }
 
   private static UUID generateAggregateId() {
