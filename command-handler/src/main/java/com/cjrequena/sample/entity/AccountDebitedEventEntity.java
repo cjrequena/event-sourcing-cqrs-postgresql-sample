@@ -1,8 +1,8 @@
 package com.cjrequena.sample.entity;
 
-import com.cjrequena.sample.entity.converter.AccountConverter;
+import com.cjrequena.sample.entity.converter.DebitConverter;
 import com.cjrequena.sample.entity.converter.EventExtensionConverter;
-import com.cjrequena.sample.vo.AccountVO;
+import com.cjrequena.sample.vo.DebitVO;
 import com.cjrequena.sample.vo.EventExtensionVO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -17,13 +17,13 @@ import org.hibernate.type.SqlTypes;
 @Setter
 @Entity
 @Table(name = "es_event")
-public class AccountCreatedEventEntity extends EventEntity {
+public class AccountDebitedEventEntity extends EventEntity {
 
   // The actual event data, the event payload.
   @JdbcTypeCode(SqlTypes.JSON)
   @Column(name = "data", columnDefinition = "json")
-  @Convert(converter = AccountConverter.class)
-  private AccountVO data;
+  @Convert(converter = DebitConverter.class)
+  private DebitVO data;
 
   // // Custom metadata extensions
   @JdbcTypeCode(SqlTypes.JSON)

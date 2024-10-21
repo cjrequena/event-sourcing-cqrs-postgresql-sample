@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -32,16 +33,15 @@ public interface AggregateRepository extends CrudRepository<AggregateEntity, UUI
     @Param("aggregateType") String aggregateType
   );
 
-  @Modifying
   @Transactional
   @Query(value = """
-        UPDATE es_aggregate
-           SET aggregate_version = :newAggregateVersion
-         WHERE id = :aggregateId
-           AND aggregate_version = :expectedAggregateVersion
-        RETURNING CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END AS success
-        """, nativeQuery = true)
-  boolean validateAndUpdateAggregateVersionIfMatch(
+    UPDATE es_aggregate
+       SET aggregate_version = :newAggregateVersion
+     WHERE id = :aggregateId
+       AND aggregate_version = :expectedAggregateVersion
+    RETURNING 1
+    """, nativeQuery = true)
+  Optional<Integer> validateAndUpdateAggregateVersionIfMatch(
     @Param("aggregateId") UUID aggregateId,
     @Param("expectedAggregateVersion") long expectedAggregateVersion,
     @Param("newAggregateVersion") long newAggregateVersion
@@ -59,7 +59,5 @@ public interface AggregateRepository extends CrudRepository<AggregateEntity, UUI
     + " WHERE A.ID = :id AND A.AGGREGATE_TYPE = :aggregateType",
     nativeQuery = true)
   boolean verifyAggregate(@Param("id") UUID id, @Param("aggregateType") String aggregateType);
-
-
 
 }

@@ -7,6 +7,7 @@ import com.cjrequena.sample.domain.command.DebitAccountCommand;
 import com.cjrequena.sample.domain.event.AccountCreatedEvent;
 import com.cjrequena.sample.domain.event.AccountCreditedEvent;
 import com.cjrequena.sample.domain.event.AccountDebitedEvent;
+import com.cjrequena.sample.vo.EventExtensionVO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.annotation.Nonnull;
 import lombok.Builder;
@@ -28,49 +29,60 @@ public class AccountAggregate extends Aggregate {
   }
 
   public void applyCommand(CreateAccountCommand command) throws JsonProcessingException {
+
+    EventExtensionVO eventExtension = EventExtensionVO.builder().traceId(UUID.randomUUID().toString()).build(); // TODO implement EventExtension
+
     applyUnconfirmedEvent(AccountCreatedEvent.builder()
       .aggregateId(command.getAggregateId())
       .aggregateVersion(getNextAggregateVersion())
       .dataContentType("application/json")
       .data(command.getAccountVO())
       .dataBase64(JsonUtil.objectToJsonBase64(command.getAccountVO()))
+      .extension(eventExtension)
       .build());
   }
 
   public void applyCommand(CreditAccountCommand command) throws JsonProcessingException {
+
+    EventExtensionVO eventExtension = EventExtensionVO.builder().traceId(UUID.randomUUID().toString()).build(); // TODO implement EventExtension
+
     applyUnconfirmedEvent(AccountCreditedEvent.builder()
       .aggregateId(command.getAggregateId())
       .aggregateVersion(getNextAggregateVersion())
       .dataContentType("application/json")
-      .credit(command.getCreditVO())
+      .data(command.getCreditVO())
       .dataBase64(JsonUtil.objectToJsonBase64(command.getCreditVO()))
+      .extension(eventExtension)
       .build());
   }
 
   public void applyCommand(DebitAccountCommand command) throws JsonProcessingException {
+    EventExtensionVO eventExtension = EventExtensionVO.builder().traceId(UUID.randomUUID().toString()).build(); // TODO implement EventExtension
+
     applyUnconfirmedEvent(AccountDebitedEvent.builder()
       .aggregateId(command.getAggregateId())
       .aggregateVersion(getNextAggregateVersion())
       .dataContentType("application/json")
-      .credit(command.getDebitVO())
+      .data(command.getDebitVO())
       .dataBase64(JsonUtil.objectToJsonBase64(command.getDebitVO()))
+      .extension(eventExtension)
       .build());
   }
 
   public void apply(AccountCreatedEvent event) {
     this.account = Account.builder()
-      .id(event.getAccountVO().getId())
-      .owner(event.getAccountVO().getOwner())
-      .balance(event.getAccountVO().getBalance())
+      .id(event.getData().getId())
+      .owner(event.getData().getOwner())
+      .balance(event.getData().getBalance())
       .build();
   }
 
   public void apply(AccountCreditedEvent event) {
-    this.account.setBalance(this.account.getBalance().add(event.getCredit().getAmount()));
+    this.account.setBalance(this.account.getBalance().add(event.getData().getAmount()));
   }
 
   public void apply(AccountDebitedEvent event) {
-    this.account.setBalance(this.account.getBalance().subtract(event.getCredit().getAmount()));
+    this.account.setBalance(this.account.getBalance().subtract(event.getData().getAmount()));
   }
 
   @Nonnull

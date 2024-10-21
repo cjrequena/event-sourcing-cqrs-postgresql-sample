@@ -3,9 +3,11 @@ package com.cjrequena.sample;
 import com.cjrequena.sample.domain.aggregate.AccountAggregate;
 import com.cjrequena.sample.domain.command.*;
 import com.cjrequena.sample.domain.event.Event;
+import com.cjrequena.sample.exception.OptimisticConcurrencyServiceException;
 import com.cjrequena.sample.repository.AggregateRepository;
 import com.cjrequena.sample.repository.AggregateSnapshotRepository;
 import com.cjrequena.sample.repository.EventRepository;
+import com.cjrequena.sample.service.event.EventStoreService;
 import com.cjrequena.sample.vo.AccountVO;
 import com.cjrequena.sample.vo.CreditVO;
 import com.cjrequena.sample.vo.DebitVO;
@@ -29,6 +31,7 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
   private final AggregateRepository aggregateRepository;
   private final AggregateSnapshotRepository aggregateSnapshotRepository;
   private final List<CommandHandler<? extends Command>> commandHandlers;
+  private final EventStoreService eventStoreService;
 
   public static void main(String... args) {
     SpringApplication.run(CommandHandlerMainApplication.class, args);
@@ -36,6 +39,7 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
 
   @Override
   public void run(String... args) throws JsonProcessingException {
+
     // Create a new accountVO aggregate
     UUID accountId = UUID.randomUUID();
     AccountAggregate accountAggregate = AccountAggregate.builder().aggregateId(accountId).version(0L).build();
@@ -43,10 +47,12 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
     AccountVO accountVO = AccountVO.builder().id(accountAggregate.getAggregateId()).owner("Carlos").balance(BigDecimal.valueOf(100)).build();
 
     Command createAccountCommand = CreateAccountCommand.builder()
+      .aggregateId(accountAggregate.getAggregateId())
       .accountVO(accountVO)
       .build();
 
     Command creditAccountCommand = CreditAccountCommand.builder()
+      .aggregateId(accountAggregate.getAggregateId())
       .creditVO(CreditVO.builder()
         .accountId(accountId)
         .amount(BigDecimal.valueOf(200))
@@ -54,6 +60,7 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
       .build();
 
     Command debittAccountCommand = DebitAccountCommand.builder()
+      .aggregateId(accountAggregate.getAggregateId())
       .debitVO(DebitVO.builder()
         .accountId(accountId)
         .amount(BigDecimal.valueOf(100))
@@ -79,6 +86,13 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
 
     // Get the unconfirmed events pool
     List<Event> unconfirmedEventsPool = accountAggregate.getUnconfirmedEventsPool();
+
+    try {
+      this.eventStoreService.saveAggregate(accountAggregate);
+    } catch (OptimisticConcurrencyServiceException ex) {
+      log.error(ex);
+    }
+
     //    List<Event> events = new ArrayList<>(unconfirmedEventsPool);
     //    accountAggregate.markUnconfirmedEventsAsConfirmed();
     // accountAggregate = AccountAggregate.builder().aggregateId(accountId).version(1L).build();
