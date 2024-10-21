@@ -1,7 +1,6 @@
 package com.cjrequena.sample.configuration;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Min;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
@@ -16,21 +15,17 @@ import java.util.Map;
 @ConfigurationProperties(prefix = "eventstore")
 public class EventStoreConfigurationProperties {
 
-    private static final SnapshotProperties NO_SNAPSHOT = new SnapshotProperties(false, 0);
+  private static final SnapshotProperties NO_SNAPSHOT = new SnapshotProperties(false, 0);
 
-    @Valid
-    @NestedConfigurationProperty
-    @Setter
-    private Map<String, SnapshotProperties> snapshot = new HashMap<>();
+  @Valid
+  @NestedConfigurationProperty
+  @Setter
+  private Map<String, SnapshotProperties> snapshot = new HashMap<>();
 
-    public SnapshotProperties getSnapshot(String aggregateType) {
-        return snapshot.getOrDefault(aggregateType, NO_SNAPSHOT);
-    }
+  public SnapshotProperties getSnapshot(String aggregateType) {
+    return snapshot.getOrDefault(aggregateType, NO_SNAPSHOT);
+  }
 
-    public record SnapshotProperties(
-            boolean enabled,
-            @Min(2)
-            int interval
-    ) {
-    }
+  public record SnapshotProperties(boolean enabled, int interval) {
+  }
 }

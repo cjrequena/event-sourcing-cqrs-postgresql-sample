@@ -1,5 +1,7 @@
 package com.cjrequena.sample.service;
 
+import com.cjrequena.sample.configuration.EventStoreConfigurationProperties;
+import com.cjrequena.sample.configuration.EventStoreConfigurationProperties.SnapshotProperties;
 import com.cjrequena.sample.domain.aggregate.Aggregate;
 import com.cjrequena.sample.domain.event.Event;
 import com.cjrequena.sample.entity.AggregateSnapshotEntity;
@@ -32,6 +34,7 @@ public class EventStoreService {
   private final EventRepository eventRepository;
   private final EventSubscriptionRepository eventSubscriptionRepository;
   private final ObjectMapper objectMapper;
+  private final EventStoreConfigurationProperties eventStoreConfigurationProperties;
 
   @SneakyThrows
   public void saveAggregate(Aggregate aggregate) throws OptimisticConcurrencyServiceException {
@@ -55,26 +58,28 @@ public class EventStoreService {
       throw new OptimisticConcurrencyServiceException(errorMessage);
     }
 
+    //Append new events
     List<Event> unconfirmedEventsPool = aggregate.getUnconfirmedEventsPool();
     for (Event event : unconfirmedEventsPool) {
       log.info("Appending {} event: {}", aggregateType, event);
-
-      //Append new event
       EventEntity eventEntity = event.mapToEventEntity();
       eventRepository.save(eventEntity);
-
-
-      // TODO change event for aggregate when creating the snapshot.
-      //create aggregate snapshot
-      AggregateSnapshotEntity aggregateSnapshotEntity = AggregateSnapshotEntity.builder()
-        .aggregateId(event.getAggregateId())
-        .data(this.objectMapper.writeValueAsString(aggregate))
-        .dataBase64("xxxxx")
-        .aggregateVersion(event.getAggregateVersion())
-        .build();
-      this.aggregateSnapshotRepository.save(aggregateSnapshotEntity);
     }
 
+    // Create snapshot
+    SnapshotProperties snapshotProperties = eventStoreConfigurationProperties.getSnapshot(aggregateType);
+    boolean shouldCreateSnapshot = aggregate.getAggregateVersion() % snapshotProperties.interval() == 0 || unconfirmedEventsPool.size() >= snapshotProperties.interval();
+    if (shouldCreateSnapshot) {
+      log.info("Creating {} aggregate {} version {} snapshot", aggregate.getAggregateType(), aggregate.getAggregateId(), aggregate.getAggregateVersion());
+      AggregateSnapshotEntity aggregateSnapshotEntity = AggregateSnapshotEntity.builder()
+        .aggregateId(aggregate.getAggregateId())
+        .data(this.objectMapper.writeValueAsString(aggregate))
+        .dataBase64("yyyy")
+        .aggregateVersion(aggregate.getAggregateVersion())
+        .build();
+      this.aggregateSnapshotRepository.save(aggregateSnapshotEntity);
+
+    }
   }
 
 }

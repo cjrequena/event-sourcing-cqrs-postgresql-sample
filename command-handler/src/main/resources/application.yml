@@ -97,5 +97,5 @@ eventstore:
     # The aggregate type
     ACCOUNT_AGGREGATE:
       enabled: true
-      interval: 10
+      interval: 5
 

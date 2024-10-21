@@ -71,7 +71,6 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
     accountAggregate.applyCommand(creditAccountCommand);
     accountAggregate.applyCommand(creditAccountCommand);
     accountAggregate.applyCommand(creditAccountCommand);
-    accountAggregate.applyCommand(creditAccountCommand);
     accountAggregate.applyCommand(debittAccountCommand);
 
     //    commandHandlers.stream()
