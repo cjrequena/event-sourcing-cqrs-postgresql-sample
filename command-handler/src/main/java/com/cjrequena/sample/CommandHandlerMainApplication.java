@@ -7,7 +7,7 @@ import com.cjrequena.sample.exception.OptimisticConcurrencyServiceException;
 import com.cjrequena.sample.repository.AggregateRepository;
 import com.cjrequena.sample.repository.AggregateSnapshotRepository;
 import com.cjrequena.sample.repository.EventRepository;
-import com.cjrequena.sample.service.event.EventStoreService;
+import com.cjrequena.sample.service.EventStoreService;
 import com.cjrequena.sample.vo.AccountVO;
 import com.cjrequena.sample.vo.CreditVO;
 import com.cjrequena.sample.vo.DebitVO;
