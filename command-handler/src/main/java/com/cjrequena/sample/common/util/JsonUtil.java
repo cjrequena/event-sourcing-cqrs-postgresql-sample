@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.Base64;
 
-public class Base64Util {
+public class JsonUtil {
 
   private static final ObjectMapper objectMapper = new ObjectMapper();
 

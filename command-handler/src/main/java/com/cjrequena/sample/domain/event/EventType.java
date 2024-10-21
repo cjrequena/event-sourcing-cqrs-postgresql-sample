@@ -8,7 +8,11 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public enum EventType {
 
-    ACCOUNT_CREATED_EVENT("ACCOUNT_CREATED_EVENT");
+    ACCOUNT_CREATED_EVENT("ACCOUNT_CREATED_EVENT"),
+    ACCOUNT_CREDITED_EVENT("ACCOUNT_CREDITED_EVENT"),
+    ACCOUNT_DEBITED_EVENT("ACCOUNT_DEBITED_EVENT");
+
+
 
     private final String value;
 

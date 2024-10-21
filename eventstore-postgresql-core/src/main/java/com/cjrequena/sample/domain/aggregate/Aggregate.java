@@ -28,7 +28,7 @@ public abstract class Aggregate {
   protected final UUID aggregateId;
   protected List<Event> unconfirmedEventsPool;
   protected long aggregateVersion; // The current version of the aggregate after the latest event has been applied.
-  protected long reconstitutedAggregateVersion; // The version of the aggregate before any changes were applied.
+  protected long reproducedAggregateVersion; // The version of the aggregate before any changes were applied.
 
   /**
    * Constructs an instance of the Aggregate class.
@@ -69,8 +69,8 @@ public abstract class Aggregate {
       })
       .forEach(this::applyEvent);  // Apply each valid event to the aggregate's state
 
-    // Update currentAggregateVersion and reconstitutedAggregateVersion if events are applied successfully
-    events.stream().reduce((first, second) -> second).ifPresent(lastEvent -> reconstitutedAggregateVersion = aggregateVersion = lastEvent.getAggregateVersion());
+    // Update currentAggregateVersion and reproducedAggregateVersion if events are applied successfully
+    events.stream().reduce((first, second) -> second).ifPresent(lastEvent -> reproducedAggregateVersion = aggregateVersion = lastEvent.getAggregateVersion());
   }
 
   /**

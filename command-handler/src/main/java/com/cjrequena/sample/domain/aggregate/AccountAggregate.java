@@ -1,6 +1,6 @@
 package com.cjrequena.sample.domain.aggregate;
 
-import com.cjrequena.sample.common.util.Base64Util;
+import com.cjrequena.sample.common.util.JsonUtil;
 import com.cjrequena.sample.domain.command.CreateAccountCommand;
 import com.cjrequena.sample.domain.command.CreditAccountCommand;
 import com.cjrequena.sample.domain.command.DebitAccountCommand;
@@ -33,7 +33,7 @@ public class AccountAggregate extends Aggregate {
       .aggregateVersion(getNextAggregateVersion())
       .dataContentType("application/json")
       .data(command.getAccountVO())
-      .dataBase64(Base64Util.objectToJsonBase64(command.getAccountVO()))
+      .dataBase64(JsonUtil.objectToJsonBase64(command.getAccountVO()))
       .build());
   }
 
@@ -43,7 +43,7 @@ public class AccountAggregate extends Aggregate {
       .aggregateVersion(getNextAggregateVersion())
       .dataContentType("application/json")
       .credit(command.getCreditVO())
-      .dataBase64(Base64Util.objectToJsonBase64(command.getCreditVO()))
+      .dataBase64(JsonUtil.objectToJsonBase64(command.getCreditVO()))
       .build());
   }
 
@@ -53,7 +53,7 @@ public class AccountAggregate extends Aggregate {
       .aggregateVersion(getNextAggregateVersion())
       .dataContentType("application/json")
       .credit(command.getDebitVO())
-      .dataBase64(Base64Util.objectToJsonBase64(command.getDebitVO()))
+      .dataBase64(JsonUtil.objectToJsonBase64(command.getDebitVO()))
       .build());
   }
 
