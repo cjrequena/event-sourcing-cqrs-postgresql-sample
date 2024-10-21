@@ -17,7 +17,7 @@ import org.hibernate.type.SqlTypes;
 @Setter
 @Entity
 @Table(name = "es_event")
-public class AccountCreatedEventEntity extends AbstractEventEntity {
+public class AccountCreatedEventEntity extends EventEntity {
 
   // The actual event data, the event payload.
   @JdbcTypeCode(SqlTypes.JSON)

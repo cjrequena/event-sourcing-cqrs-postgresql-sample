@@ -31,8 +31,8 @@ public class AccountVO implements Serializable {
   @JsonProperty(value = "balance")
   private BigDecimal balance;
 
-  @JsonProperty(value = "version")
-  private long version;
+//  @JsonProperty(value = "version")
+//  private long version;
 
   // No setters to maintain immutability
 

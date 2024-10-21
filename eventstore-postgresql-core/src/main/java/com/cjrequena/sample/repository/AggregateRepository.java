@@ -1,6 +1,6 @@
 package com.cjrequena.sample.repository;
 
-import com.cjrequena.sample.entity.AbstractAggregateEntity;
+import com.cjrequena.sample.entity.AggregateEntity;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -15,7 +15,7 @@ import java.util.UUID;
  * @author cjrequena
  */
 @Repository
-public interface AggregateRepository extends CrudRepository<AbstractAggregateEntity, UUID> {
+public interface AggregateRepository extends CrudRepository<AggregateEntity, UUID> {
 
   @Query(value = "SELECT CASE "
     + " WHEN COUNT(A)> 0 THEN TRUE ELSE FALSE END "
@@ -28,6 +28,6 @@ public interface AggregateRepository extends CrudRepository<AbstractAggregateEnt
     + " WHEN  VERSION = :#{#aggregate.version} THEN True ELSE False END "
     + " FROM AGGREGATE WHERE ID=:#{#aggregate.id}",
     nativeQuery = true)
-  boolean checkVersion(@Param("aggregate") AbstractAggregateEntity abstractAggregateEntity);
+  boolean checkVersion(@Param("aggregate") AggregateEntity aggregateEntity);
 
 }

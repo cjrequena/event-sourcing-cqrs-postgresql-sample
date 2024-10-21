@@ -17,7 +17,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,7 +30,6 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
   private final AggregateSnapshotRepository aggregateSnapshotRepository;
   private final List<CommandHandler<? extends Command>> commandHandlers;
 
-
   public static void main(String... args) {
     SpringApplication.run(CommandHandlerMainApplication.class, args);
   }
@@ -40,9 +38,9 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
   public void run(String... args) throws JsonProcessingException {
     // Create a new accountVO aggregate
     UUID accountId = UUID.randomUUID();
-    AccountAggregate accountAggregate = AccountAggregate.builder().aggregateId(accountId).version(1L).build();
+    AccountAggregate accountAggregate = AccountAggregate.builder().aggregateId(accountId).version(0L).build();
 
-    AccountVO accountVO = AccountVO.builder().id(accountAggregate.getAggregateId()).owner("Carlos").balance(BigDecimal.valueOf(100)).version(1L).build();
+    AccountVO accountVO = AccountVO.builder().id(accountAggregate.getAggregateId()).owner("Carlos").balance(BigDecimal.valueOf(100)).build();
 
     Command createAccountCommand = CreateAccountCommand.builder()
       .accountVO(accountVO)
@@ -69,24 +67,22 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
     accountAggregate.applyCommand(creditAccountCommand);
     accountAggregate.applyCommand(debittAccountCommand);
 
-//    commandHandlers.stream()
-//      .filter(commandHandler -> commandHandler.getCommandType() == command.getClass())
-//      .findFirst()
-//      .ifPresentOrElse(commandHandler -> {
-//        log.info("Handling command {} with {}", command.getClass().getSimpleName(), commandHandler.getClass().getSimpleName());
-//        commandHandler.handle(command, accountAggregate);
-//      }, () -> {
-//        log.info("No specialized handler found with {}", command.getClass().getSimpleName());
-//      });
-
+    //    commandHandlers.stream()
+    //      .filter(commandHandler -> commandHandler.getCommandType() == command.getClass())
+    //      .findFirst()
+    //      .ifPresentOrElse(commandHandler -> {
+    //        log.info("Handling command {} with {}", command.getClass().getSimpleName(), commandHandler.getClass().getSimpleName());
+    //        commandHandler.handle(command, accountAggregate);
+    //      }, () -> {
+    //        log.info("No specialized handler found with {}", command.getClass().getSimpleName());
+    //      });
 
     // Get the unconfirmed events pool
     List<Event> unconfirmedEventsPool = accountAggregate.getUnconfirmedEventsPool();
-    List<Event> events = new ArrayList<>(unconfirmedEventsPool);
-    accountAggregate.markUnconfirmedEventsAsConfirmed();
-
-   // accountAggregate = AccountAggregate.builder().aggregateId(accountId).version(1L).build();
-    accountAggregate.reconstituteFromConfirmedEvents(events);
+    //    List<Event> events = new ArrayList<>(unconfirmedEventsPool);
+    //    accountAggregate.markUnconfirmedEventsAsConfirmed();
+    // accountAggregate = AccountAggregate.builder().aggregateId(accountId).version(1L).build();
+    //accountAggregate.reconstituteFromConfirmedEvents(events);
 
     log.debug("GOOD");
   }

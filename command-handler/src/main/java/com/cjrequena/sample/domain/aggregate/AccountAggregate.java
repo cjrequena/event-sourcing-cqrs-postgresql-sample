@@ -62,19 +62,15 @@ public class AccountAggregate extends Aggregate {
       .id(event.getAccountVO().getId())
       .owner(event.getAccountVO().getOwner())
       .balance(event.getAccountVO().getBalance())
-      .version(event.getAccountVO().getVersion())
       .build();
   }
 
   public void apply(AccountCreditedEvent event) {
     this.account.setBalance(this.account.getBalance().add(event.getCredit().getAmount()));
-    this.account.setVersion(event.getAggregateVersion());
-
   }
 
   public void apply(AccountDebitedEvent event) {
     this.account.setBalance(this.account.getBalance().subtract(event.getCredit().getAmount()));
-    this.account.setVersion(event.getAggregateVersion());
   }
 
   @Nonnull
