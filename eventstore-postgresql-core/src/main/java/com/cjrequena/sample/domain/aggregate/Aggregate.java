@@ -2,6 +2,7 @@ package com.cjrequena.sample.domain.aggregate;
 
 import com.cjrequena.sample.domain.command.Command;
 import com.cjrequena.sample.domain.event.Event;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.annotation.Nonnull;
 import lombok.Getter;
 import lombok.NonNull;
@@ -26,10 +27,11 @@ import java.util.UUID;
 @Slf4j
 public abstract class Aggregate {
   protected final UUID aggregateId;
-  protected List<Event> unconfirmedEventsPool;
   protected long aggregateVersion; // The current version of the aggregate after the latest event has been applied.
+  @JsonIgnore
   protected long reproducedAggregateVersion; // The version of the aggregate before any changes were applied.
-
+  @JsonIgnore
+  protected List<Event> unconfirmedEventsPool;
   /**
    * Constructs an instance of the Aggregate class.
    *
