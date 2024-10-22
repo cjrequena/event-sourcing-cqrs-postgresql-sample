@@ -28,7 +28,7 @@ public class EventSubscriptionEntity {
 
   // The event offset_txid
   @Column(name = "offset_txid", nullable = false)
-  protected long offset;
+  protected long offsetTxId;
 
   // The event_id
   @Column(name = "event_id", nullable = false)

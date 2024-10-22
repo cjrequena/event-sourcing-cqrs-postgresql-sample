@@ -21,7 +21,7 @@ public abstract class Event {
   protected UUID id;
 
   // The event offset_txid
-  protected long offset;
+  protected long offsetTxId;
 
   // Unique aggregateId for the specific message. This id is globally unique
   protected final UUID aggregateId;

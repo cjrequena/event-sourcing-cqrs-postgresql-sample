@@ -25,9 +25,14 @@ public abstract class EventEntity {
   @Column(name = "id", updatable = false, nullable = false) // Enforce not-null and non-updatable
   protected UUID id;
 
+
+  // The event offset_txid
+  @Column(name = "offset_id", insertable = false, updatable = false)
+  protected long offsetId;
+
   // The event offset_txid
   @Column(name = "offset_txid", columnDefinition = "xid8", insertable = false, updatable = false)
-  protected long offset;
+  protected long offsetTxId;
 
   // Unique aggregateId for the specific message. This id is globally unique
   @Column(name = "aggregate_id", nullable = false)
