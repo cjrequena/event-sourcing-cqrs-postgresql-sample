@@ -6,12 +6,15 @@ import com.cjrequena.sample.domain.aggregate.Aggregate;
 import com.cjrequena.sample.domain.event.Event;
 import com.cjrequena.sample.entity.AggregateSnapshotEntity;
 import com.cjrequena.sample.entity.EventEntity;
+import com.cjrequena.sample.entity.MyEventEntity;
 import com.cjrequena.sample.exception.OptimisticConcurrencyServiceException;
 import com.cjrequena.sample.repository.AggregateRepository;
 import com.cjrequena.sample.repository.AggregateSnapshotRepository;
 import com.cjrequena.sample.repository.EventRepository;
 import com.cjrequena.sample.repository.EventSubscriptionRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.annotation.Nullable;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
@@ -33,14 +36,15 @@ public class EventStoreService {
   private final AggregateSnapshotRepository aggregateSnapshotRepository;
   private final EventRepository eventRepository;
   private final EventSubscriptionRepository eventSubscriptionRepository;
-  private final ObjectMapper objectMapper;
   private final EventStoreConfigurationProperties eventStoreConfigurationProperties;
+  private final ObjectMapper objectMapper;
 
   @SneakyThrows
   public void saveAggregate(Aggregate aggregate) throws OptimisticConcurrencyServiceException {
     String aggregateType = aggregate.getAggregateType();
     UUID aggregateId = aggregate.getAggregateId();
 
+    // Create new aggregate if does not exist.
     this.aggregateRepository.createAggregateIfAbsent(aggregateId, aggregateType);
 
     long expectedAggregateVersion = aggregate.getReproducedAggregateVersion();
@@ -58,7 +62,7 @@ public class EventStoreService {
       throw new OptimisticConcurrencyServiceException(errorMessage);
     }
 
-    //Append new events
+    // Append new events
     List<Event> unconfirmedEventsPool = aggregate.getUnconfirmedEventsPool();
     for (Event event : unconfirmedEventsPool) {
       log.info("Appending {} event: {}", aggregateType, event);
@@ -77,8 +81,28 @@ public class EventStoreService {
         .aggregateVersion(aggregate.getAggregateVersion())
         .build();
       this.aggregateSnapshotRepository.save(aggregateSnapshotEntity);
-
     }
   }
 
+  public Aggregate retrieveAggregate(UUID aggregateId, String aggregateType) {
+    return retrieveAggregate(aggregateId, aggregateType, null);
+  }
+
+  public Aggregate retrieveAggregate(@NonNull UUID aggregateId, @NonNull String aggregateType, @Nullable Integer version) {
+    return reproduceAggregateFromEvents(aggregateId, aggregateType, null);
+  }
+
+  private Aggregate reproduceAggregateFromEvents(UUID aggregateId, String aggregateType, @Nullable Integer aggregateVersion) {
+    final List<MyEventEntity> eventEntities = this.eventRepository.retrieveEventsByAggregateId(aggregateId, null, aggregateVersion);
+
+    //    var events = eventRepository.retrieveEventsByAggregateId(aggregateId, null, aggregateVersion)
+    //      .stream()
+    //      .map(EventWithId::event)
+    //      .toList();
+    //    log.info("Read {} events for aggregate {}", events.size(), aggregateId);
+    //    Aggregate aggregate = aggregateFactory.newInstance(aggregateType, aggregateId);
+    //    aggregate.loadFromHistory(events);
+    //    return aggregate;
+    return null;
+  }
 }

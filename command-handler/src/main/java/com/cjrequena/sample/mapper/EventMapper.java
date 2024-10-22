@@ -8,9 +8,13 @@ import com.cjrequena.sample.entity.AccountCreditedEventEntity;
 import com.cjrequena.sample.entity.AccountDebitedEventEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.NullValueCheckStrategy;
 import org.mapstruct.factory.Mappers;
 
-@Mapper
+@Mapper(
+  componentModel = "spring",
+  nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS
+)
 public interface EventMapper {
 
     EventMapper INSTANCE = Mappers.getMapper(EventMapper.class);
