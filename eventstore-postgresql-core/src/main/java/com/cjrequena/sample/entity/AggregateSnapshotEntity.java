@@ -38,8 +38,4 @@ public class AggregateSnapshotEntity {
   @Column(name = "data", columnDefinition = "json", nullable = false)
   private String data;
 
-  // Base64 encoded event payload. Must adhere to RFC4648.
-  @Column(name = "data_base64", nullable = false)
-  protected String dataBase64;
-
 }

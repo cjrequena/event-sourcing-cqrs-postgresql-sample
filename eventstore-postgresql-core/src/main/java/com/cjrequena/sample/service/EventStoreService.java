@@ -74,7 +74,6 @@ public class EventStoreService {
       AggregateSnapshotEntity aggregateSnapshotEntity = AggregateSnapshotEntity.builder()
         .aggregateId(aggregate.getAggregateId())
         .data(this.objectMapper.writeValueAsString(aggregate))
-        .dataBase64("yyyy")
         .aggregateVersion(aggregate.getAggregateVersion())
         .build();
       this.aggregateSnapshotRepository.save(aggregateSnapshotEntity);
