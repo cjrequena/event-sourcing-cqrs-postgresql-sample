@@ -1,7 +1,8 @@
 package com.cjrequena.sample;
 
 import com.cjrequena.sample.component.CommandHandler;
-import com.cjrequena.sample.domain.aggregate.AccountAggregate;
+import com.cjrequena.sample.domain.aggregate.Aggregate;
+import com.cjrequena.sample.domain.aggregate.AggregateType;
 import com.cjrequena.sample.domain.command.Command;
 import com.cjrequena.sample.domain.command.CreateAccountCommand;
 import com.cjrequena.sample.domain.command.CreditAccountCommand;
@@ -12,6 +13,7 @@ import com.cjrequena.sample.mapper.EventMapper;
 import com.cjrequena.sample.repository.AggregateRepository;
 import com.cjrequena.sample.repository.AggregateSnapshotRepository;
 import com.cjrequena.sample.repository.EventRepository;
+import com.cjrequena.sample.service.AggregateFactory;
 import com.cjrequena.sample.service.EventStoreService;
 import com.cjrequena.sample.vo.AccountVO;
 import com.cjrequena.sample.vo.CreditVO;
@@ -38,6 +40,7 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
   private final List<CommandHandler<? extends Command>> commandHandlers;
   private final EventStoreService eventStoreService;
   private final EventMapper eventMapper;
+  private final AggregateFactory aggregateFactory;
 
   public static void main(String... args) {
     SpringApplication.run(CommandHandlerMainApplication.class, args);
@@ -54,10 +57,12 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
 
     final UUID aggregateId = createAccountCommand.getAggregateId();
 
-    AccountAggregate accountAggregate = AccountAggregate
-      .builder()
-      .aggregateId(aggregateId)
-      .build();
+    Aggregate accountAggregate = aggregateFactory.newInstance(AggregateType.ACCOUNT_AGGREGATE.getAggregateClass(), aggregateId);
+
+//    AccountAggregate accountAggregate = AccountAggregate
+//      .builder()
+//      .aggregateId(aggregateId)
+//      .build();
 
     Command creditAccountCommand = CreditAccountCommand.builder()
       .aggregateId(aggregateId)
