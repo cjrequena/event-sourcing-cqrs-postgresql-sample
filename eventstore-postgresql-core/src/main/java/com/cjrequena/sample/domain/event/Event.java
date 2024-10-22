@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 import lombok.extern.log4j.Log4j2;
 
 import java.lang.reflect.Method;
@@ -13,6 +14,7 @@ import java.util.UUID;
 
 @RequiredArgsConstructor
 @Getter
+@SuperBuilder
 @ToString
 @Log4j2
 public abstract class Event {
