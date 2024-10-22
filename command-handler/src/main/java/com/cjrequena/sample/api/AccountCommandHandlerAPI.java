@@ -39,8 +39,6 @@ public class AccountCommandHandlerAPI {
   public ResponseEntity<String> create(@Parameter @Valid @RequestBody AccountDTO accountDTO, ServerHttpRequest request)
     throws JsonProcessingException, OptimisticConcurrencyServiceException {
 
-
-
     CreateAccountCommand command = CreateAccountCommand.builder()
       .accountVO(accountMapper.toAccountVO(accountDTO))
       .build();
