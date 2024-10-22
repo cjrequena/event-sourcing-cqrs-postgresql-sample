@@ -10,14 +10,16 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 @Getter
 @Setter
+@SuperBuilder
 @Entity
 @Table(name = "es_event")
-public class AccountCreatedEventEntity extends EventEntity {
+public class AccountCreatedEventEntity extends AbstractEventEntity {
 
   // The actual event data, the event payload.
   @JdbcTypeCode(SqlTypes.JSON)

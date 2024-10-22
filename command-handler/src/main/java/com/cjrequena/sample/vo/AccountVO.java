@@ -1,18 +1,18 @@
 package com.cjrequena.sample.vo;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-
 @Getter
 @Builder
-@NoArgsConstructor // Lombok generates a no-args constructor
-@AllArgsConstructor // Lombok generates an all-args constructor
 @ToString
 @JsonPropertyOrder(value = {
   "id",
@@ -23,16 +23,25 @@ import java.util.UUID;
 public class AccountVO implements Serializable {
 
   @JsonProperty(value = "id")
-  private UUID id;
+  private final UUID id;
 
   @JsonProperty(value = "owner")
-  private String owner;
+  private final String owner;
 
   @JsonProperty(value = "balance")
-  private BigDecimal balance;
+  private final BigDecimal balance;
 
-//  @JsonProperty(value = "version")
-//  private long version;
+  // Constructor for deserialization
+  @JsonCreator
+  public AccountVO(
+    @JsonProperty("id") UUID accountId,
+    @JsonProperty(value = "owner") String owner,
+    @JsonProperty("balance") BigDecimal balance
+  ) {
+    this.id = accountId;
+    this.owner = owner;
+    this.balance = balance;
+  }
 
   // No setters to maintain immutability
 

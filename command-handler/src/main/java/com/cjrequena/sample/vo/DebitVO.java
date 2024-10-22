@@ -1,8 +1,8 @@
 package com.cjrequena.sample.vo;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -13,7 +13,6 @@ import java.util.UUID;
 
 @Getter
 @Builder
-@AllArgsConstructor
 @ToString
 @JsonPropertyOrder(value = {
   "account_id",
@@ -26,6 +25,13 @@ public class DebitVO implements Serializable {
 
   @JsonProperty(value = "amount")
   private final BigDecimal amount;
+
+  // Constructor for deserialization
+  @JsonCreator
+  public DebitVO(@JsonProperty("account_id") UUID accountId, @JsonProperty("amount") BigDecimal amount) {
+    this.accountId = accountId;
+    this.amount = amount;
+  }
 
   // No setters to maintain immutability
 

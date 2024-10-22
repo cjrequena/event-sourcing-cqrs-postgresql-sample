@@ -1,6 +1,6 @@
 package com.cjrequena.sample.domain.event;
 
-import com.cjrequena.sample.entity.AccountCreatedEventEntity;
+import com.cjrequena.sample.entity.EventEntity;
 import com.cjrequena.sample.mapper.EventMapper;
 import com.cjrequena.sample.vo.AccountVO;
 import com.cjrequena.sample.vo.EventExtensionVO;
@@ -19,7 +19,7 @@ public class AccountCreatedEvent extends Event {
   private final AccountVO data;
   private final EventExtensionVO extension;
 
-  public AccountCreatedEventEntity mapToEventEntity() {
+  public EventEntity mapToEventEntity() {
     log.info("Appending event {}", this);
     return EventMapper.INSTANCE.toEventEntity(this);
   }

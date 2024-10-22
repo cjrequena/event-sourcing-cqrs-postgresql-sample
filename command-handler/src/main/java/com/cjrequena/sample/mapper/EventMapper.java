@@ -1,15 +1,20 @@
 package com.cjrequena.sample.mapper;
 
+import com.cjrequena.sample.common.util.JsonUtil;
 import com.cjrequena.sample.domain.event.AccountCreatedEvent;
 import com.cjrequena.sample.domain.event.AccountCreditedEvent;
 import com.cjrequena.sample.domain.event.AccountDebitedEvent;
-import com.cjrequena.sample.entity.AccountCreatedEventEntity;
-import com.cjrequena.sample.entity.AccountCreditedEventEntity;
-import com.cjrequena.sample.entity.AccountDebitedEventEntity;
+import com.cjrequena.sample.entity.EventEntity;
+import com.cjrequena.sample.vo.AccountVO;
+import com.cjrequena.sample.vo.CreditVO;
+import com.cjrequena.sample.vo.DebitVO;
+import com.cjrequena.sample.vo.EventExtensionVO;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.NullValueCheckStrategy;
 import org.mapstruct.factory.Mappers;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Mapper(
   componentModel = "spring",
@@ -17,71 +22,103 @@ import org.mapstruct.factory.Mappers;
 )
 public interface EventMapper {
 
-    EventMapper INSTANCE = Mappers.getMapper(EventMapper.class);
+  Logger log = LoggerFactory.getLogger(EventMapper.class);
 
-    // Map from Event to EventEntity
-    @Mapping(source = "aggregateId", target = "aggregateId")
-    @Mapping(source = "aggregateVersion", target = "aggregateVersion")
-    @Mapping(source = "eventType", target = "eventType")
-    @Mapping(source = "dataContentType", target = "dataContentType")
-    @Mapping(source = "data", target = "data")
-    @Mapping(source = "dataBase64", target = "dataBase64")
-    @Mapping(source = "extension", target = "extension")
-    @Mapping(source = "time", target = "time")
-    AccountCreatedEventEntity toEventEntity(AccountCreatedEvent event);
+  EventMapper INSTANCE = Mappers.getMapper(EventMapper.class);
 
+  //@Mapping(source = "aggregateId", target = "aggregateId")
+  EventEntity toEventEntity(AccountCreatedEvent event);
 
-    // Map from Event to EventEntity
-    @Mapping(source = "aggregateId", target = "aggregateId")
-    @Mapping(source = "aggregateVersion", target = "aggregateVersion")
-    @Mapping(source = "eventType", target = "eventType")
-    @Mapping(source = "dataContentType", target = "dataContentType")
-    @Mapping(source = "data", target = "data")
-    @Mapping(source = "dataBase64", target = "dataBase64")
-    @Mapping(source = "extension", target = "extension")
-    @Mapping(source = "time", target = "time")
-    AccountCreditedEventEntity toEventEntity(AccountCreditedEvent event);
+  //@Mapping(source = "aggregateId", target = "aggregateId")
+  EventEntity toEventEntity(AccountCreditedEvent event);
 
-    // Map from Event to EventEntity
-    @Mapping(source = "aggregateId", target = "aggregateId")
-    @Mapping(source = "aggregateVersion", target = "aggregateVersion")
-    @Mapping(source = "eventType", target = "eventType")
-    @Mapping(source = "dataContentType", target = "dataContentType")
-    @Mapping(source = "data", target = "data")
-    @Mapping(source = "dataBase64", target = "dataBase64")
-    @Mapping(source = "extension", target = "extension")
-    @Mapping(source = "time", target = "time")
-    AccountDebitedEventEntity toEventEntity(AccountDebitedEvent event);
+  //    @Mapping(source = "aggregateId", target = "aggregateId")
+  EventEntity toEventEntity(AccountDebitedEvent event);
 
+  AccountCreatedEvent toAccountCreatedEvent(EventEntity eventEntity);
 
+  AccountCreditedEvent toAccountCreditedEvent(EventEntity eventEntity);
 
-    // Map from EventEntity to Event
-    @Mapping(source = "aggregateId", target = "aggregateId")
-//    @Mapping(source = "aggregateVersion", target = "aggregateVersion")
-//    @Mapping(source = "eventType", target = "eventType")
-//    @Mapping(source = "dataContentType", target = "dataContentType")
-//    @Mapping(source = "data", target = "accountVO")
-//    @Mapping(source = "dataBase64", target = "dataBase64")
-//    @Mapping(source = "time", target = "time")
-    AccountCreatedEvent toEvent(AccountCreditedEventEntity eventEntity);
+  AccountDebitedEvent toAccountDebitedEvent(EventEntity eventEntity);
 
-    // Map from EventEntity to Event
-    @Mapping(source = "aggregateId", target = "aggregateId")
-//    @Mapping(source = "aggregateVersion", target = "aggregateVersion")
-//    @Mapping(source = "eventType", target = "eventType")
-//    @Mapping(source = "dataContentType", target = "dataContentType")
-//    @Mapping(source = "data", target = "credit")
-//    @Mapping(source = "dataBase64", target = "dataBase64")
-//    @Mapping(source = "time", target = "time")
-    AccountCreditedEvent toEvent(AccountCreatedEventEntity eventEntity);
+  // Custom mapping method for converting String to EventExtensionVO
+  default EventExtensionVO mapToEventExtensionVO(String value) {
+    try {
+      return JsonUtil.jsonStringToObject(value, EventExtensionVO.class);
+    } catch (JsonProcessingException e) {
+      log.error("Failed to map JSON string to EventExtensionVO: {}", value, e);
+      return null; // Or throw a custom exception based on your requirements
+    }
+  }
 
-    // Map from EventEntity to Event
-    @Mapping(source = "aggregateId", target = "aggregateId")
-//    @Mapping(source = "aggregateVersion", target = "aggregateVersion")
-//    @Mapping(source = "eventType", target = "eventType")
-//    @Mapping(source = "dataContentType", target = "dataContentType")
-//    @Mapping(source = "data", target = "debit")
-//    @Mapping(source = "dataBase64", target = "dataBase64")
-//    @Mapping(source = "time", target = "time")
-    AccountDebitedEvent toEvent(AccountDebitedEventEntity eventEntity);
+  // You can add another mapping method if you need to go from EventExtensionVO to String
+  default String map(EventExtensionVO value) {
+    try {
+      return JsonUtil.objectToJsonString(value);
+    } catch (JsonProcessingException e) {
+      log.error("Failed to map EventExtensionVO to JSON string: {}", value, e);
+      return null; // Or throw a custom exception based on your requirements
+    }
+  }
+
+  // Custom mapping method for converting String to AccountVO
+  default AccountVO mapToAccountVO(String value) {
+    try {
+      return JsonUtil.jsonStringToObject(value, AccountVO.class);
+    } catch (JsonProcessingException e) {
+      log.error("Failed to map JSON string to AccountVO: {}", value, e);
+      return null; // Or throw a custom exception based on your requirements
+    }
+  }
+
+  // You can add another mapping method if you need to go from AccountVO to String
+  default String map(AccountVO value) {
+    try {
+      return JsonUtil.objectToJsonString(value);
+    } catch (JsonProcessingException e) {
+      log.error("Failed to map AccountVO to JSON string: {}", value, e);
+      return null; // Or throw a custom exception based on your requirements
+    }
+  }
+
+  // Custom mapping method for converting String to CreditVO
+  default CreditVO mapToCreditVO(String value) {
+    try {
+      return JsonUtil.jsonStringToObject(value, CreditVO.class);
+    } catch (JsonProcessingException e) {
+      log.error("Failed to map JSON string to CreditVO: {}", value, e);
+      return null; // Or throw a custom exception based on your requirements
+    }
+  }
+
+  // You can add another mapping method if you need to go from CreditVO to String
+  default String map(CreditVO value) {
+    try {
+      return JsonUtil.objectToJsonString(value);
+    } catch (JsonProcessingException e) {
+      log.error("Failed to map CreditVO to JSON string: {}", value, e);
+      return null; // Or throw a custom exception based on your requirements
+    }
+  }
+
+  // Custom mapping method for converting String to DebitVO
+  default DebitVO mapToDebitVO(String value) {
+    try {
+      return JsonUtil.jsonStringToObject(value, DebitVO.class);
+    } catch (JsonProcessingException e) {
+      log.error("Failed to map JSON string to DebitVO: {}", value, e);
+      return null; // Or throw a custom exception based on your requirements
+    }
+  }
+
+  // You can add another mapping method if you need to go from DebitVO to String
+  default String map(DebitVO value) {
+    try {
+      return JsonUtil.objectToJsonString(value);
+    } catch (JsonProcessingException e) {
+      log.error("Failed to map DebitVO to JSON string: {}", value, e);
+      return null; // Or throw a custom exception based on your requirements
+    }
+  }
+
 }

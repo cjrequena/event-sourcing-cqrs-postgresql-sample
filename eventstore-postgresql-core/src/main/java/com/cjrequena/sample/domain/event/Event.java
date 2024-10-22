@@ -1,6 +1,6 @@
 package com.cjrequena.sample.domain.event;
 
-import com.cjrequena.sample.entity.EventEntity;
+import com.cjrequena.sample.entity.AbstractEventEntity;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -21,6 +21,9 @@ public abstract class Event {
 
   // Unique id for the specific message. This id is globally unique
   protected UUID id;
+
+  // The event offset_txid
+  protected long offsetId;
 
   // The event offset_txid
   protected long offsetTxId;
@@ -46,16 +49,16 @@ public abstract class Event {
   // The time the event occurred
   protected OffsetDateTime time;
 
-  public EventEntity mapToEventEntity() {
+  public AbstractEventEntity mapToEventEntity() {
     log.info("Mapping to event entity {}", this);
     return invoke();
   }
 
   @SneakyThrows
-  private EventEntity invoke() {
+  private AbstractEventEntity invoke() {
     Class<?> parameterType = this.getClass();
     Method method = this.getClass().getMethod("mapToEventEntity");
-    return (EventEntity) method.invoke(this);
+    return (AbstractEventEntity) method.invoke(this);
   }
 
 }
