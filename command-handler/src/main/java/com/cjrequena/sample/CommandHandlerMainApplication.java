@@ -8,7 +8,8 @@ import com.cjrequena.sample.domain.command.CreateAccountCommand;
 import com.cjrequena.sample.domain.command.CreditAccountCommand;
 import com.cjrequena.sample.domain.command.DebitAccountCommand;
 import com.cjrequena.sample.domain.event.Event;
-import com.cjrequena.sample.exception.OptimisticConcurrencyServiceException;
+import com.cjrequena.sample.entity.EventEntity;
+import com.cjrequena.sample.exception.service.OptimisticConcurrencyServiceException;
 import com.cjrequena.sample.mapper.EventMapper;
 import com.cjrequena.sample.repository.AggregateRepository;
 import com.cjrequena.sample.repository.AggregateSnapshotRepository;
@@ -27,6 +28,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Log4j2
@@ -57,12 +59,14 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
 
     final UUID aggregateId = createAccountCommand.getAggregateId();
 
+    final List<EventEntity> eventEntities = this.eventStoreService.retrieveEventsByAggregateId(aggregateId, null, null);
+
     Aggregate accountAggregate = aggregateFactory.newInstance(AggregateType.ACCOUNT_AGGREGATE.getAggregateClass(), aggregateId);
 
-//    AccountAggregate accountAggregate = AccountAggregate
-//      .builder()
-//      .aggregateId(aggregateId)
-//      .build();
+    //    AccountAggregate accountAggregate = AccountAggregate
+    //      .builder()
+    //      .aggregateId(aggregateId)
+    //      .build();
 
     Command creditAccountCommand = CreditAccountCommand.builder()
       .aggregateId(aggregateId)
@@ -86,7 +90,6 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
     accountAggregate.applyCommand(creditAccountCommand);
     accountAggregate.applyCommand(debittAccountCommand);
 
-
     // Get the unconfirmed events pool
     List<Event> unconfirmedEventsPool = accountAggregate.getUnconfirmedEventsPool();
 
@@ -95,8 +98,6 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
     } catch (OptimisticConcurrencyServiceException ex) {
       log.error(ex);
     }
-
-
 
     //    final List<EventEntity> eventEntities = this.eventRepository.retrieveEventsByAggregateId(UUID.fromString("9f53ce42-0381-4a15-bfc9-5ad939e8cf99"), null, null);
     //    List<Event> events = new ArrayList<>();
@@ -112,7 +113,6 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
     //        events.add(accountDebitedEvent);
     //      }
     //    }
-
 
     //    commandHandlers.stream()
     //      .filter(commandHandler -> commandHandler.getCommandType() == command.getClass())

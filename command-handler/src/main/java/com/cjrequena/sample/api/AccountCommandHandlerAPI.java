@@ -5,7 +5,7 @@ import com.cjrequena.sample.domain.command.CreateAccountCommand;
 import com.cjrequena.sample.dto.AccountDTO;
 import com.cjrequena.sample.dto.CreditDTO;
 import com.cjrequena.sample.dto.DebitDTO;
-import com.cjrequena.sample.exception.OptimisticConcurrencyServiceException;
+import com.cjrequena.sample.exception.service.OptimisticConcurrencyServiceException;
 import com.cjrequena.sample.mapper.AccountMapper;
 import com.cjrequena.sample.service.EventStoreService;
 import com.fasterxml.jackson.core.JsonProcessingException;
