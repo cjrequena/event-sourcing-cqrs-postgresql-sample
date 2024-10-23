@@ -1,5 +1,6 @@
 package com.cjrequena.sample.domain.event;
 
+import com.cjrequena.eventstore.sample.domain.event.Event;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

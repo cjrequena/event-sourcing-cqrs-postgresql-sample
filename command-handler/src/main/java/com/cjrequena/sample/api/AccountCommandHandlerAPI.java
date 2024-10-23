@@ -1,13 +1,13 @@
 package com.cjrequena.sample.api;
 
+import com.cjrequena.eventstore.sample.exception.service.OptimisticConcurrencyServiceException;
+import com.cjrequena.eventstore.sample.service.EventStoreService;
 import com.cjrequena.sample.domain.aggregate.AccountAggregate;
 import com.cjrequena.sample.domain.command.CreateAccountCommand;
 import com.cjrequena.sample.dto.AccountDTO;
 import com.cjrequena.sample.dto.CreditDTO;
 import com.cjrequena.sample.dto.DebitDTO;
-import com.cjrequena.sample.exception.service.OptimisticConcurrencyServiceException;
 import com.cjrequena.sample.mapper.AccountMapper;
-import com.cjrequena.sample.service.EventStoreService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;

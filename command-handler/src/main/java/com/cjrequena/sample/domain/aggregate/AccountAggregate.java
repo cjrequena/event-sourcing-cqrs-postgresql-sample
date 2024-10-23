@@ -1,5 +1,6 @@
 package com.cjrequena.sample.domain.aggregate;
 
+import com.cjrequena.eventstore.sample.domain.aggregate.Aggregate;
 import com.cjrequena.sample.common.util.JsonUtil;
 import com.cjrequena.sample.domain.command.CreateAccountCommand;
 import com.cjrequena.sample.domain.command.CreditAccountCommand;

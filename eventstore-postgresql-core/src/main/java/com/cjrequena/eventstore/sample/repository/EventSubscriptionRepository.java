@@ -1,6 +1,6 @@
-package com.cjrequena.sample.repository;
+package com.cjrequena.eventstore.sample.repository;
 
-import com.cjrequena.sample.entity.EventSubscriptionEntity;
+import com.cjrequena.eventstore.sample.entity.EventSubscriptionEntity;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

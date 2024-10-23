@@ -1,21 +1,21 @@
 package com.cjrequena.sample;
 
+import com.cjrequena.eventstore.sample.domain.aggregate.Aggregate;
+import com.cjrequena.eventstore.sample.domain.command.Command;
+import com.cjrequena.eventstore.sample.domain.event.Event;
+import com.cjrequena.eventstore.sample.entity.EventEntity;
+import com.cjrequena.eventstore.sample.exception.service.OptimisticConcurrencyServiceException;
+import com.cjrequena.eventstore.sample.repository.AggregateRepository;
+import com.cjrequena.eventstore.sample.repository.AggregateSnapshotRepository;
+import com.cjrequena.eventstore.sample.repository.EventRepository;
+import com.cjrequena.eventstore.sample.service.AggregateFactory;
+import com.cjrequena.eventstore.sample.service.EventStoreService;
 import com.cjrequena.sample.component.CommandHandler;
-import com.cjrequena.sample.domain.aggregate.Aggregate;
 import com.cjrequena.sample.domain.aggregate.AggregateType;
-import com.cjrequena.sample.domain.command.Command;
 import com.cjrequena.sample.domain.command.CreateAccountCommand;
 import com.cjrequena.sample.domain.command.CreditAccountCommand;
 import com.cjrequena.sample.domain.command.DebitAccountCommand;
-import com.cjrequena.sample.domain.event.Event;
-import com.cjrequena.sample.entity.EventEntity;
-import com.cjrequena.sample.exception.service.OptimisticConcurrencyServiceException;
 import com.cjrequena.sample.mapper.EventMapper;
-import com.cjrequena.sample.repository.AggregateRepository;
-import com.cjrequena.sample.repository.AggregateSnapshotRepository;
-import com.cjrequena.sample.repository.EventRepository;
-import com.cjrequena.sample.service.AggregateFactory;
-import com.cjrequena.sample.service.EventStoreService;
 import com.cjrequena.sample.vo.AccountVO;
 import com.cjrequena.sample.vo.CreditVO;
 import com.cjrequena.sample.vo.DebitVO;
@@ -25,6 +25,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -33,6 +34,10 @@ import java.util.UUID;
 @Log4j2
 @SpringBootApplication
 @RequiredArgsConstructor
+@ComponentScan(basePackages = {
+  "com.cjrequena.sample",  // The main package
+  "com.cjrequena.eventstore.sample"  // Eventstore
+})
 public class CommandHandlerMainApplication implements CommandLineRunner {
 
   private final EventRepository eventRepository;

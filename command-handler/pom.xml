@@ -22,7 +22,7 @@
 
 
         <dependency>
-            <groupId>com.cjrequena.sample</groupId>
+            <groupId>com.cjrequena.eventstore.sample</groupId>
             <artifactId>eventstore-postgresql-core</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>

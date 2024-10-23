@@ -1,7 +1,7 @@
-package com.cjrequena.sample.domain.aggregate;
+package com.cjrequena.eventstore.sample.domain.aggregate;
 
-import com.cjrequena.sample.domain.command.Command;
-import com.cjrequena.sample.domain.event.Event;
+import com.cjrequena.eventstore.sample.domain.command.Command;
+import com.cjrequena.eventstore.sample.domain.event.Event;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.annotation.Nonnull;
 import lombok.Getter;

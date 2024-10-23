@@ -1,6 +1,7 @@
 package com.cjrequena.sample.domain.event;
 
-import com.cjrequena.sample.entity.EventEntity;
+import com.cjrequena.eventstore.sample.domain.event.Event;
+import com.cjrequena.eventstore.sample.entity.EventEntity;
 import com.cjrequena.sample.mapper.EventMapper;
 import com.cjrequena.sample.vo.AccountVO;
 import com.cjrequena.sample.vo.EventExtensionVO;

@@ -1,11 +1,11 @@
 package com.cjrequena.sample.mapper;
 
+import com.cjrequena.eventstore.sample.domain.event.Event;
+import com.cjrequena.eventstore.sample.entity.EventEntity;
 import com.cjrequena.sample.common.util.JsonUtil;
 import com.cjrequena.sample.domain.event.AccountCreatedEvent;
 import com.cjrequena.sample.domain.event.AccountCreditedEvent;
 import com.cjrequena.sample.domain.event.AccountDebitedEvent;
-import com.cjrequena.sample.domain.event.Event;
-import com.cjrequena.sample.entity.EventEntity;
 import com.cjrequena.sample.vo.AccountVO;
 import com.cjrequena.sample.vo.CreditVO;
 import com.cjrequena.sample.vo.DebitVO;

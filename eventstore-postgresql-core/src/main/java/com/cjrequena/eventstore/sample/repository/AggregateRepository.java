@@ -1,6 +1,6 @@
-package com.cjrequena.sample.repository;
+package com.cjrequena.eventstore.sample.repository;
 
-import com.cjrequena.sample.entity.AggregateEntity;
+import com.cjrequena.eventstore.sample.entity.AggregateEntity;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;

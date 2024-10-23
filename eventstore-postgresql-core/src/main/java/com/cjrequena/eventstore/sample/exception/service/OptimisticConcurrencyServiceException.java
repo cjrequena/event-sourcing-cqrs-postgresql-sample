@@ -1,4 +1,4 @@
-package com.cjrequena.sample.exception.service;
+package com.cjrequena.eventstore.sample.exception.service;
 
 /**
  *

@@ -1,6 +1,6 @@
-package com.cjrequena.sample.service;
+package com.cjrequena.eventstore.sample.service;
 
-import com.cjrequena.sample.domain.aggregate.Aggregate;
+import com.cjrequena.eventstore.sample.domain.aggregate.Aggregate;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;

@@ -1,7 +1,7 @@
 package com.cjrequena.sample.component;
 
-import com.cjrequena.sample.domain.aggregate.Aggregate;
-import com.cjrequena.sample.domain.command.Command;
+import com.cjrequena.eventstore.sample.domain.aggregate.Aggregate;
+import com.cjrequena.eventstore.sample.domain.command.Command;
 import com.cjrequena.sample.domain.command.CreateAccountCommand;
 import jakarta.annotation.Nonnull;
 import lombok.extern.log4j.Log4j2;

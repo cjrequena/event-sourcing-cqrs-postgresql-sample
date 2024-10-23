@@ -1,4 +1,4 @@
-package com.cjrequena.sample.configuration;
+package com.cjrequena.eventstore.sample.configuration;
 
 import jakarta.validation.Valid;
 import lombok.Setter;

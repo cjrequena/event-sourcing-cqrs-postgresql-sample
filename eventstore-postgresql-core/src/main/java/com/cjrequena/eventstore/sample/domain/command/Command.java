@@ -1,4 +1,4 @@
-package com.cjrequena.sample.domain.command;
+package com.cjrequena.eventstore.sample.domain.command;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;

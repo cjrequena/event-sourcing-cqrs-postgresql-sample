@@ -1,5 +1,6 @@
 package com.cjrequena.sample.entity;
 
+import com.cjrequena.eventstore.sample.entity.AbstractEventEntity;
 import com.cjrequena.sample.entity.converter.CreditConverter;
 import com.cjrequena.sample.entity.converter.EventExtensionConverter;
 import com.cjrequena.sample.vo.CreditVO;

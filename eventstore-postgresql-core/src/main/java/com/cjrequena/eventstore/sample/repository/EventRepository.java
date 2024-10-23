@@ -1,7 +1,7 @@
-package com.cjrequena.sample.repository;
+package com.cjrequena.eventstore.sample.repository;
 
-import com.cjrequena.sample.entity.AbstractEventEntity;
-import com.cjrequena.sample.entity.EventEntity;
+import com.cjrequena.eventstore.sample.entity.AbstractEventEntity;
+import com.cjrequena.eventstore.sample.entity.EventEntity;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
