@@ -13,6 +13,7 @@ import com.cjrequena.sample.repository.AggregateSnapshotRepository;
 import com.cjrequena.sample.repository.EventRepository;
 import com.cjrequena.sample.repository.EventSubscriptionRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
@@ -82,49 +83,8 @@ public class EventStoreService {
     }
   }
 
-
-  /**
-   * Retrieves a list of {@link EventEntity} instances associated with the specified aggregate ID,
-   * optionally filtered by a range of aggregate versions.
-   * <p>
-   * This method is typically used to retrieve events for a specific aggregate, allowing for
-   * filtering based on the provided version range. If both {@code fromAggregateVersion} and
-   * {@code toAggregateVersion} are {@code null}, all events for the given aggregate ID are returned.
-   * <p>
-   * This operation is executed within a read-only transaction, ensuring optimal performance
-   * for data retrieval without any modification to the underlying data.
-   * <p>
-   * <strong>Usage Example:</strong>
-   * <pre>
-   * {@code
-   * UUID aggregateId = UUID.randomUUID();
-   * Long fromVersion = 1L;
-   * Long toVersion = 10L;
-   * List<EventEntity> events = eventService.retrieveEventsByAggregateId(aggregateId, fromVersion, toVersion);
-   * if (events.isEmpty()) {
-   *     // Handle case when no events are found
-   * }
-   * }
-   * </pre>
-   *
-   * @param aggregateId the unique identifier of the aggregate whose events are being retrieved.
-   *                    This parameter cannot be {@code null}.
-   * @param fromAggregateVersion the lower bound (inclusive) for filtering events by aggregate version.
-   *                             If {@code null}, no lower bound filter is applied.
-   * @param toAggregateVersion the upper bound (inclusive) for filtering events by aggregate version.
-   *                           If {@code null}, no upper bound filter is applied.
-   *
-   * @return a list of {@link EventEntity} instances that match the specified criteria,
-   *         ordered by {@code aggregate_version} in ascending order. If no events match the
-   *         criteria, an empty list is returned.
-   *
-   * @throws IllegalArgumentException if {@code aggregateId} is {@code null}.
-   *
-   * @see EventEntity
-   * @see EventRepository#retrieveEventsByAggregateId(UUID, Long, Long)
-   */
   @Transactional(readOnly = true)
-  public List<EventEntity> retrieveEventsByAggregateId(UUID aggregateId, Long fromAggregateVersion, Long toAggregateVersion) {
+  public List<EventEntity> retrieveEventsByAggregateId(UUID aggregateId, @Nullable Long fromAggregateVersion, @Nullable Long toAggregateVersion) {
 
     // Validate input
     if (aggregateId == null) {

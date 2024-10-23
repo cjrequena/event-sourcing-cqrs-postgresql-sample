@@ -11,12 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 import java.util.UUID;
 
-/**
- *
- * <p></p>
- * <p></p>
- * @author cjrequena
- */
 @Repository
 public interface AggregateRepository extends CrudRepository<AggregateEntity, UUID> {
 
