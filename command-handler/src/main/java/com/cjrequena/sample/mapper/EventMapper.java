@@ -4,6 +4,7 @@ import com.cjrequena.sample.common.util.JsonUtil;
 import com.cjrequena.sample.domain.event.AccountCreatedEvent;
 import com.cjrequena.sample.domain.event.AccountCreditedEvent;
 import com.cjrequena.sample.domain.event.AccountDebitedEvent;
+import com.cjrequena.sample.domain.event.Event;
 import com.cjrequena.sample.entity.EventEntity;
 import com.cjrequena.sample.vo.AccountVO;
 import com.cjrequena.sample.vo.CreditVO;
@@ -15,6 +16,9 @@ import org.mapstruct.NullValueCheckStrategy;
 import org.mapstruct.factory.Mappers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Mapper(
   componentModel = "spring",
@@ -118,6 +122,29 @@ public interface EventMapper {
     } catch (JsonProcessingException e) {
       log.error("Failed to map DebitVO to JSON string: {}", value, e);
       return null; // Or throw a custom exception based on your requirements
+    }
+  }
+
+  // New method to map a List of EventEntity to a List of Event
+  default List<Event> toEventList(List<EventEntity> eventEntities) {
+    return eventEntities.stream()
+      .map(this::toEvent)  // Call the helper method for individual mapping
+      .collect(Collectors.toList());
+  }
+
+  // Helper method to map a single EventEntity to an Event (AccountCreatedEvent, AccountCreditedEvent, etc.)
+  default Event toEvent(EventEntity eventEntity) {
+    // Assuming EventEntity has a type field or some kind of discriminator
+    switch (eventEntity.getEventType()) {
+      case "ACCOUNT_CREATED_EVENT":
+        return toAccountCreatedEvent(eventEntity);
+      case "ACCOUNT_CREDITED_EVENT":
+        return toAccountCreditedEvent(eventEntity);
+      case "ACCOUNT_DEBITED_EVENT":
+        return toAccountDebitedEvent(eventEntity);
+      default:
+        log.error("Unknown event type: {}", eventEntity.getEventType());
+        return null;  // Or throw an exception
     }
   }
 

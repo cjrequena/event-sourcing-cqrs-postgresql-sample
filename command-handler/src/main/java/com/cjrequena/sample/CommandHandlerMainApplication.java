@@ -51,30 +51,124 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
   public void run(String... args) throws JsonProcessingException {
 
     AccountVO accountVO = AccountVO.builder().owner("Carlos").balance(BigDecimal.valueOf(100)).build();
-
     Command createAccountCommand = CreateAccountCommand.builder()
       .accountVO(accountVO)
       .build();
-
     final UUID aggregateId = createAccountCommand.getAggregateId();
 
-    final List<EventEntity> eventEntities = this.eventStoreService.retrieveEventsByAggregateId(aggregateId, null, null);
 
-    Aggregate accountAggregate = aggregateFactory.newInstance(AggregateType.ACCOUNT_AGGREGATE.getAggregateClass(), aggregateId);
+    Aggregate aggregate = aggregateFactory.newInstance(AggregateType.ACCOUNT_AGGREGATE.getAggregateClass(), aggregateId);
+    aggregate.applyCommand(createAccountCommand);
+    try {
+      this.eventStoreService.saveAggregate(aggregate);
+    } catch (OptimisticConcurrencyServiceException ex) {
+      log.error(ex);
+    }
+    aggregate.markUnconfirmedEventsAsConfirmed();
 
-    //    AccountAggregate accountAggregate = AccountAggregate
-    //      .builder()
-    //      .aggregateId(aggregateId)
-    //      .build();
-
+    // --
+    aggregate = aggregateFactory.newInstance(AggregateType.ACCOUNT_AGGREGATE.getAggregateClass(), aggregateId);
+    List<EventEntity> eventEntities = this.eventStoreService.retrieveEventsByAggregateId(aggregateId, null, null);
+    List<Event> events = this.eventMapper.toEventList(eventEntities);
+    aggregate.reconstituteFromConfirmedEvents(events);
     Command creditAccountCommand = CreditAccountCommand.builder()
       .aggregateId(aggregateId)
       .creditVO(CreditVO.builder()
         .accountId(aggregateId)
-        .amount(BigDecimal.valueOf(200))
+        .amount(BigDecimal.valueOf(100))
         .build())
       .build();
+    aggregate.applyCommand(creditAccountCommand);
+    try {
+      this.eventStoreService.saveAggregate(aggregate);
+    } catch (OptimisticConcurrencyServiceException ex) {
+      log.error(ex);
+    }
+    aggregate.markUnconfirmedEventsAsConfirmed();
 
+    // --
+    aggregate = aggregateFactory.newInstance(AggregateType.ACCOUNT_AGGREGATE.getAggregateClass(), aggregateId);
+    eventEntities = this.eventStoreService.retrieveEventsByAggregateId(aggregateId, null, null);
+    events = this.eventMapper.toEventList(eventEntities);
+    aggregate.reconstituteFromConfirmedEvents(events);
+    aggregate.applyCommand(creditAccountCommand);
+    try {
+      this.eventStoreService.saveAggregate(aggregate);
+    } catch (OptimisticConcurrencyServiceException ex) {
+      log.error(ex);
+    }
+    aggregate.markUnconfirmedEventsAsConfirmed();
+
+    // --
+    aggregate = aggregateFactory.newInstance(AggregateType.ACCOUNT_AGGREGATE.getAggregateClass(), aggregateId);
+    eventEntities = this.eventStoreService.retrieveEventsByAggregateId(aggregateId, null, null);
+    events = this.eventMapper.toEventList(eventEntities);
+    aggregate.reconstituteFromConfirmedEvents(events);
+    aggregate.applyCommand(creditAccountCommand);
+    try {
+      this.eventStoreService.saveAggregate(aggregate);
+    } catch (OptimisticConcurrencyServiceException ex) {
+      log.error(ex);
+    }
+    aggregate.markUnconfirmedEventsAsConfirmed();
+
+    // --
+    aggregate = aggregateFactory.newInstance(AggregateType.ACCOUNT_AGGREGATE.getAggregateClass(), aggregateId);
+    eventEntities = this.eventStoreService.retrieveEventsByAggregateId(aggregateId, null, null);
+    events = this.eventMapper.toEventList(eventEntities);
+    aggregate.reconstituteFromConfirmedEvents(events);
+    aggregate.applyCommand(creditAccountCommand);
+    try {
+      this.eventStoreService.saveAggregate(aggregate);
+    } catch (OptimisticConcurrencyServiceException ex) {
+      log.error(ex);
+    }
+    aggregate.markUnconfirmedEventsAsConfirmed();
+
+    // --
+    aggregate = aggregateFactory.newInstance(AggregateType.ACCOUNT_AGGREGATE.getAggregateClass(), aggregateId);
+    eventEntities = this.eventStoreService.retrieveEventsByAggregateId(aggregateId, null, null);
+    events = this.eventMapper.toEventList(eventEntities);
+    aggregate.reconstituteFromConfirmedEvents(events);
+    aggregate.applyCommand(creditAccountCommand);
+    try {
+      this.eventStoreService.saveAggregate(aggregate);
+    } catch (OptimisticConcurrencyServiceException ex) {
+      log.error(ex);
+    }
+    aggregate.markUnconfirmedEventsAsConfirmed();
+
+    // --
+    aggregate = aggregateFactory.newInstance(AggregateType.ACCOUNT_AGGREGATE.getAggregateClass(), aggregateId);
+    eventEntities = this.eventStoreService.retrieveEventsByAggregateId(aggregateId, null, null);
+    events = this.eventMapper.toEventList(eventEntities);
+    aggregate.reconstituteFromConfirmedEvents(events);
+    aggregate.applyCommand(creditAccountCommand);
+    try {
+      this.eventStoreService.saveAggregate(aggregate);
+    } catch (OptimisticConcurrencyServiceException ex) {
+      log.error(ex);
+    }
+    aggregate.markUnconfirmedEventsAsConfirmed();
+
+    // --
+    aggregate = aggregateFactory.newInstance(AggregateType.ACCOUNT_AGGREGATE.getAggregateClass(), aggregateId);
+    eventEntities = this.eventStoreService.retrieveEventsByAggregateId(aggregateId, null, null);
+    events = this.eventMapper.toEventList(eventEntities);
+    aggregate.reconstituteFromConfirmedEvents(events);
+    aggregate.applyCommand(creditAccountCommand);
+    try {
+      this.eventStoreService.saveAggregate(aggregate);
+    } catch (OptimisticConcurrencyServiceException ex) {
+      log.error(ex);
+    }
+    aggregate.markUnconfirmedEventsAsConfirmed();
+
+    // --
+    aggregate = aggregateFactory.newInstance(AggregateType.ACCOUNT_AGGREGATE.getAggregateClass(), aggregateId);
+    eventEntities = this.eventStoreService.retrieveEventsByAggregateId(aggregateId, null, null);
+    events = this.eventMapper.toEventList(eventEntities);
+    aggregate.reconstituteFromConfirmedEvents(events);
     Command debittAccountCommand = DebitAccountCommand.builder()
       .aggregateId(aggregateId)
       .debitVO(DebitVO.builder()
@@ -82,21 +176,55 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
         .amount(BigDecimal.valueOf(100))
         .build())
       .build();
-
-    accountAggregate.applyCommand(createAccountCommand);
-    accountAggregate.applyCommand(creditAccountCommand);
-    accountAggregate.applyCommand(creditAccountCommand);
-    accountAggregate.applyCommand(creditAccountCommand);
-    accountAggregate.applyCommand(debittAccountCommand);
-
-    // Get the unconfirmed events pool
-    List<Event> unconfirmedEventsPool = accountAggregate.getUnconfirmedEventsPool();
-
+    aggregate.applyCommand(debittAccountCommand);
     try {
-      this.eventStoreService.saveAggregate(accountAggregate);
+      this.eventStoreService.saveAggregate(aggregate);
     } catch (OptimisticConcurrencyServiceException ex) {
       log.error(ex);
     }
+    aggregate.markUnconfirmedEventsAsConfirmed();
+
+    // --
+    aggregate = aggregateFactory.newInstance(AggregateType.ACCOUNT_AGGREGATE.getAggregateClass(), aggregateId);
+    eventEntities = this.eventStoreService.retrieveEventsByAggregateId(aggregateId, null, null);
+    events = this.eventMapper.toEventList(eventEntities);
+    aggregate.reconstituteFromConfirmedEvents(events);
+    aggregate.applyCommand(debittAccountCommand);
+    try {
+      this.eventStoreService.saveAggregate(aggregate);
+    } catch (OptimisticConcurrencyServiceException ex) {
+      log.error(ex);
+    }
+    aggregate.markUnconfirmedEventsAsConfirmed();
+
+    // --
+    aggregate = aggregateFactory.newInstance(AggregateType.ACCOUNT_AGGREGATE.getAggregateClass(), aggregateId);
+    eventEntities = this.eventStoreService.retrieveEventsByAggregateId(aggregateId, null, null);
+    events = this.eventMapper.toEventList(eventEntities);
+    aggregate.reconstituteFromConfirmedEvents(events);
+    aggregate.applyCommand(debittAccountCommand);
+    try {
+      this.eventStoreService.saveAggregate(aggregate);
+    } catch (OptimisticConcurrencyServiceException ex) {
+      log.error(ex);
+    }
+    aggregate.markUnconfirmedEventsAsConfirmed();
+
+    // --
+    aggregate = aggregateFactory.newInstance(AggregateType.ACCOUNT_AGGREGATE.getAggregateClass(), aggregateId);
+    eventEntities = this.eventStoreService.retrieveEventsByAggregateId(aggregateId, null, null);
+    events = this.eventMapper.toEventList(eventEntities);
+    aggregate.reconstituteFromConfirmedEvents(events);
+    aggregate.applyCommand(debittAccountCommand);
+    try {
+      this.eventStoreService.saveAggregate(aggregate);
+    } catch (OptimisticConcurrencyServiceException ex) {
+      log.error(ex);
+    }
+    aggregate.markUnconfirmedEventsAsConfirmed();
+
+    // Get the unconfirmed events pool
+    List<Event> unconfirmedEventsPool = aggregate.getUnconfirmedEventsPool();
 
     //    final List<EventEntity> eventEntities = this.eventRepository.retrieveEventsByAggregateId(UUID.fromString("9f53ce42-0381-4a15-bfc9-5ad939e8cf99"), null, null);
     //    List<Event> events = new ArrayList<>();

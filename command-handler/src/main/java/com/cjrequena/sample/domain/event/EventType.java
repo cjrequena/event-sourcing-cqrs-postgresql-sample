@@ -8,13 +8,12 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public enum EventType {
 
-    ACCOUNT_CREATED_EVENT("ACCOUNT_CREATED_EVENT"),
-    ACCOUNT_CREDITED_EVENT("ACCOUNT_CREDITED_EVENT"),
-    ACCOUNT_DEBITED_EVENT("ACCOUNT_DEBITED_EVENT");
+    ACCOUNT_CREATED_EVENT(AccountCreatedEvent.class),
+    ACCOUNT_CREDITED_EVENT(AccountCreditedEvent.class),
+    ACCOUNT_DEBITED_EVENT(AccountDebitedEvent.class);
 
+    private final Class<? extends Event> eventClass;
 
+    //private final String value;
 
-    private final String value;
-
-    //private final Class<? extends AbstractEvent> eventClass;
 }
