@@ -66,7 +66,7 @@ public class AccountCommandHandlerAPI {
     return new ResponseEntity<>("Create successful", HttpStatus.OK);
   }
 
-  @PostMapping("/accounts/{accountId}/credit")
+  @PutMapping("/accounts/{accountId}/credit")
   public ResponseEntity<String> creditAccount(@PathVariable("accountId") UUID accountId, @RequestBody CreditDTO creditDTO)
     throws JsonProcessingException, OptimisticConcurrencyServiceException {
 
@@ -92,7 +92,7 @@ public class AccountCommandHandlerAPI {
     return new ResponseEntity<>("Credit successful", HttpStatus.OK);
   }
 
-  @PostMapping("/accounts/{accountId}/debit")
+  @PutMapping("/accounts/{accountId}/debit")
   public ResponseEntity<String> debitAccount(@PathVariable("accountId") UUID accountId, @RequestBody DebitDTO debitDTO)
     throws JsonProcessingException, OptimisticConcurrencyServiceException {
     // Logic to handle debiting the account
