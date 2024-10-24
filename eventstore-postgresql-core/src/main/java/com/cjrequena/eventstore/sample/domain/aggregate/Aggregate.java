@@ -58,14 +58,14 @@ public abstract class Aggregate {
    * aggregate's version accordingly. If there are unconfirmed events,
    * an exception will be thrown to prevent inconsistencies.
    *
-   * @param events The list of events used to reconstitute the aggregate.
+   * @param events The list of events used to reproduce the aggregate.
    * @throws IllegalStateException if there are uncommitted changes.
    * @throws IllegalArgumentException if any event's aggregate version is not greater than the current version.
    */
-  public void reconstituteFromConfirmedEvents(List<Event> events) {
+  public void reproduceFromEvents(List<Event> events) {
     // Guard clause to check for unsaved changes
     if (!unconfirmedEventsPool.isEmpty()) {
-      throw new IllegalStateException("Cannot reconstitute from history. The aggregate has unconfirmed events.");
+      throw new IllegalStateException("Cannot reproduce from history. The aggregate has unconfirmed events.");
     }
 
     // Validate and apply events using Stream API

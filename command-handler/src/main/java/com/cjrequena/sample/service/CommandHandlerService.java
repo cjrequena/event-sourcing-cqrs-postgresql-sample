@@ -54,9 +54,9 @@ public class CommandHandlerService {
     final EventStoreConfigurationProperties.SnapshotProperties snapshotConfiguration = eventStoreConfigurationProperties.getSnapshot(AggregateType.ACCOUNT_AGGREGATE.toString());
     if (snapshotConfiguration.enabled()) {
       return retrieveAggregateFromSnapshot(aggregateId, command)
-        .orElseGet(() -> createAndReconstituteAggregate(aggregateId, command));
+        .orElseGet(() -> createAndReproduceAggregate(aggregateId, command));
     } else {
-      return createAndReconstituteAggregate(aggregateId, command);
+      return createAndReproduceAggregate(aggregateId, command);
     }
   }
 
@@ -65,7 +65,7 @@ public class CommandHandlerService {
     return optionalAggregate.map(aggregate -> {
       List<Event> events = retrieveEvents(aggregateId, aggregate.getAggregateVersion());
       if (events != null && !events.isEmpty()) {
-        aggregate.reconstituteFromConfirmedEvents(events);
+        aggregate.reproduceFromEvents(events);
       }else{
         aggregate.setReproducedAggregateVersion(aggregate.getAggregateVersion());
       }
@@ -73,11 +73,11 @@ public class CommandHandlerService {
     });
   }
 
-  private Aggregate createAndReconstituteAggregate(UUID aggregateId, Command command) {
+  private Aggregate createAndReproduceAggregate(UUID aggregateId, Command command) {
     log.info("Snapshot not found for Aggregate ID: {}. Reconstituting from events.", aggregateId);
     Aggregate aggregate = aggregateFactory.newInstance(AggregateType.ACCOUNT_AGGREGATE.getAggregateClass(), aggregateId);
     List<Event> events = retrieveEvents(aggregateId, null);
-    aggregate.reconstituteFromConfirmedEvents(events);
+    aggregate.reproduceFromEvents(events);
     return aggregate;
   }
 

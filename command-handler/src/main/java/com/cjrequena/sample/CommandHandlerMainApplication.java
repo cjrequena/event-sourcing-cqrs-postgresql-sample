@@ -57,7 +57,7 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
 
     final Aggregate aggregateSS = this.eventStoreService.retrieveAggregateSnapshot(AggregateType.ACCOUNT_AGGREGATE.getAggregateClass(), UUID.fromString("582d9889-d262-4a7e-ac3e-5d4c88c6e957"), null).get();
     final List<Event> eventList = this.eventMapper.toEventList(this.eventStoreService.retrieveEventsByAggregateId(aggregateSS.getAggregateId(), aggregateSS.getAggregateVersion(), null));
-    aggregateSS.reconstituteFromConfirmedEvents(eventList);
+    aggregateSS.reproduceFromEvents(eventList);
 
     AccountVO accountVO = AccountVO.builder().owner("Carlos").balance(BigDecimal.valueOf(100)).build();
     Command createAccountCommand = CreateAccountCommand.builder()
@@ -80,7 +80,7 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
     aggregate = aggregateFactory.newInstance(AggregateType.ACCOUNT_AGGREGATE.getAggregateClass(), aggregateId);
     List<EventEntity> eventEntities = this.eventStoreService.retrieveEventsByAggregateId(aggregateId, null, null);
     List<Event> events = this.eventMapper.toEventList(eventEntities);
-    aggregate.reconstituteFromConfirmedEvents(events);
+    aggregate.reproduceFromEvents(events);
     Command creditAccountCommand = CreditAccountCommand.builder()
       .aggregateId(aggregateId)
       .creditVO(CreditVO.builder()
@@ -100,7 +100,7 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
     aggregate = aggregateFactory.newInstance(AggregateType.ACCOUNT_AGGREGATE.getAggregateClass(), aggregateId);
     eventEntities = this.eventStoreService.retrieveEventsByAggregateId(aggregateId, null, null);
     events = this.eventMapper.toEventList(eventEntities);
-    aggregate.reconstituteFromConfirmedEvents(events);
+    aggregate.reproduceFromEvents(events);
     aggregate.applyCommand(creditAccountCommand);
     try {
       this.eventStoreService.saveAggregate(aggregate);
@@ -113,7 +113,7 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
     aggregate = aggregateFactory.newInstance(AggregateType.ACCOUNT_AGGREGATE.getAggregateClass(), aggregateId);
     eventEntities = this.eventStoreService.retrieveEventsByAggregateId(aggregateId, null, null);
     events = this.eventMapper.toEventList(eventEntities);
-    aggregate.reconstituteFromConfirmedEvents(events);
+    aggregate.reproduceFromEvents(events);
     aggregate.applyCommand(creditAccountCommand);
     try {
       this.eventStoreService.saveAggregate(aggregate);
@@ -126,7 +126,7 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
     aggregate = aggregateFactory.newInstance(AggregateType.ACCOUNT_AGGREGATE.getAggregateClass(), aggregateId);
     eventEntities = this.eventStoreService.retrieveEventsByAggregateId(aggregateId, null, null);
     events = this.eventMapper.toEventList(eventEntities);
-    aggregate.reconstituteFromConfirmedEvents(events);
+    aggregate.reproduceFromEvents(events);
     aggregate.applyCommand(creditAccountCommand);
     try {
       this.eventStoreService.saveAggregate(aggregate);
@@ -139,7 +139,7 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
     aggregate = aggregateFactory.newInstance(AggregateType.ACCOUNT_AGGREGATE.getAggregateClass(), aggregateId);
     eventEntities = this.eventStoreService.retrieveEventsByAggregateId(aggregateId, null, null);
     events = this.eventMapper.toEventList(eventEntities);
-    aggregate.reconstituteFromConfirmedEvents(events);
+    aggregate.reproduceFromEvents(events);
     aggregate.applyCommand(creditAccountCommand);
     try {
       this.eventStoreService.saveAggregate(aggregate);
@@ -152,7 +152,7 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
     aggregate = aggregateFactory.newInstance(AggregateType.ACCOUNT_AGGREGATE.getAggregateClass(), aggregateId);
     eventEntities = this.eventStoreService.retrieveEventsByAggregateId(aggregateId, null, null);
     events = this.eventMapper.toEventList(eventEntities);
-    aggregate.reconstituteFromConfirmedEvents(events);
+    aggregate.reproduceFromEvents(events);
     aggregate.applyCommand(creditAccountCommand);
     try {
       this.eventStoreService.saveAggregate(aggregate);
@@ -165,7 +165,7 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
     aggregate = aggregateFactory.newInstance(AggregateType.ACCOUNT_AGGREGATE.getAggregateClass(), aggregateId);
     eventEntities = this.eventStoreService.retrieveEventsByAggregateId(aggregateId, null, null);
     events = this.eventMapper.toEventList(eventEntities);
-    aggregate.reconstituteFromConfirmedEvents(events);
+    aggregate.reproduceFromEvents(events);
     aggregate.applyCommand(creditAccountCommand);
     try {
       this.eventStoreService.saveAggregate(aggregate);
@@ -178,7 +178,7 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
     aggregate = aggregateFactory.newInstance(AggregateType.ACCOUNT_AGGREGATE.getAggregateClass(), aggregateId);
     eventEntities = this.eventStoreService.retrieveEventsByAggregateId(aggregateId, null, null);
     events = this.eventMapper.toEventList(eventEntities);
-    aggregate.reconstituteFromConfirmedEvents(events);
+    aggregate.reproduceFromEvents(events);
     Command debittAccountCommand = DebitAccountCommand.builder()
       .aggregateId(aggregateId)
       .debitVO(DebitVO.builder()
@@ -198,7 +198,7 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
     aggregate = aggregateFactory.newInstance(AggregateType.ACCOUNT_AGGREGATE.getAggregateClass(), aggregateId);
     eventEntities = this.eventStoreService.retrieveEventsByAggregateId(aggregateId, null, null);
     events = this.eventMapper.toEventList(eventEntities);
-    aggregate.reconstituteFromConfirmedEvents(events);
+    aggregate.reproduceFromEvents(events);
     aggregate.applyCommand(debittAccountCommand);
     try {
       this.eventStoreService.saveAggregate(aggregate);
@@ -211,7 +211,7 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
     aggregate = aggregateFactory.newInstance(AggregateType.ACCOUNT_AGGREGATE.getAggregateClass(), aggregateId);
     eventEntities = this.eventStoreService.retrieveEventsByAggregateId(aggregateId, null, null);
     events = this.eventMapper.toEventList(eventEntities);
-    aggregate.reconstituteFromConfirmedEvents(events);
+    aggregate.reproduceFromEvents(events);
     aggregate.applyCommand(debittAccountCommand);
     try {
       this.eventStoreService.saveAggregate(aggregate);
@@ -224,7 +224,7 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
     aggregate = aggregateFactory.newInstance(AggregateType.ACCOUNT_AGGREGATE.getAggregateClass(), aggregateId);
     eventEntities = this.eventStoreService.retrieveEventsByAggregateId(aggregateId, null, null);
     events = this.eventMapper.toEventList(eventEntities);
-    aggregate.reconstituteFromConfirmedEvents(events);
+    aggregate.reproduceFromEvents(events);
     aggregate.applyCommand(debittAccountCommand);
     try {
       this.eventStoreService.saveAggregate(aggregate);

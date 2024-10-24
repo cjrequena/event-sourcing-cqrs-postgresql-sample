@@ -114,7 +114,7 @@ public class AccountCommandHandlerAPI {
     final List<Event> events = this.eventMapper.toEventList(eventEntities);
 
     final Aggregate aggregate = this.aggregateFactory.newInstance(AggregateType.ACCOUNT_AGGREGATE.getAggregateClass(), command.getAggregateId());
-    aggregate.reconstituteFromConfirmedEvents(events);
+    aggregate.reproduceFromEvents(events);
 
     aggregate.applyCommand(command);
     eventStoreService.saveAggregate(aggregate);
