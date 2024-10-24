@@ -1,6 +1,7 @@
 package com.cjrequena.eventstore.sample.configuration;
 
 import jakarta.validation.Valid;
+import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
@@ -10,6 +11,8 @@ import org.springframework.validation.annotation.Validated;
 import java.util.HashMap;
 import java.util.Map;
 
+@Getter
+@Setter
 @Validated
 @Configuration
 @ConfigurationProperties(prefix = "eventstore")
@@ -19,7 +22,6 @@ public class EventStoreConfigurationProperties {
 
   @Valid
   @NestedConfigurationProperty
-  @Setter
   private Map<String, SnapshotProperties> snapshot = new HashMap<>();
 
   public SnapshotProperties getSnapshot(String aggregateType) {
