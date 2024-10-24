@@ -8,7 +8,7 @@ import com.cjrequena.eventstore.sample.domain.event.Event;
 import com.cjrequena.eventstore.sample.entity.AbstractEventEntity;
 import com.cjrequena.eventstore.sample.entity.AggregateSnapshotEntity;
 import com.cjrequena.eventstore.sample.entity.EventEntity;
-import com.cjrequena.eventstore.sample.exception.service.OptimisticConcurrencyServiceException;
+import com.cjrequena.eventstore.sample.exception.service.EventStoreOptimisticConcurrencyServiceException;
 import com.cjrequena.eventstore.sample.repository.AggregateRepository;
 import com.cjrequena.eventstore.sample.repository.AggregateSnapshotRepository;
 import com.cjrequena.eventstore.sample.repository.EventRepository;
@@ -40,7 +40,7 @@ public class EventStoreService {
   private final ObjectMapper objectMapper;
 
   @SneakyThrows
-  public void saveAggregate(Aggregate aggregate) throws OptimisticConcurrencyServiceException {
+  public void saveAggregate(Aggregate aggregate) throws EventStoreOptimisticConcurrencyServiceException {
     String aggregateType = aggregate.getAggregateType();
     UUID aggregateId = aggregate.getAggregateId();
 
@@ -59,7 +59,7 @@ public class EventStoreService {
         expectedAggregateVersion
       );
       log.warn(errorMessage);
-      throw new OptimisticConcurrencyServiceException(errorMessage);
+      throw new EventStoreOptimisticConcurrencyServiceException(errorMessage);
     }
 
     // Append new events
@@ -86,9 +86,8 @@ public class EventStoreService {
   }
 
   public Optional<Aggregate> retrieveAggregateSnapshot(Class<? extends Aggregate> aggregateClass, UUID aggregateId, @Nullable Long aggregateVersion) {
-    final AggregateSnapshotEntity aggregateSnapshotEntity = this.aggregateSnapshotRepository.retrieveAggregateSnapshot(aggregateId, null);
-    final Aggregate aggregate = fromSnapshotToAggregate(aggregateSnapshotEntity, aggregateClass);
-    return Optional.ofNullable(aggregate);
+    return Optional.ofNullable(aggregateSnapshotRepository.retrieveAggregateSnapshot(aggregateId, aggregateVersion))
+      .map(aggregateSnapshotEntity -> fromSnapshotToAggregate(aggregateSnapshotEntity, aggregateClass));
   }
 
   @Transactional(readOnly = true)

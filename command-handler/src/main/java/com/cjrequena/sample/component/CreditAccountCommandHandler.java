@@ -4,8 +4,9 @@ import com.cjrequena.eventstore.sample.domain.aggregate.Aggregate;
 import com.cjrequena.eventstore.sample.domain.command.Command;
 import com.cjrequena.eventstore.sample.service.EventStoreService;
 import com.cjrequena.sample.domain.command.CreateAccountCommand;
-import com.cjrequena.sample.exception.service.AccountBalanceServiceException;
-import com.cjrequena.sample.vo.AccountVO;
+import com.cjrequena.sample.domain.command.CreditAccountCommand;
+import com.cjrequena.sample.exception.service.AmountServiceException;
+import com.cjrequena.sample.vo.CreditVO;
 import jakarta.annotation.Nonnull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -19,7 +20,7 @@ import java.math.BigDecimal;
 @Component
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @Transactional
-public class CreateAccountCommandHandler implements CommandHandler<CreateAccountCommand> {
+public class CreditAccountCommandHandler implements CommandHandler<CreditAccountCommand> {
 
   private final EventStoreService eventStoreService;
 
@@ -27,9 +28,9 @@ public class CreateAccountCommandHandler implements CommandHandler<CreateAccount
   @Override
   public void handle(Command command, Aggregate aggregate) {
     log.trace("Handling {} with command {}", CreateAccountCommand.class.getSimpleName(), command);
-    final AccountVO accountVO = ((CreateAccountCommand) command).getAccountVO();
-    if (accountVO.getBalance().compareTo(BigDecimal.ZERO) <= 0) {
-      throw new AccountBalanceServiceException("Invalid account balance: The account balance must be greater than zero.");
+    final CreditVO creditVO = ((CreditAccountCommand) command).getCreditVO();
+    if (creditVO.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
+      throw new AmountServiceException("Invalid credit amount: The amount must be greater than zero.");
     }
     aggregate.applyCommand(command);
     eventStoreService.saveAggregate(aggregate);
@@ -38,8 +39,8 @@ public class CreateAccountCommandHandler implements CommandHandler<CreateAccount
 
   @Nonnull
   @Override
-  public Class<CreateAccountCommand> getCommandType() {
-    return CreateAccountCommand.class;
+  public Class<CreditAccountCommand> getCommandType() {
+    return CreditAccountCommand.class;
   }
 
 

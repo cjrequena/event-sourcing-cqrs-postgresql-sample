@@ -4,7 +4,7 @@ import com.cjrequena.eventstore.sample.domain.aggregate.Aggregate;
 import com.cjrequena.eventstore.sample.domain.command.Command;
 import com.cjrequena.eventstore.sample.domain.event.Event;
 import com.cjrequena.eventstore.sample.entity.EventEntity;
-import com.cjrequena.eventstore.sample.exception.service.OptimisticConcurrencyServiceException;
+import com.cjrequena.eventstore.sample.exception.service.EventStoreOptimisticConcurrencyServiceException;
 import com.cjrequena.eventstore.sample.repository.AggregateRepository;
 import com.cjrequena.eventstore.sample.repository.AggregateSnapshotRepository;
 import com.cjrequena.eventstore.sample.repository.EventRepository;
@@ -70,7 +70,7 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
     aggregate.applyCommand(createAccountCommand);
     try {
       this.eventStoreService.saveAggregate(aggregate);
-    } catch (OptimisticConcurrencyServiceException ex) {
+    } catch (EventStoreOptimisticConcurrencyServiceException ex) {
       log.error(ex);
     }
 
@@ -91,7 +91,7 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
     aggregate.applyCommand(creditAccountCommand);
     try {
       this.eventStoreService.saveAggregate(aggregate);
-    } catch (OptimisticConcurrencyServiceException ex) {
+    } catch (EventStoreOptimisticConcurrencyServiceException ex) {
       log.error(ex);
     }
     aggregate.markUnconfirmedEventsAsConfirmed();
@@ -104,7 +104,7 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
     aggregate.applyCommand(creditAccountCommand);
     try {
       this.eventStoreService.saveAggregate(aggregate);
-    } catch (OptimisticConcurrencyServiceException ex) {
+    } catch (EventStoreOptimisticConcurrencyServiceException ex) {
       log.error(ex);
     }
     aggregate.markUnconfirmedEventsAsConfirmed();
@@ -117,7 +117,7 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
     aggregate.applyCommand(creditAccountCommand);
     try {
       this.eventStoreService.saveAggregate(aggregate);
-    } catch (OptimisticConcurrencyServiceException ex) {
+    } catch (EventStoreOptimisticConcurrencyServiceException ex) {
       log.error(ex);
     }
     aggregate.markUnconfirmedEventsAsConfirmed();
@@ -130,7 +130,7 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
     aggregate.applyCommand(creditAccountCommand);
     try {
       this.eventStoreService.saveAggregate(aggregate);
-    } catch (OptimisticConcurrencyServiceException ex) {
+    } catch (EventStoreOptimisticConcurrencyServiceException ex) {
       log.error(ex);
     }
     aggregate.markUnconfirmedEventsAsConfirmed();
@@ -143,7 +143,7 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
     aggregate.applyCommand(creditAccountCommand);
     try {
       this.eventStoreService.saveAggregate(aggregate);
-    } catch (OptimisticConcurrencyServiceException ex) {
+    } catch (EventStoreOptimisticConcurrencyServiceException ex) {
       log.error(ex);
     }
     aggregate.markUnconfirmedEventsAsConfirmed();
@@ -156,7 +156,7 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
     aggregate.applyCommand(creditAccountCommand);
     try {
       this.eventStoreService.saveAggregate(aggregate);
-    } catch (OptimisticConcurrencyServiceException ex) {
+    } catch (EventStoreOptimisticConcurrencyServiceException ex) {
       log.error(ex);
     }
     aggregate.markUnconfirmedEventsAsConfirmed();
@@ -169,7 +169,7 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
     aggregate.applyCommand(creditAccountCommand);
     try {
       this.eventStoreService.saveAggregate(aggregate);
-    } catch (OptimisticConcurrencyServiceException ex) {
+    } catch (EventStoreOptimisticConcurrencyServiceException ex) {
       log.error(ex);
     }
     aggregate.markUnconfirmedEventsAsConfirmed();
@@ -189,7 +189,7 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
     aggregate.applyCommand(debittAccountCommand);
     try {
       this.eventStoreService.saveAggregate(aggregate);
-    } catch (OptimisticConcurrencyServiceException ex) {
+    } catch (EventStoreOptimisticConcurrencyServiceException ex) {
       log.error(ex);
     }
     aggregate.markUnconfirmedEventsAsConfirmed();
@@ -202,7 +202,7 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
     aggregate.applyCommand(debittAccountCommand);
     try {
       this.eventStoreService.saveAggregate(aggregate);
-    } catch (OptimisticConcurrencyServiceException ex) {
+    } catch (EventStoreOptimisticConcurrencyServiceException ex) {
       log.error(ex);
     }
     aggregate.markUnconfirmedEventsAsConfirmed();
@@ -215,7 +215,7 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
     aggregate.applyCommand(debittAccountCommand);
     try {
       this.eventStoreService.saveAggregate(aggregate);
-    } catch (OptimisticConcurrencyServiceException ex) {
+    } catch (EventStoreOptimisticConcurrencyServiceException ex) {
       log.error(ex);
     }
     aggregate.markUnconfirmedEventsAsConfirmed();
@@ -228,7 +228,7 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
     aggregate.applyCommand(debittAccountCommand);
     try {
       this.eventStoreService.saveAggregate(aggregate);
-    } catch (OptimisticConcurrencyServiceException ex) {
+    } catch (EventStoreOptimisticConcurrencyServiceException ex) {
       log.error(ex);
     }
     aggregate.markUnconfirmedEventsAsConfirmed();

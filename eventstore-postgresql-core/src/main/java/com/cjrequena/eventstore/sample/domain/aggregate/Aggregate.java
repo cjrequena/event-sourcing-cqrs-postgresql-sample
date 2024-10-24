@@ -5,10 +5,7 @@ import com.cjrequena.eventstore.sample.domain.event.Event;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.annotation.Nonnull;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.SneakyThrows;
-import lombok.ToString;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.InvocationTargetException;
@@ -38,6 +35,7 @@ public abstract class Aggregate {
   protected String aggregateType;
 
   @JsonIgnore
+  @Setter
   protected long reproducedAggregateVersion; // The version of the aggregate before any changes were applied.
 
   @JsonIgnore
