@@ -9,6 +9,8 @@ import com.cjrequena.sample.domain.event.AccountCreatedEvent;
 import com.cjrequena.sample.domain.event.AccountCreditedEvent;
 import com.cjrequena.sample.domain.event.AccountDebitedEvent;
 import com.cjrequena.sample.vo.EventExtensionVO;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.annotation.Nonnull;
 import lombok.Builder;
@@ -22,11 +24,13 @@ import java.util.UUID;
 @ToString(callSuper = true)
 public class AccountAggregate extends Aggregate {
 
+  @JsonProperty("account")
   private Account account;
 
   @Builder
-  public AccountAggregate(@NonNull UUID aggregateId, long version) {
-    super(aggregateId, version);
+  @JsonCreator
+  public AccountAggregate(@NonNull @JsonProperty("aggregate_id") UUID aggregateId, @JsonProperty("aggregate_version") long aggregateVersion) {
+    super(aggregateId, aggregateVersion);
   }
 
   public void applyCommand(CreateAccountCommand command) throws JsonProcessingException {

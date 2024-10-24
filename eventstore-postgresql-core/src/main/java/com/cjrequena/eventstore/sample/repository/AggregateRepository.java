@@ -35,17 +35,11 @@ public interface AggregateRepository extends CrudRepository<AggregateEntity, UUI
        AND aggregate_version = :expectedAggregateVersion
     RETURNING 1
     """, nativeQuery = true)
-  Optional<Integer> validateAndUpdateAggregateVersionIfMatch(
+  Optional<Integer> verifyAndUpdateAggregateVersionIfMatch(
     @Param("aggregateId") UUID aggregateId,
     @Param("expectedAggregateVersion") long expectedAggregateVersion,
     @Param("newAggregateVersion") long newAggregateVersion
   );
-
-  @Query(value = "SELECT CASE "
-    + " WHEN  VERSION = :#{#aggregate.version} THEN True ELSE False END "
-    + " FROM AGGREGATE WHERE ID=:#{#aggregate.id}",
-    nativeQuery = true)
-  boolean validateAggregateVersion(@Param("aggregate") AggregateEntity aggregateEntity);
 
   @Query(value = "SELECT CASE "
     + " WHEN COUNT(A)> 0 THEN TRUE ELSE FALSE END "

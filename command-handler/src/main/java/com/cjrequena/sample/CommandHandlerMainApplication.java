@@ -55,6 +55,10 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
   @Override
   public void run(String... args) throws JsonProcessingException {
 
+    final Aggregate aggregateSS = this.eventStoreService.retrieveAggregateSnapshot(AggregateType.ACCOUNT_AGGREGATE.getAggregateClass(), UUID.fromString("582d9889-d262-4a7e-ac3e-5d4c88c6e957"), null).get();
+    final List<Event> eventList = this.eventMapper.toEventList(this.eventStoreService.retrieveEventsByAggregateId(aggregateSS.getAggregateId(), aggregateSS.getAggregateVersion(), null));
+    aggregateSS.reconstituteFromConfirmedEvents(eventList);
+
     AccountVO accountVO = AccountVO.builder().owner("Carlos").balance(BigDecimal.valueOf(100)).build();
     Command createAccountCommand = CreateAccountCommand.builder()
       .accountVO(accountVO)
@@ -69,6 +73,7 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
     } catch (OptimisticConcurrencyServiceException ex) {
       log.error(ex);
     }
+
     aggregate.markUnconfirmedEventsAsConfirmed();
 
     // --

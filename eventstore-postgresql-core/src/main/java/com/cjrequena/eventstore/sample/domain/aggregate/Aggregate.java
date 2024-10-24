@@ -3,6 +3,7 @@ package com.cjrequena.eventstore.sample.domain.aggregate;
 import com.cjrequena.eventstore.sample.domain.command.Command;
 import com.cjrequena.eventstore.sample.domain.event.Event;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.annotation.Nonnull;
 import lombok.Getter;
 import lombok.NonNull;
@@ -26,21 +27,30 @@ import java.util.UUID;
 @ToString
 @Slf4j
 public abstract class Aggregate {
+
+  @JsonProperty("aggregate_id")
   protected final UUID aggregateId;
+
+  @JsonProperty("aggregate_version")
   protected long aggregateVersion; // The current version of the aggregate after the latest event has been applied.
+
+  @JsonProperty("aggregate_type")
+  protected String aggregateType;
+
   @JsonIgnore
   protected long reproducedAggregateVersion; // The version of the aggregate before any changes were applied.
+
   @JsonIgnore
   protected List<Event> unconfirmedEventsPool;
   /**
    * Constructs an instance of the Aggregate class.
    *
    * @param aggregateId The unique identifier for this aggregate.
-   * @param version The initial version of the aggregate.
+   * @param aggregateVersion The initial version of the aggregate.
    */
-  protected Aggregate(@NonNull UUID aggregateId, long version) {
+  protected Aggregate(@NonNull UUID aggregateId, long aggregateVersion) {
     this.aggregateId = aggregateId;
-    this.aggregateVersion = version;
+    this.aggregateVersion = aggregateVersion;
     this.unconfirmedEventsPool = new ArrayList<>();
   }
 

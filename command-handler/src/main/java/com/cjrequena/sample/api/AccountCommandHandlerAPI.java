@@ -45,7 +45,7 @@ public class AccountCommandHandlerAPI {
 
     AccountAggregate aggregate = AccountAggregate.builder()
       .aggregateId(command.getAggregateId())
-      .version(0L)
+      .aggregateVersion(0L)
       .build();
 
     aggregate.applyCommand(command);

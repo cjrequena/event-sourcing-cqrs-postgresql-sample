@@ -1,5 +1,6 @@
 package com.cjrequena.eventstore.sample.service;
 
+import com.cjrequena.eventstore.sample.common.util.JsonUtil;
 import com.cjrequena.eventstore.sample.configuration.EventStoreConfigurationProperties;
 import com.cjrequena.eventstore.sample.configuration.EventStoreConfigurationProperties.SnapshotProperties;
 import com.cjrequena.eventstore.sample.domain.aggregate.Aggregate;
@@ -49,7 +50,7 @@ public class EventStoreService {
     long expectedAggregateVersion = aggregate.getReproducedAggregateVersion();
     long newAggregateVersion = aggregate.getAggregateVersion();
 
-    Optional<Integer> isVersionUpdated = aggregateRepository.validateAndUpdateAggregateVersionIfMatch(aggregateId, expectedAggregateVersion, newAggregateVersion);
+    Optional<Integer> isVersionUpdated = aggregateRepository.verifyAndUpdateAggregateVersionIfMatch(aggregateId, expectedAggregateVersion, newAggregateVersion);
     if (isVersionUpdated.isEmpty()) {
       String errorMessage = String.format(
         "Optimistic concurrency control error in aggregate: %s id: %s. Actual version doesn't match expected version: %s",
@@ -76,24 +77,34 @@ public class EventStoreService {
       log.info("Creating {} aggregate {} version {} snapshot", aggregate.getAggregateType(), aggregate.getAggregateId(), aggregate.getAggregateVersion());
       AggregateSnapshotEntity aggregateSnapshotEntity = AggregateSnapshotEntity.builder()
         .aggregateId(aggregate.getAggregateId())
-        .data(this.objectMapper.writeValueAsString(aggregate))
         .aggregateVersion(aggregate.getAggregateVersion())
+        .aggregateType(aggregate.getAggregateType())
+        .data(this.objectMapper.writeValueAsString(aggregate))
         .build();
       this.aggregateSnapshotRepository.save(aggregateSnapshotEntity);
     }
   }
 
+  public Optional<Aggregate> retrieveAggregateSnapshot(Class<? extends Aggregate> aggregateClass, UUID aggregateId, @Nullable Long aggregateVersion) {
+    final AggregateSnapshotEntity aggregateSnapshotEntity = this.aggregateSnapshotRepository.retrieveAggregateSnapshot(aggregateId, null);
+    final Aggregate aggregate = fromSnapshotToAggregate(aggregateSnapshotEntity, aggregateClass);
+    return Optional.ofNullable(aggregate);
+  }
+
   @Transactional(readOnly = true)
   public List<EventEntity> retrieveEventsByAggregateId(UUID aggregateId, @Nullable Long fromAggregateVersion, @Nullable Long toAggregateVersion) {
-
     // Validate input
     if (aggregateId == null) {
       throw new IllegalArgumentException("aggregateId cannot be null");
     }
-
     // Query the repository, with optional parameters for version range
     return eventRepository.retrieveEventsByAggregateId(aggregateId, fromAggregateVersion, toAggregateVersion);
   }
 
+  @SneakyThrows
+  private Aggregate fromSnapshotToAggregate(AggregateSnapshotEntity aggregateSnapshotEntity, Class<? extends Aggregate> aggregateClass) {
+    String json = aggregateSnapshotEntity.getData();
+    return JsonUtil.jsonStringToObject(json, aggregateClass);
+  }
 
 }
