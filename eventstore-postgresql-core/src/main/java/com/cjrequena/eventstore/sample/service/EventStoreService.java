@@ -86,12 +86,21 @@ public class EventStoreService {
   }
 
   public Optional<Aggregate> retrieveAggregateSnapshot(Class<? extends Aggregate> aggregateClass, UUID aggregateId, @Nullable Long aggregateVersion) {
+    log.info("Retrieving aggregate snapshot for aggregate {} with id {}", aggregateClass, aggregateId);
+
     return Optional.ofNullable(aggregateSnapshotRepository.retrieveAggregateSnapshot(aggregateId, aggregateVersion))
       .map(aggregateSnapshotEntity -> fromSnapshotToAggregate(aggregateSnapshotEntity, aggregateClass));
   }
 
   @Transactional(readOnly = true)
   public List<EventEntity> retrieveEventsByAggregateId(UUID aggregateId, @Nullable Long fromAggregateVersion, @Nullable Long toAggregateVersion) {
+    if (log.isInfoEnabled()) {
+      if (toAggregateVersion != null) {
+        log.info("Retrieving aggregate events for aggregate with id {} from version {} to version {}", aggregateId, fromAggregateVersion, toAggregateVersion);
+      } else {
+        log.info("Retrieving aggregate events for aggregate with id {} from version {}", aggregateId, fromAggregateVersion);
+      }
+    }
     // Validate input
     if (aggregateId == null) {
       throw new IllegalArgumentException("aggregateId cannot be null");
