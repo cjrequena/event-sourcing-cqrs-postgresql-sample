@@ -64,11 +64,7 @@ public class CommandHandlerService {
     Optional<Aggregate> optionalAggregate = eventStoreService.retrieveAggregateSnapshot(AggregateType.ACCOUNT_AGGREGATE.getAggregateClass(), aggregateId, null);
     return optionalAggregate.map(aggregate -> {
       List<Event> events = retrieveEvents(aggregateId, aggregate.getAggregateVersion());
-      if (events != null && !events.isEmpty()) {
-        aggregate.reproduceFromEvents(events);
-      }else{
-        aggregate.setReproducedAggregateVersion(aggregate.getAggregateVersion());
-      }
+      aggregate.reproduceFromEvents(events);
       return aggregate;
     });
   }

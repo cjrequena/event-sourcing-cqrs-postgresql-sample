@@ -5,10 +5,10 @@ import com.cjrequena.eventstore.sample.domain.command.Command;
 import com.cjrequena.eventstore.sample.exception.service.EventStoreOptimisticConcurrencyServiceException;
 import com.cjrequena.eventstore.sample.service.EventStoreService;
 import com.cjrequena.sample.domain.command.CreateAccountCommand;
-import com.cjrequena.sample.domain.command.CreditAccountCommand;
+import com.cjrequena.sample.domain.command.DebitAccountCommand;
 import com.cjrequena.sample.exception.service.AmountServiceException;
 import com.cjrequena.sample.exception.service.OptimisticConcurrencyServiceException;
-import com.cjrequena.sample.vo.CreditVO;
+import com.cjrequena.sample.vo.DebitVO;
 import jakarta.annotation.Nonnull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -22,7 +22,7 @@ import java.math.BigDecimal;
 @Component
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @Transactional
-public class CreditAccountCommandHandler implements CommandHandler<CreditAccountCommand> {
+public class DebitAccountCommandHandler implements CommandHandler<DebitAccountCommand> {
 
   private final EventStoreService eventStoreService;
 
@@ -30,9 +30,9 @@ public class CreditAccountCommandHandler implements CommandHandler<CreditAccount
   @Override
   public void handle(Command command, Aggregate aggregate) {
     log.trace("Handling {} with command {}", CreateAccountCommand.class.getSimpleName(), command);
-    final CreditVO creditVO = ((CreditAccountCommand) command).getCreditVO();
-    if (creditVO.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
-      throw new AmountServiceException("Invalid credit amount: The amount must be greater than zero.");
+    final DebitVO debitVO = ((DebitAccountCommand) command).getDebitVO();
+    if (debitVO.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
+      throw new AmountServiceException("Invalid debit amount: The amount must be greater than zero.");
     }
     aggregate.applyCommand(command);
     try {
@@ -45,8 +45,8 @@ public class CreditAccountCommandHandler implements CommandHandler<CreditAccount
 
   @Nonnull
   @Override
-  public Class<CreditAccountCommand> getCommandType() {
-    return CreditAccountCommand.class;
+  public Class<DebitAccountCommand> getCommandType() {
+    return DebitAccountCommand.class;
   }
 
 

@@ -53,7 +53,7 @@ public class EventStoreService {
     Optional<Integer> isVersionUpdated = aggregateRepository.verifyAndUpdateAggregateVersionIfMatch(aggregateId, expectedAggregateVersion, newAggregateVersion);
     if (isVersionUpdated.isEmpty()) {
       String errorMessage = String.format(
-        "Optimistic concurrency control error in aggregate: %s id: %s. Actual version doesn't match expected version: %s",
+        "Optimistic concurrency conflict detected for aggregate '%s' with ID '%s'. The current expected version does not match the version '%s'.",
         aggregateType,
         aggregateId,
         expectedAggregateVersion
@@ -103,6 +103,8 @@ public class EventStoreService {
   @SneakyThrows
   private Aggregate fromSnapshotToAggregate(AggregateSnapshotEntity aggregateSnapshotEntity, Class<? extends Aggregate> aggregateClass) {
     String json = aggregateSnapshotEntity.getData();
+    final Aggregate aggregate = JsonUtil.jsonStringToObject(json, aggregateClass);
+    aggregate.setReproducedAggregateVersion(aggregate.getAggregateVersion());
     return JsonUtil.jsonStringToObject(json, aggregateClass);
   }
 
