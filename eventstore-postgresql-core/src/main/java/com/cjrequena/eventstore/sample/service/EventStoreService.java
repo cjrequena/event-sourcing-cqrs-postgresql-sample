@@ -105,7 +105,7 @@ public class EventStoreService {
     String json = aggregateSnapshotEntity.getData();
     final Aggregate aggregate = JsonUtil.jsonStringToObject(json, aggregateClass);
     aggregate.setReproducedAggregateVersion(aggregate.getAggregateVersion());
-    return JsonUtil.jsonStringToObject(json, aggregateClass);
+    return aggregate;
   }
 
 }
