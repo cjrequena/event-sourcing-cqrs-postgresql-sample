@@ -7,7 +7,7 @@ import jakarta.annotation.Nonnull;
 
 public interface CommandHandler< T extends Command> {
 
-    void handle(Command command, Aggregate aggregate) throws EventStoreOptimisticConcurrencyServiceException;
+    void handle(@Nonnull Command command, @Nonnull Aggregate aggregate) throws EventStoreOptimisticConcurrencyServiceException;
 
     @Nonnull
     Class<T> getCommandType();

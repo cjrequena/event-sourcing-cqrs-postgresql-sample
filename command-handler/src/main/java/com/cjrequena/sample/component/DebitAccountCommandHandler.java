@@ -4,7 +4,6 @@ import com.cjrequena.eventstore.sample.domain.aggregate.Aggregate;
 import com.cjrequena.eventstore.sample.domain.command.Command;
 import com.cjrequena.eventstore.sample.exception.service.EventStoreOptimisticConcurrencyServiceException;
 import com.cjrequena.eventstore.sample.service.EventStoreService;
-import com.cjrequena.sample.domain.command.CreateAccountCommand;
 import com.cjrequena.sample.domain.command.DebitAccountCommand;
 import com.cjrequena.sample.exception.service.AmountServiceException;
 import com.cjrequena.sample.exception.service.OptimisticConcurrencyServiceException;
@@ -28,19 +27,28 @@ public class DebitAccountCommandHandler implements CommandHandler<DebitAccountCo
 
 
   @Override
-  public void handle(Command command, Aggregate aggregate) {
-    log.trace("Handling {} with command {}", CreateAccountCommand.class.getSimpleName(), command);
+  public void handle(@Nonnull Command command, @Nonnull Aggregate aggregate) {
+    if (!(command instanceof DebitAccountCommand)) {
+      throw new IllegalArgumentException("Expected command of type DebitAccountCommand but received " + command.getClass().getSimpleName());
+    }
+
+    log.trace("Handling command of type {} for aggregate {}", command.getClass().getSimpleName(), aggregate.getClass().getSimpleName());
+
     final DebitVO debitVO = ((DebitAccountCommand) command).getDebitVO();
     if (debitVO.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
       throw new AmountServiceException("Invalid debit amount: The amount must be greater than zero.");
     }
-    aggregate.applyCommand(command);
+
     try {
+      aggregate.applyCommand(command);
       eventStoreService.saveAggregate(aggregate);
+      aggregate.markUnconfirmedEventsAsConfirmed();
     } catch (EventStoreOptimisticConcurrencyServiceException ex) {
       throw new OptimisticConcurrencyServiceException(ex.getMessage(), ex);
     }
-    aggregate.markUnconfirmedEventsAsConfirmed();
+
+    log.info("Successfully handled command {} and updated aggregate with ID {}", command.getClass().getSimpleName(), aggregate.getAggregateId());
+
   }
 
   @Nonnull
