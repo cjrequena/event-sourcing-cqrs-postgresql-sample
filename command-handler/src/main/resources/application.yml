@@ -41,9 +41,11 @@ management.info.git.mode: full # Mode to use to expose git information.
 # https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#appendix.application-properties.core
 #logging.config: classpath:log4j2.xml # Location of the logging configuration file. For instance, `classpath:logback.xml` for Logback.
 logging.level: # Log levels severity mapping. For instance, `logging.level.org.springframework: DEBUG`.
-  org.springframework: INFO
+  org.springframework: ERROR
   org.flywaydb: INFO
-  com.cjrequena.sample: TRACE
+  com.cjrequena.sample: INFO
+  com.cjrequena.eventstore.sample: INFO
+
 logging.pattern:
   console:  "%highlight{%-5p|%d{ISO8601}{GMT}|application=${spring.application.name}|traceID=%X{traceId},spanID=%X{spanId}|%c{1}|%m%ex%n}{
       FATAL=bg_red, 
