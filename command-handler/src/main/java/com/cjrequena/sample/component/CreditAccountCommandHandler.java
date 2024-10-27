@@ -26,7 +26,6 @@ public class CreditAccountCommandHandler implements CommandHandler<CreditAccount
 
   private final EventStoreService eventStoreService;
 
-
   @Override
   public void handle(@Nonnull Command command, @Nonnull Aggregate aggregate) {
 
@@ -36,7 +35,7 @@ public class CreditAccountCommandHandler implements CommandHandler<CreditAccount
       throw new IllegalArgumentException("Expected command of type CreditAccountCommand but received " + command.getClass().getSimpleName());
     }
 
-      if (!this.eventStoreService.verifyIfAggregateExist(aggregate.getAggregateId(), aggregate.getAggregateType())) {
+    if (!this.eventStoreService.verifyIfAggregateExist(aggregate.getAggregateId(), aggregate.getAggregateType())) {
       String errorMessage = String.format(
         "The aggregate '%s' with ID '%s' does not exist, which means there is not any account with ID '%s'.",
         aggregate.getAggregateType(),
@@ -67,6 +66,5 @@ public class CreditAccountCommandHandler implements CommandHandler<CreditAccount
   public Class<CreditAccountCommand> getCommandType() {
     return CreditAccountCommand.class;
   }
-
 
 }
