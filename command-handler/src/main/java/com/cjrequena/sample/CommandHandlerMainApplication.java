@@ -29,6 +29,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Log4j2
@@ -55,16 +56,21 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
   @Override
   public void run(String... args) throws JsonProcessingException {
 
-    final Aggregate aggregateSS = this.eventStoreService.retrieveAggregateSnapshot(AggregateType.ACCOUNT_AGGREGATE.getAggregateClass(), UUID.fromString("582d9889-d262-4a7e-ac3e-5d4c88c6e957"), null).get();
-    final List<Event> eventList = this.eventMapper.toEventList(this.eventStoreService.retrieveEventsByAggregateId(aggregateSS.getAggregateId(), aggregateSS.getAggregateVersion(), null));
-    aggregateSS.reproduceFromEvents(eventList);
+    final Optional<Aggregate> optionalAggregateSS = this.eventStoreService.retrieveAggregateSnapshot(AggregateType.ACCOUNT_AGGREGATE.getAggregateClass(), UUID.fromString("582d9889-d262-4a7e-ac3e-5d4c88c6e957"), null);
+    optionalAggregateSS
+      .map(aggregate -> {
+        List<Event> eventList = eventMapper.toEventList(
+          eventStoreService.retrieveEventsByAggregateId(aggregate.getAggregateId(), aggregate.getAggregateVersion(), null)
+        );
+        aggregate.reproduceFromEvents(eventList);
+        return aggregate;
+      });
 
     AccountVO accountVO = AccountVO.builder().owner("Carlos").balance(BigDecimal.valueOf(100)).build();
     Command createAccountCommand = CreateAccountCommand.builder()
       .accountVO(accountVO)
       .build();
     final UUID aggregateId = createAccountCommand.getAggregateId();
-
 
     Aggregate aggregate = aggregateFactory.newInstance(AggregateType.ACCOUNT_AGGREGATE.getAggregateClass(), aggregateId);
     aggregate.applyCommand(createAccountCommand);

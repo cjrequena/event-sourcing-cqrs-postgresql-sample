@@ -41,11 +41,12 @@ public interface AggregateRepository extends CrudRepository<AggregateEntity, UUI
     @Param("newAggregateVersion") long newAggregateVersion
   );
 
-  @Query(value = "SELECT CASE "
-    + " WHEN COUNT(A)> 0 THEN TRUE ELSE FALSE END "
-    + " FROM AGGREGATE A "
-    + " WHERE A.ID = :id AND A.AGGREGATE_TYPE = :aggregateType",
-    nativeQuery = true)
-  boolean verifyAggregate(@Param("id") UUID id, @Param("aggregateType") String aggregateType);
+  @Query(value = """ 
+    SELECT CASE
+    WHEN COUNT(A)> 0 THEN TRUE ELSE FALSE END
+    FROM es_aggregate A
+    WHERE A.ID = :aggregateId AND A.AGGREGATE_TYPE = :aggregateType
+    """, nativeQuery = true)
+  boolean verifyIfAggregateExist(@Param("aggregateId") UUID aggregateId, @Param("aggregateType") String aggregateType);
 
 }

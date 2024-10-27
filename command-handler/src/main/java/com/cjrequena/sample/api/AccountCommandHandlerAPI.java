@@ -12,8 +12,10 @@ import com.cjrequena.sample.dto.CreditDTO;
 import com.cjrequena.sample.dto.DebitDTO;
 import com.cjrequena.sample.exception.api.BadRequestApiException;
 import com.cjrequena.sample.exception.api.ConflictApiException;
+import com.cjrequena.sample.exception.api.NotFoundApiException;
 import com.cjrequena.sample.exception.api.NotImplementedApiException;
 import com.cjrequena.sample.exception.service.AccountBalanceServiceException;
+import com.cjrequena.sample.exception.service.AggregateNotFoundServiceException;
 import com.cjrequena.sample.exception.service.AmountServiceException;
 import com.cjrequena.sample.exception.service.CommandHandlerNotFoundServiceException;
 import com.cjrequena.sample.mapper.AccountMapper;
@@ -106,13 +108,15 @@ public class AccountCommandHandlerAPI {
           .build())
         .build();
       this.commandHandlerService.handler(command);
-      return new ResponseEntity<>("Credit successful", HttpStatus.OK);
+      return new ResponseEntity<>("Debit successful", HttpStatus.OK);
     } catch (EventStoreOptimisticConcurrencyServiceException ex) {
       throw new ConflictApiException(ex.getMessage());
     } catch (CommandHandlerNotFoundServiceException ex) {
       throw new NotImplementedApiException(ex.getMessage());
     } catch (AmountServiceException ex) {
       throw new BadRequestApiException(ex.getMessage());
+    } catch (AggregateNotFoundServiceException ex) {
+      throw new NotFoundApiException(ex.getMessage());
     }
   }
 }

@@ -28,7 +28,7 @@ public class AccountCreatedEvent extends Event {
   @Nonnull
   @Override
   public String getEventType() {
-    return EventType.ACCOUNT_CREATED_EVENT.toString();
+    return EventType.ACCOUNT_CREATED_EVENT.getEventType();
   }
 
 }

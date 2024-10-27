@@ -5,6 +5,7 @@ import com.cjrequena.eventstore.sample.domain.command.Command;
 import com.cjrequena.eventstore.sample.exception.service.EventStoreOptimisticConcurrencyServiceException;
 import com.cjrequena.eventstore.sample.service.EventStoreService;
 import com.cjrequena.sample.domain.command.CreditAccountCommand;
+import com.cjrequena.sample.exception.service.AggregateNotFoundServiceException;
 import com.cjrequena.sample.exception.service.AmountServiceException;
 import com.cjrequena.sample.exception.service.OptimisticConcurrencyServiceException;
 import com.cjrequena.sample.vo.CreditVO;
@@ -29,11 +30,20 @@ public class CreditAccountCommandHandler implements CommandHandler<CreditAccount
   @Override
   public void handle(@Nonnull Command command, @Nonnull Aggregate aggregate) {
 
+    log.trace("Handling command of type {} for aggregate {}", command.getClass().getSimpleName(), aggregate.getClass().getSimpleName());
+
     if (!(command instanceof CreditAccountCommand)) {
       throw new IllegalArgumentException("Expected command of type CreditAccountCommand but received " + command.getClass().getSimpleName());
     }
 
-    log.trace("Handling command of type {} for aggregate {}", command.getClass().getSimpleName(), aggregate.getClass().getSimpleName());
+      if (!this.eventStoreService.verifyIfAggregateExist(aggregate.getAggregateId(), aggregate.getAggregateType())) {
+      String errorMessage = String.format(
+        "The aggregate '%s' with ID '%s' does not exist, which means there is not any account with ID '%s'.",
+        aggregate.getAggregateType(),
+        aggregate.getAggregateId(),
+        aggregate.getAggregateId());
+      throw new AggregateNotFoundServiceException(errorMessage);
+    }
 
     final CreditVO creditVO = ((CreditAccountCommand) command).getCreditVO();
     if (creditVO.getAmount().compareTo(BigDecimal.ZERO) <= 0) {

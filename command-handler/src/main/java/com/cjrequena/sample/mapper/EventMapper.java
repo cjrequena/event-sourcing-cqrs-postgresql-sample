@@ -33,17 +33,10 @@ public interface EventMapper {
 
   //@Mapping(source = "aggregateId", target = "aggregateId")
   EventEntity toEventEntity(AccountCreatedEvent event);
-
-  //@Mapping(source = "aggregateId", target = "aggregateId")
   EventEntity toEventEntity(AccountCreditedEvent event);
-
-  //    @Mapping(source = "aggregateId", target = "aggregateId")
   EventEntity toEventEntity(AccountDebitedEvent event);
-
   AccountCreatedEvent toAccountCreatedEvent(EventEntity eventEntity);
-
   AccountCreditedEvent toAccountCreditedEvent(EventEntity eventEntity);
-
   AccountDebitedEvent toAccountDebitedEvent(EventEntity eventEntity);
 
   // Custom mapping method for converting String to EventExtensionVO
@@ -145,11 +138,11 @@ public interface EventMapper {
   default Event toEvent(EventEntity eventEntity) {
     // Assuming EventEntity has a type field or some kind of discriminator
     switch (eventEntity.getEventType()) {
-      case "ACCOUNT_CREATED_EVENT":
+      case "com.cjrequena.sample.domain.event.AccountCreatedEvent":
         return toAccountCreatedEvent(eventEntity);
-      case "ACCOUNT_CREDITED_EVENT":
+      case "com.cjrequena.sample.domain.event.AccountCreditedEvent":
         return toAccountCreditedEvent(eventEntity);
-      case "ACCOUNT_DEBITED_EVENT":
+      case "com.cjrequena.sample.domain.event.AccountDebitedEvent":
         return toAccountDebitedEvent(eventEntity);
       default:
         String errorMessage = String.format("Error mapping to event, unknown event type: %s", eventEntity.getEventType());

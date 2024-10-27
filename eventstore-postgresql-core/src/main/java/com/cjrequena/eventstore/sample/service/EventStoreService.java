@@ -44,7 +44,7 @@ public class EventStoreService {
     String aggregateType = aggregate.getAggregateType();
     UUID aggregateId = aggregate.getAggregateId();
 
-    // Create new aggregate if does not exist.
+    // Create new aggregate if it does not exist.
     this.aggregateRepository.createAggregateIfAbsent(aggregateId, aggregateType);
 
     long expectedAggregateVersion = aggregate.getReproducedAggregateVersion();
@@ -86,7 +86,7 @@ public class EventStoreService {
   }
 
   public Optional<Aggregate> retrieveAggregateSnapshot(Class<? extends Aggregate> aggregateClass, UUID aggregateId, @Nullable Long aggregateVersion) {
-    log.info("Retrieving aggregate snapshot for aggregate {} with id {}", aggregateClass, aggregateId);
+    log.info("Retrieving aggregate snapshot for aggregate {}with ID {}", aggregateClass, aggregateId);
 
     return Optional.ofNullable(aggregateSnapshotRepository.retrieveAggregateSnapshot(aggregateId, aggregateVersion))
       .map(aggregateSnapshotEntity -> fromSnapshotToAggregate(aggregateSnapshotEntity, aggregateClass));
@@ -96,9 +96,9 @@ public class EventStoreService {
   public List<EventEntity> retrieveEventsByAggregateId(UUID aggregateId, @Nullable Long fromAggregateVersion, @Nullable Long toAggregateVersion) {
     if (log.isInfoEnabled()) {
       if (toAggregateVersion != null) {
-        log.info("Retrieving aggregate events for aggregate with id {} from version {} to version {}", aggregateId, fromAggregateVersion, toAggregateVersion);
+        log.info("Retrieving aggregate events for aggregatewith ID {} from version {} to version {}", aggregateId, fromAggregateVersion, toAggregateVersion);
       } else {
-        log.info("Retrieving aggregate events for aggregate with id {} from version {}", aggregateId, fromAggregateVersion);
+        log.info("Retrieving aggregate events for aggregatewith ID {} from version {}", aggregateId, fromAggregateVersion);
       }
     }
     // Validate input
@@ -107,6 +107,11 @@ public class EventStoreService {
     }
     // Query the repository, with optional parameters for version range
     return eventRepository.retrieveEventsByAggregateId(aggregateId, fromAggregateVersion, toAggregateVersion);
+  }
+
+
+  public boolean verifyIfAggregateExist(UUID aggregateId, String aggregateType){
+    return this.aggregateRepository.verifyIfAggregateExist(aggregateId, aggregateType);
   }
 
   @SneakyThrows
