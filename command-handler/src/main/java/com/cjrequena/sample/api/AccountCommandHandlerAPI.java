@@ -113,7 +113,7 @@ public class AccountCommandHandlerAPI {
       throw new ConflictApiException(ex.getMessage());
     } catch (CommandHandlerNotFoundServiceException ex) {
       throw new NotImplementedApiException(ex.getMessage());
-    } catch (AmountServiceException ex) {
+    } catch (AmountServiceException | AccountBalanceServiceException ex) {
       throw new BadRequestApiException(ex.getMessage());
     } catch (AggregateNotFoundServiceException ex) {
       throw new NotFoundApiException(ex.getMessage());
