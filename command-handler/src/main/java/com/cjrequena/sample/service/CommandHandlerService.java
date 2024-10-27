@@ -78,6 +78,6 @@ public class CommandHandlerService {
   }
 
   private List<Event> retrieveEvents(UUID aggregateId, Long fromVersion) {
-    return eventMapper.toEventList(eventStoreService.retrieveEventsByAggregateId(aggregateId, fromVersion, null));
+    return eventMapper.mapToEventList(eventStoreService.retrieveEventsByAggregateId(aggregateId, fromVersion, null));
   }
 }

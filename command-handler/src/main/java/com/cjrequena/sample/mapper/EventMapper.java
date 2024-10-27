@@ -32,12 +32,12 @@ public interface EventMapper {
   EventMapper INSTANCE = Mappers.getMapper(EventMapper.class);
 
   //@Mapping(source = "aggregateId", target = "aggregateId")
-  EventEntity toEventEntity(AccountCreatedEvent event);
-  EventEntity toEventEntity(AccountCreditedEvent event);
-  EventEntity toEventEntity(AccountDebitedEvent event);
-  AccountCreatedEvent toAccountCreatedEvent(EventEntity eventEntity);
-  AccountCreditedEvent toAccountCreditedEvent(EventEntity eventEntity);
-  AccountDebitedEvent toAccountDebitedEvent(EventEntity eventEntity);
+  EventEntity mapToEventEntity(AccountCreatedEvent event);
+  EventEntity mapToEventEntity(AccountCreditedEvent event);
+  EventEntity mapToEventEntity(AccountDebitedEvent event);
+  AccountCreatedEvent mapToAccountCreatedEvent(EventEntity eventEntity);
+  AccountCreditedEvent mapToAccountCreditedEvent(EventEntity eventEntity);
+  AccountDebitedEvent mapToAccountDebitedEvent(EventEntity eventEntity);
 
   // Custom mapping method for converting String to EventExtensionVO
   default EventExtensionVO mapToEventExtensionVO(String value) {
@@ -128,22 +128,22 @@ public interface EventMapper {
   }
 
   // New method to map a List of EventEntity to a List of Event
-  default List<Event> toEventList(List<EventEntity> eventEntities) {
+  default List<Event> mapToEventList(List<EventEntity> eventEntities) {
     return eventEntities.stream()
-      .map(this::toEvent)  // Call the helper method for individual mapping
+      .map(this::mapToEvent)  // Call the helper method for individual mapping
       .collect(Collectors.toList());
   }
 
   // Helper method to map a single EventEntity to an Event (AccountCreatedEvent, AccountCreditedEvent, etc.)
-  default Event toEvent(EventEntity eventEntity) {
+  default Event mapToEvent(EventEntity eventEntity) {
     // Assuming EventEntity has a type field or some kind of discriminator
     switch (eventEntity.getEventType()) {
       case "com.cjrequena.sample.domain.event.AccountCreatedEvent":
-        return toAccountCreatedEvent(eventEntity);
+        return mapToAccountCreatedEvent(eventEntity);
       case "com.cjrequena.sample.domain.event.AccountCreditedEvent":
-        return toAccountCreditedEvent(eventEntity);
+        return mapToAccountCreditedEvent(eventEntity);
       case "com.cjrequena.sample.domain.event.AccountDebitedEvent":
-        return toAccountDebitedEvent(eventEntity);
+        return mapToAccountDebitedEvent(eventEntity);
       default:
         String errorMessage = String.format("Error mapping to event, unknown event type: %s", eventEntity.getEventType());
         log.error(errorMessage);

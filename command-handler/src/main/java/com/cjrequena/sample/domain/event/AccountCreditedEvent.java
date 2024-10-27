@@ -22,7 +22,7 @@ public class AccountCreditedEvent extends Event {
 
   public EventEntity mapToEventEntity() {
     log.info("Appending event {}", this);
-    return EventMapper.INSTANCE.toEventEntity(this);
+    return EventMapper.INSTANCE.mapToEventEntity(this);
   }
 
 

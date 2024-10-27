@@ -21,7 +21,7 @@ public class AccountDebitedEvent extends Event {
   private final EventExtensionVO extension;
 
   public EventEntity mapToEventEntity() {
-    return EventMapper.INSTANCE.toEventEntity(this);
+    return EventMapper.INSTANCE.mapToEventEntity(this);
   }
 
   @Nonnull
