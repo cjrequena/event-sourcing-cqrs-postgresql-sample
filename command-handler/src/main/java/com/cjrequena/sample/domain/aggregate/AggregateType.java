@@ -10,10 +10,10 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public enum AggregateType {
 
-  ACCOUNT_AGGREGATE(AccountAggregate.class);
+  ACCOUNT_AGGREGATE(AccountAggregate.class,"ACCOUNT_AGGREGATE");
 
   private final Class<? extends Aggregate> aggregateClass;
-
+  private final String aggregateType;
   //private final String value;
 
 }

@@ -18,7 +18,7 @@ public class CreateAccountCommand extends Command {
 
   @Builder
   public CreateAccountCommand(UUID aggregateId, @NotNull AccountVO accountVO) {
-    super(generateAggregateId(), AggregateType.ACCOUNT_AGGREGATE.toString());
+    super(generateAggregateId(), AggregateType.ACCOUNT_AGGREGATE.getAggregateType());
     this.accountVO = AccountVO
       .builder()
       .id(getAggregateId())

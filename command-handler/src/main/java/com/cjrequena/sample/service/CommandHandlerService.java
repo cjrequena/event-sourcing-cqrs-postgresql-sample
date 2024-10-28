@@ -51,7 +51,7 @@ public class CommandHandlerService {
   }
 
   private Aggregate retrieveOrCreateAggregate(UUID aggregateId, Command command) {
-    final EventStoreConfigurationProperties.SnapshotProperties snapshotConfiguration = eventStoreConfigurationProperties.getSnapshot(AggregateType.ACCOUNT_AGGREGATE.toString());
+    final EventStoreConfigurationProperties.SnapshotProperties snapshotConfiguration = eventStoreConfigurationProperties.getSnapshot(AggregateType.ACCOUNT_AGGREGATE.getAggregateType());
     if (snapshotConfiguration.enabled()) {
       return retrieveAggregateFromSnapshot(aggregateId, command)
         .orElseGet(() -> createAndReproduceAggregate(aggregateId, command));

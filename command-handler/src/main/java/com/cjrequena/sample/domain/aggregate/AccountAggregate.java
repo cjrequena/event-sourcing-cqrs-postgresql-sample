@@ -93,6 +93,6 @@ public class AccountAggregate extends Aggregate {
   @Nonnull
   @Override
   public String getAggregateType() {
-    return AggregateType.ACCOUNT_AGGREGATE.toString();
+    return AggregateType.ACCOUNT_AGGREGATE.getAggregateType();
   }
 }

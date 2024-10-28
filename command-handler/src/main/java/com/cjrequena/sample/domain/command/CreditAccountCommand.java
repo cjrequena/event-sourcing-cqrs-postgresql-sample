@@ -18,7 +18,7 @@ public class CreditAccountCommand extends Command {
 
   @Builder
   public CreditAccountCommand(UUID aggregateId, @NotNull CreditVO creditVO) {
-    super(aggregateId, AggregateType.ACCOUNT_AGGREGATE.toString());
+    super(aggregateId, AggregateType.ACCOUNT_AGGREGATE.getAggregateType());
     this.creditVO = creditVO;
   }
 
