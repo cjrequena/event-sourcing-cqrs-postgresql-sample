@@ -10,11 +10,11 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.cjrequena.sample</groupId>
-    <artifactId>event-sourcing-cqrs-rdbms-sample-v2</artifactId>
+    <artifactId>event-sourcing-cqrs-postgresql-sample</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>event-sourcing-cqrs-rdbms-sample-v2</name>
-    <description>event-sourcing-cqrs-rdbms-sample-v2</description>
+    <name>event-sourcing-cqrs-postgresql-sample</name>
+    <description>event-sourcing-cqrs-postgresql-sample</description>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>21</java.version>
