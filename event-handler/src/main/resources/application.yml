@@ -102,7 +102,7 @@ eventstore:
   # Available subscription: polling, postgres-channel
   subscription:
     enabled: true
-    #name: event-handler
-    name: event-handler-${random.int(100)}
-    polling-initial-delay: PT1S
-    polling-interval: PT1S
+    name: event-handler
+    #name: event-handler-${random.int(100)}
+    polling-initial-delay: PT6S
+    polling-interval: PT6S

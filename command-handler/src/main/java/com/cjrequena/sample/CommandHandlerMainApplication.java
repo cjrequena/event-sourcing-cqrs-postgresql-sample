@@ -26,6 +26,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -35,6 +36,7 @@ import java.util.UUID;
 @Log4j2
 @SpringBootApplication
 @RequiredArgsConstructor
+@EnableAsync
 @ComponentScan(basePackages = {
   "com.cjrequena.sample",  // The main package
   "com.cjrequena.eventstore.sample"  // Eventstore
