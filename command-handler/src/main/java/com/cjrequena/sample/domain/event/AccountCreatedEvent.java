@@ -21,7 +21,6 @@ public class AccountCreatedEvent extends Event {
   private final EventExtensionVO extension;
 
   public EventEntity mapToEventEntity() {
-    log.info("Appending event {}", this);
     return EventMapper.INSTANCE.mapToEventEntity(this);
   }
 

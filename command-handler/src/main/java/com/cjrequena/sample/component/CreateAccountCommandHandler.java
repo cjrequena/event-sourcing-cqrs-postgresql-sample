@@ -1,15 +1,17 @@
 package com.cjrequena.sample.component;
 
+import com.cjrequena.eventstore.sample.configuration.EventStoreConfigurationProperties;
 import com.cjrequena.eventstore.sample.domain.aggregate.Aggregate;
 import com.cjrequena.eventstore.sample.domain.command.Command;
 import com.cjrequena.eventstore.sample.exception.service.EventStoreOptimisticConcurrencyServiceException;
+import com.cjrequena.eventstore.sample.service.AggregateFactory;
 import com.cjrequena.eventstore.sample.service.EventStoreService;
 import com.cjrequena.sample.domain.command.CreateAccountCommand;
 import com.cjrequena.sample.exception.service.AccountBalanceServiceException;
 import com.cjrequena.sample.exception.service.OptimisticConcurrencyServiceException;
+import com.cjrequena.sample.mapper.EventMapper;
 import com.cjrequena.sample.vo.AccountVO;
 import jakarta.annotation.Nonnull;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,18 +21,25 @@ import java.math.BigDecimal;
 
 @Log4j2
 @Component
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @Transactional
-public class CreateAccountCommandHandler implements CommandHandler<CreateAccountCommand> {
+public class CreateAccountCommandHandler extends CommandHandler<CreateAccountCommand> {
 
-  private final EventStoreService eventStoreService;
+  @Autowired
+  public CreateAccountCommandHandler(
+    EventStoreService eventStoreService,
+    AggregateFactory aggregateFactory,
+    EventMapper eventMapper,
+    EventStoreConfigurationProperties eventStoreConfigurationProperties) {
+    super(eventStoreService, aggregateFactory, eventMapper, eventStoreConfigurationProperties);
+  }
 
   @Override
-  public void handle(@Nonnull Command command, @Nonnull Aggregate aggregate) {
+  public void handle(@Nonnull Command command) {
+    log.trace("Handling command of type {} for aggregate {}", command.getClass().getSimpleName(), command.getAggregateType());
+
     if (!(command instanceof CreateAccountCommand)) {
       throw new IllegalArgumentException("Expected command of type CreateAccountCommand but received " + command.getClass().getSimpleName());
     }
-    log.trace("Handling command of type {} for aggregate {}", command.getClass().getSimpleName(), aggregate.getClass().getSimpleName());
 
     // Safely cast the command and retrieve AccountVO
     AccountVO accountVO = ((CreateAccountCommand) command).getAccountVO();
@@ -44,6 +53,7 @@ public class CreateAccountCommandHandler implements CommandHandler<CreateAccount
 
     // Apply command and persist aggregate state
     try {
+      Aggregate aggregate = retrieveOrInstantiateAggregate(command.getAggregateId());
       aggregate.applyCommand(command);
       eventStoreService.saveAggregate(aggregate);
       aggregate.markUnconfirmedEventsAsConfirmed();
@@ -51,7 +61,7 @@ public class CreateAccountCommandHandler implements CommandHandler<CreateAccount
       throw new OptimisticConcurrencyServiceException(ex.getMessage(), ex);
     }
 
-    log.info("Successfully handled command {} and updated aggregate with ID {}", command.getClass().getSimpleName(), aggregate.getAggregateId());
+    log.info("Successfully handled command {} and updated aggregate with ID {}", command.getClass().getSimpleName(), command.getAggregateId());
   }
 
   @Nonnull

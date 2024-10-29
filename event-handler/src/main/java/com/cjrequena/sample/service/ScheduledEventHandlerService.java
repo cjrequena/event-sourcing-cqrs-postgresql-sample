@@ -23,8 +23,6 @@ import java.util.List;
 public class ScheduledEventHandlerService {
 
   private final EventStoreService eventStoreService;
-//  private final EventSubscriptionRepository eventSubscriptionRepository;
-//  private final EventRepository eventRepository;
   private final List<AsyncEventHandler> eventHandlers;
   private final EventStoreConfigurationProperties eventStoreConfigurationProperties;
 
@@ -45,25 +43,25 @@ public class ScheduledEventHandlerService {
     log.debug("Handling new events for subscription {}", subscriptionName);
 
     this.eventStoreService.registerNewSubscriptionIfAbsent(subscriptionName);
+
     this.eventStoreService.retrieveEventSubscriptionAndLockSubscriptionOffset(subscriptionName).ifPresentOrElse(
       eventSubscription -> {
-        log.info("Acquired lock on subscription {}, eventSubscription = {}", subscriptionName, eventSubscription);
+        log.debug("Acquired lock on subscription {}, eventSubscription = {}", subscriptionName, eventSubscription);
+
         List<EventEntity> events = eventStoreService.retrieveEventsByAggregateTypeAfterOffsetTxIAndOffsetId(
           eventHandler.getAggregateType(),
           eventSubscription.getOffsetTxId(),
           eventSubscription.getOffsetId()
         );
-        log.debug("Fetched {} new event(s) for subscription {}", events.size(), subscriptionName);
-        if (!events.isEmpty()) {
-          events.forEach(eventHandler::handle);
-          EventEntity lastEvent = events.getLast();
 
-          this.eventStoreService.updateEventSubscription(subscriptionName,lastEvent.getOffsetTxId(), lastEvent.getOffsetId());
+        if (!events.isEmpty()) {
+          log.debug("Fetched {} new event(s) for subscription {}", events.size(), subscriptionName);
+          eventHandler.handle(events);
+          EventEntity lastEvent = events.getLast();
+          this.eventStoreService.updateEventSubscription(subscriptionName, lastEvent.getOffsetTxId(), lastEvent.getOffsetId());
         }
       },
       () -> log.info("Can't acquire lock on subscription {}", subscriptionName)
     );
-
-    //eventHandler.handle(AccountCreatedEvent.builder().build());
   }
 }

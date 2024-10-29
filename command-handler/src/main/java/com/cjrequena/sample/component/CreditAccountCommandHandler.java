@@ -1,16 +1,18 @@
 package com.cjrequena.sample.component;
 
+import com.cjrequena.eventstore.sample.configuration.EventStoreConfigurationProperties;
 import com.cjrequena.eventstore.sample.domain.aggregate.Aggregate;
 import com.cjrequena.eventstore.sample.domain.command.Command;
 import com.cjrequena.eventstore.sample.exception.service.EventStoreOptimisticConcurrencyServiceException;
+import com.cjrequena.eventstore.sample.service.AggregateFactory;
 import com.cjrequena.eventstore.sample.service.EventStoreService;
 import com.cjrequena.sample.domain.command.CreditAccountCommand;
 import com.cjrequena.sample.exception.service.AggregateNotFoundServiceException;
 import com.cjrequena.sample.exception.service.AmountServiceException;
 import com.cjrequena.sample.exception.service.OptimisticConcurrencyServiceException;
+import com.cjrequena.sample.mapper.EventMapper;
 import com.cjrequena.sample.vo.CreditVO;
 import jakarta.annotation.Nonnull;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,27 +22,32 @@ import java.math.BigDecimal;
 
 @Log4j2
 @Component
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @Transactional
-public class CreditAccountCommandHandler implements CommandHandler<CreditAccountCommand> {
+public class CreditAccountCommandHandler extends CommandHandler<CreditAccountCommand> {
 
-  private final EventStoreService eventStoreService;
+  @Autowired
+  public CreditAccountCommandHandler(
+    EventStoreService eventStoreService,
+    AggregateFactory aggregateFactory,
+    EventMapper eventMapper,
+    EventStoreConfigurationProperties eventStoreConfigurationProperties) {
+    super(eventStoreService, aggregateFactory, eventMapper, eventStoreConfigurationProperties);
+  }
 
   @Override
-  public void handle(@Nonnull Command command, @Nonnull Aggregate aggregate) {
-
-    log.trace("Handling command of type {} for aggregate {}", command.getClass().getSimpleName(), aggregate.getClass().getSimpleName());
+  public void handle(@Nonnull Command command) {
+    log.trace("Handling command of type {} for aggregate {}", command.getClass().getSimpleName(), command.getAggregateType());
 
     if (!(command instanceof CreditAccountCommand)) {
       throw new IllegalArgumentException("Expected command of type CreditAccountCommand but received " + command.getClass().getSimpleName());
     }
 
-    if (!this.eventStoreService.verifyIfAggregateExist(aggregate.getAggregateId(), aggregate.getAggregateType())) {
+    if (!this.eventStoreService.verifyIfAggregateExist(command.getAggregateId(), command.getAggregateType())) {
       String errorMessage = String.format(
         "The aggregate '%s' with ID '%s' does not exist, which means there is not any account with ID '%s'.",
-        aggregate.getAggregateType(),
-        aggregate.getAggregateId(),
-        aggregate.getAggregateId());
+        command.getAggregateType(),
+        command.getAggregateId(),
+        command.getAggregateId());
       throw new AggregateNotFoundServiceException(errorMessage);
     }
 
@@ -50,6 +57,7 @@ public class CreditAccountCommandHandler implements CommandHandler<CreditAccount
     }
 
     try {
+      Aggregate aggregate = retrieveOrInstantiateAggregate(command.getAggregateId());
       aggregate.applyCommand(command);
       eventStoreService.saveAggregate(aggregate);
       aggregate.markUnconfirmedEventsAsConfirmed();
@@ -57,7 +65,7 @@ public class CreditAccountCommandHandler implements CommandHandler<CreditAccount
       throw new OptimisticConcurrencyServiceException(ex.getMessage(), ex);
     }
 
-    log.info("Successfully handled command {} and updated aggregate with ID {}", command.getClass().getSimpleName(), aggregate.getAggregateId());
+    log.info("Successfully handled command {} and updated aggregate with ID {}", command.getClass().getSimpleName(), command.getAggregateId());
 
   }
 
