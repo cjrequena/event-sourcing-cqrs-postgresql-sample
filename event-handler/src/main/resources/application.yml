@@ -1,5 +1,5 @@
 server.servlet.context-path: / # Context path of the application.
-server.port: ${SERVER_PORT:8080} # Server HTTP port.
+server.port: ${SERVER_PORT:8090} # Server HTTP port.
 spring.application.name: '@project.artifactId@'
 spring.application.version: '@project.version@'
 spring.profiles.active: ${SPRING_PROFILES_ACTIVE:local}
@@ -99,4 +99,10 @@ eventstore:
     # The aggregate type
     ACCOUNT_AGGREGATE:
       enabled: true
-      interval: 5
+  # Available subscription: polling, postgres-channel
+  subscription:
+    enabled: true
+    #name: event-handler
+    name: event-handler-${random.int(100)}
+    polling-initial-delay: PT1S
+    polling-interval: PT1S

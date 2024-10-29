@@ -23,11 +23,18 @@ public class EventStoreConfigurationProperties {
   @Valid
   @NestedConfigurationProperty
   private Map<String, SnapshotProperties> snapshot = new HashMap<>();
+  @Valid
+  @NestedConfigurationProperty
+  private SubscriptionProperties subscription;
+
 
   public SnapshotProperties getSnapshot(String aggregateType) {
     return snapshot.getOrDefault(aggregateType, NO_SNAPSHOT);
   }
 
   public record SnapshotProperties(boolean enabled, int interval) {
+  }
+
+  public record SubscriptionProperties(boolean enabled, String name, String pollingInitialDelay, String pollingInterval) {
   }
 }

@@ -8,12 +8,14 @@ import com.cjrequena.eventstore.sample.domain.event.Event;
 import com.cjrequena.eventstore.sample.entity.AbstractEventEntity;
 import com.cjrequena.eventstore.sample.entity.AggregateSnapshotEntity;
 import com.cjrequena.eventstore.sample.entity.EventEntity;
+import com.cjrequena.eventstore.sample.entity.EventSubscriptionEntity;
 import com.cjrequena.eventstore.sample.exception.service.EventStoreOptimisticConcurrencyServiceException;
 import com.cjrequena.eventstore.sample.repository.AggregateRepository;
 import com.cjrequena.eventstore.sample.repository.AggregateSnapshotRepository;
 import com.cjrequena.eventstore.sample.repository.EventRepository;
 import com.cjrequena.eventstore.sample.repository.EventSubscriptionRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -85,6 +87,7 @@ public class EventStoreService {
     }
   }
 
+  @Transactional(readOnly = true)
   public Optional<Aggregate> retrieveAggregateSnapshot(Class<? extends Aggregate> aggregateClass, UUID aggregateId, @Nullable Long aggregateVersion) {
     log.info("Retrieving aggregate snapshot for aggregate {}with ID {}", aggregateClass, aggregateId);
 
@@ -109,9 +112,28 @@ public class EventStoreService {
     return eventRepository.retrieveEventsByAggregateId(aggregateId, fromAggregateVersion, toAggregateVersion);
   }
 
-
-  public boolean verifyIfAggregateExist(UUID aggregateId, String aggregateType){
+  @Transactional(readOnly = true)
+  public boolean verifyIfAggregateExist(@Nonnull UUID aggregateId, @Nonnull String aggregateType) {
     return this.aggregateRepository.verifyIfAggregateExist(aggregateId, aggregateType);
+  }
+
+  public void registerNewSubscriptionIfAbsent(@Nonnull String subscriptionName) {
+    this.eventSubscriptionRepository.registerNewSubscriptionIfAbsent(subscriptionName);
+  }
+
+  @Transactional(readOnly = true)
+  public Optional<EventSubscriptionEntity> retrieveEventSubscriptionAndLockSubscriptionOffset(String subscriptionName) {
+    return this.eventSubscriptionRepository.retrieveEventSubscriptionAndLockSubscriptionOffset(subscriptionName);
+  }
+
+  @Transactional(readOnly = true)
+  public List<EventEntity> retrieveEventsByAggregateTypeAfterOffsetTxIAndOffsetId(@Nonnull String aggregateType, @Nonnull Long offsetTxId, Long offsetId) {
+    return this.eventRepository.retrieveEventsByAggregateTypeAfterOffsetTxIAndOffsetId(aggregateType, offsetTxId, offsetId);
+  }
+
+  public boolean updateEventSubscription(@Nonnull String subscriptionName, @Nonnull Long offsetTxId, @Nonnull Long offsetId){
+    final int rowsUpdated = this.eventSubscriptionRepository.updateEventSubscription(subscriptionName, offsetTxId, offsetId);
+    return rowsUpdated > 0;
   }
 
   @SneakyThrows

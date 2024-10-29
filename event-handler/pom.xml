@@ -8,14 +8,13 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>command-handler</artifactId>
+    <artifactId>event-handler</artifactId>
     <packaging>jar</packaging>
     <!-- -->
     <properties>
         <!-- -->
         <main-class>com.cjrequena.sample.CommandHandlerMainApplication</main-class>
     </properties>
-    <!-- -->
     <dependencies>
         <!-- spring boot -->
         <dependency>
@@ -156,27 +155,6 @@
             <artifactId>junit-jupiter-engine</artifactId>
             <scope>test</scope>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.testcontainers/junit-jupiter -->
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>1.20.3</version><!-- TODO -->
-            <scope>test</scope>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.testcontainers/postgresql -->
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>1.20.3</version><!-- TODO -->
-            <scope>test</scope>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.testcontainers/kafka -->
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>kafka</artifactId><!-- TODO -->
-            <version>1.20.3</version>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
     <!-- -->
     <build>
@@ -215,4 +193,5 @@
             </plugin>
         </plugins>
     </build>
+
 </project>

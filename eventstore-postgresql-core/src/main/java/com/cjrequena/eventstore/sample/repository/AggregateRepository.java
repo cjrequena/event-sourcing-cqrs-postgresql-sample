@@ -12,11 +12,11 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
+@Transactional
 public interface AggregateRepository extends CrudRepository<AggregateEntity, UUID> {
 
   // Native SQL query to insert if not exists (using PostgreSQL's ON CONFLICT DO NOTHING)
   @Modifying
-  @Transactional
   @Query(value = """
     INSERT INTO es_aggregate (id, aggregate_type, aggregate_version)
     VALUES (:aggregateId, :aggregateType, 0)
@@ -27,7 +27,6 @@ public interface AggregateRepository extends CrudRepository<AggregateEntity, UUI
     @Param("aggregateType") String aggregateType
   );
 
-  @Transactional
   @Query(value = """
     UPDATE es_aggregate
        SET aggregate_version = :newAggregateVersion

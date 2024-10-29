@@ -19,8 +19,8 @@ import com.cjrequena.sample.mapper.EventMapper;
 import com.cjrequena.sample.vo.AccountVO;
 import com.cjrequena.sample.vo.CreditVO;
 import com.cjrequena.sample.vo.DebitVO;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -53,8 +53,9 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
     SpringApplication.run(CommandHandlerMainApplication.class, args);
   }
 
+  @SneakyThrows
   @Override
-  public void run(String... args) throws JsonProcessingException {
+  public void run(String... args) {
 
     final Optional<Aggregate> optionalAggregateSS = this.eventStoreService.retrieveAggregateSnapshot(AggregateType.ACCOUNT_AGGREGATE.getAggregateClass(), UUID.fromString("582d9889-d262-4a7e-ac3e-5d4c88c6e957"), null);
     optionalAggregateSS

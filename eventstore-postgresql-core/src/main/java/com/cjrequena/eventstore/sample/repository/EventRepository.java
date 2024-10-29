@@ -2,18 +2,19 @@ package com.cjrequena.eventstore.sample.repository;
 
 import com.cjrequena.eventstore.sample.entity.AbstractEventEntity;
 import com.cjrequena.eventstore.sample.entity.EventEntity;
+import lombok.NonNull;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
 
-
 @Repository
+@Transactional
 public interface EventRepository extends CrudRepository<AbstractEventEntity, UUID> {
-
 
   /**
    * Retrieves a list of {@link EventEntity} instances associated with a specific aggregate ID.
@@ -41,16 +42,41 @@ public interface EventRepository extends CrudRepository<AbstractEventEntity, UUI
    * @throws IllegalArgumentException if the {@code aggregateId} is null.
    */
   @Query(value = """
-           SELECT *
-             FROM es_event
-            WHERE aggregate_id = :aggregateId
-              AND (:fromAggregateVersion IS NULL OR aggregate_version > :fromAggregateVersion)
-              AND (:toAggregateVersion IS NULL OR aggregate_version <= :toAggregateVersion)
-            ORDER BY aggregate_version ASC
-           """, nativeQuery = true)
+    SELECT *
+      FROM es_event
+     WHERE aggregate_id = :aggregateId
+       AND (:fromAggregateVersion IS NULL OR aggregate_version > :fromAggregateVersion)
+       AND (:toAggregateVersion IS NULL OR aggregate_version <= :toAggregateVersion)
+     ORDER BY aggregate_version ASC
+    """, nativeQuery = true)
   List<EventEntity> retrieveEventsByAggregateId(
     @Param("aggregateId") UUID aggregateId,
     @Param("fromAggregateVersion") Long fromAggregateVersion,
     @Param("toAggregateVersion") Long toAggregateVersion
   );
+
+  @Query(value = """
+    SELECT 
+        event.id, 
+        event.offset_id, 
+        event.offset_txid, 
+        event.aggregate_id, 
+        event.aggregate_version, 
+        event.event_type, 
+        event.data_content_type, 
+        event.data, 
+        event.data_base64, 
+        event.offset_date_time, 
+        event.extension
+    FROM ES_EVENT event
+    JOIN ES_AGGREGATE aggregate on aggregate.id = event.aggregate_id
+    WHERE aggregate.aggregate_type = :aggregateType
+      AND (event.offset_txid, event.offset_id) > (:offsetTxId ::text::xid8, :offsetId)
+      AND event.offset_txid < pg_snapshot_xmin(pg_current_snapshot())
+    ORDER BY event.offset_txid ASC, event.offset_id ASC
+    """, nativeQuery = true)
+  List<EventEntity> retrieveEventsByAggregateTypeAfterOffsetTxIAndOffsetId(
+    @Param("aggregateType") @NonNull String aggregateType,
+    @Param("offsetTxId") @NonNull Long offsetTxId,
+    @Param("offsetId") @NonNull Long offsetId);
 }

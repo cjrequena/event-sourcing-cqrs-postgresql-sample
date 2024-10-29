@@ -27,11 +27,11 @@ public class EventSubscriptionEntity {
   protected String subscriptionName;
 
   // The event offset_txid
-  @Column(name = "offset_txid", nullable = false)
+  @Column(name = "offset_txid", columnDefinition = "xid8", nullable = false)
   protected long offsetTxId;
 
   // The event_id
-  @Column(name = "event_id", nullable = false)
-  protected UUID eventId;
+  @Column(name = "offset_id", nullable = false)
+  protected long offsetId;
 
 }
