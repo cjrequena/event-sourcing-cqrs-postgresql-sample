@@ -76,6 +76,25 @@ spring.datasource.eventstore.postgres.idle-timeout: 300000
 spring.datasource.eventstore.postgres.max-lifetime: 1200000
 spring.datasource.eventstore.postgres.auto-commit: false
 
+# DataSource Configuration :: ProjectionDB
+spring.datasource.postgres.type: com.zaxxer.hikari.HikariDataSource
+#spring.datasource.postgres.url: jdbc:postgresql://${POSTGRES_HOST:localhost}:5432/postgres
+spring.datasource.postgres.jdbcUrl: jdbc:postgresql://${POSTGRES_HOST:localhost}:5432/postgres
+spring.datasource.postgres.driver-class-name: org.postgresql.Driver
+spring.datasource.postgres.username: postgres
+spring.datasource.postgres.password: postgres
+spring.datasource.postgres.testOnBorrow: true
+spring.datasource.postgres.validationQuery: SELECT 1
+# Hikari - https://github.com/brettwooldridge/HikariCP#configuration-knobs-baby
+spring.datasource.postgres.pool-name: ProjectionDBHikariPool
+spring.datasource.postgres.connection-timeout: 20000
+spring.datasource.postgres.minimum-idle: 5
+spring.datasource.postgres.maximum-pool-size: 12
+spring.datasource.postgres.idle-timeout: 300000
+spring.datasource.postgres.max-lifetime: 1200000
+spring.datasource.postgres.auto-commit: false
+
+
 # JPA & Hibernate properties
 spring.jpa.open-in-view: false
 #spring.jpa.properties.hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
@@ -93,6 +112,8 @@ spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation: true
 spring.flyway:
   enabled: true
   baseline-on-migrate: true
+  schemas: account
+  default-schema: account
   #locations: classpath:/db/migration
   locations: classpath:/db/migration/postgres
 

@@ -50,7 +50,7 @@ public class DataSourceConfiguration {
       .persistenceUnit("chinook")
       .build();
   }
-
+  
   @Bean("transactionManagerPostgres")
   public PlatformTransactionManager transactionManagerPostgres(@Qualifier("entityManagerFactoryPostgres") EntityManagerFactory entityManagerFactoryPostgres) {
     return new JpaTransactionManager(entityManagerFactoryPostgres);
