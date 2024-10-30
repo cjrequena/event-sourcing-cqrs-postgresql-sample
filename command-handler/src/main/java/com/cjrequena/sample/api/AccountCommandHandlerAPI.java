@@ -51,12 +51,12 @@ public class AccountCommandHandlerAPI {
   private final AggregateFactory aggregateFactory;
   private final EventMapper eventMapper;
 
+  @SneakyThrows
   @PostMapping(
     path = "/accounts",
     produces = {APPLICATION_JSON_VALUE}
   )
-  public ResponseEntity<String> create(@Parameter @Valid @RequestBody AccountDTO accountDTO, ServerHttpRequest request)
-    throws ConflictApiException, NotImplementedApiException, BadRequestApiException {
+  public ResponseEntity<String> create(@Parameter @Valid @RequestBody AccountDTO accountDTO, ServerHttpRequest request) {
     try {
       Command command = CreateAccountCommand.builder()
         .accountVO(accountMapper.toAccountVO(accountDTO))
@@ -72,9 +72,9 @@ public class AccountCommandHandlerAPI {
     }
   }
 
+  @SneakyThrows
   @PutMapping("/accounts/{accountId}/credit")
-  public ResponseEntity<String> creditAccount(@PathVariable("accountId") UUID accountId, @RequestBody CreditDTO creditDTO)
-    throws ConflictApiException, NotImplementedApiException, BadRequestApiException {
+  public ResponseEntity<String> creditAccount(@PathVariable("accountId") UUID accountId, @RequestBody CreditDTO creditDTO) {
     // Logic to handle crediting the account
     try {
       Command command = CreditAccountCommand.builder()

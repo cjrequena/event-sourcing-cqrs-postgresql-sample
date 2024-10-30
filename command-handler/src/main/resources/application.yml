@@ -43,7 +43,7 @@ management.info.git.mode: full # Mode to use to expose git information.
 logging.level: # Log levels severity mapping. For instance, `logging.level.org.springframework: DEBUG`.
   org.springframework: ERROR
   org.flywaydb: INFO
-  com.zaxxer.hikari: DEBUG
+  com.zaxxer.hikari: INFO
   com.cjrequena.sample: INFO
   com.cjrequena.eventstore.sample: INFO
 
