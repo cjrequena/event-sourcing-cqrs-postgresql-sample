@@ -8,7 +8,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>command-handler</artifactId>
+    <artifactId>query-handler</artifactId>
     <packaging>jar</packaging>
     <!-- -->
     <properties>

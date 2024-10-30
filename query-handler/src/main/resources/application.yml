@@ -1,5 +1,5 @@
 server.servlet.context-path: / # Context path of the application.
-server.port: ${SERVER_PORT:6080} # Server HTTP port.
+server.port: ${SERVER_PORT:7080} # Server HTTP port.
 spring.application.name: '@project.artifactId@'
 spring.application.version: '@project.version@'
 spring.profiles.active: ${SPRING_PROFILES_ACTIVE:local}
@@ -59,22 +59,22 @@ logging.pattern:
   file: "%-5p|%d{ISO8601}{GMT}|application=${spring.application.name}|traceID=%X{traceId},spanID=%X{spanId}|%c{1}|%m%ex%n"
 
 # DataSource Configuration :: EventStore
-spring.datasource.eventstore.postgres.type: com.zaxxer.hikari.HikariDataSource
-#spring.datasource.eventstore.postgres.url: jdbc:postgresql://${POSTGRES_HOST:localhost}:5432/postgres
-spring.datasource.eventstore.postgres.jdbcUrl: jdbc:postgresql://${POSTGRES_HOST:localhost}:5432/postgres
-spring.datasource.eventstore.postgres.driver-class-name: org.postgresql.Driver
-spring.datasource.eventstore.postgres.username: postgres
-spring.datasource.eventstore.postgres.password: postgres
-spring.datasource.eventstore.postgres.testOnBorrow: true
-spring.datasource.eventstore.postgres.validationQuery: SELECT 1
+spring.datasource.postgres.type: com.zaxxer.hikari.HikariDataSource
+#spring.datasource.postgres.url: jdbc:postgresql://${POSTGRES_HOST:localhost}:5432/postgres
+spring.datasource.postgres.jdbcUrl: jdbc:postgresql://${POSTGRES_HOST:localhost}:5432/postgres
+spring.datasource.postgres.driver-class-name: org.postgresql.Driver
+spring.datasource.postgres.username: postgres
+spring.datasource.postgres.password: postgres
+spring.datasource.postgres.testOnBorrow: true
+spring.datasource.postgres.validationQuery: SELECT 1
 # Hikari - https://github.com/brettwooldridge/HikariCP#configuration-knobs-baby
-spring.datasource.eventstore.postgres.pool-name: EventStoreHikariPool
-spring.datasource.eventstore.postgres.connection-timeout: 20000
-spring.datasource.eventstore.postgres.minimum-idle: 5
-spring.datasource.eventstore.postgres.maximum-pool-size: 12
-spring.datasource.eventstore.postgres.idle-timeout: 300000
-spring.datasource.eventstore.postgres.max-lifetime: 1200000
-spring.datasource.eventstore.postgres.auto-commit: false
+spring.datasource.postgres.pool-name: EventStoreHikariPool
+spring.datasource.postgres.connection-timeout: 20000
+spring.datasource.postgres.minimum-idle: 5
+spring.datasource.postgres.maximum-pool-size: 12
+spring.datasource.postgres.idle-timeout: 300000
+spring.datasource.postgres.max-lifetime: 1200000
+spring.datasource.postgres.auto-commit: false
 
 # JPA & Hibernate properties
 spring.jpa.open-in-view: false

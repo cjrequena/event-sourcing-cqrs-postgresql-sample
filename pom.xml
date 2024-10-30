@@ -38,6 +38,7 @@
         <module>command-handler</module>
         <module>eventstore-postgresql-core</module>
         <module>event-handler</module>
+        <module>query-handler</module>
     </modules>
     <dependencyManagement>
         <dependencies>
