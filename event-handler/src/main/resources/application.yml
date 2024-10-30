@@ -43,6 +43,7 @@ management.info.git.mode: full # Mode to use to expose git information.
 logging.level: # Log levels severity mapping. For instance, `logging.level.org.springframework: DEBUG`.
   org.springframework: ERROR
   org.flywaydb: INFO
+  com.zaxxer.hikari: INFO
   com.cjrequena.sample: INFO
   com.cjrequena.eventstore.sample: INFO
 
@@ -57,23 +58,24 @@ logging.pattern:
     }"
   file: "%-5p|%d{ISO8601}{GMT}|application=${spring.application.name}|traceID=%X{traceId},spanID=%X{spanId}|%c{1}|%m%ex%n"
 
-# DataSource Configuration
-spring.datasource.postgres.type: com.zaxxer.hikari.HikariDataSource
-#spring.datasource.postgres.url: jdbc:postgresql://${POSTGRES_HOST:localhost}:5432/postgres
-spring.datasource.postgres.jdbcUrl: jdbc:postgresql://${POSTGRES_HOST:localhost}:5432/postgres
-spring.datasource.postgres.driver-class-name: org.postgresql.Driver
-spring.datasource.postgres.username: postgres
-spring.datasource.postgres.password: postgres
-spring.datasource.postgres.testOnBorrow: true
-spring.datasource.postgres.validationQuery: SELECT 1
+# DataSource Configuration :: EventStore
+spring.datasource.eventstore.postgres.type: com.zaxxer.hikari.HikariDataSource
+#spring.datasource.eventstore.postgres.url: jdbc:postgresql://${POSTGRES_HOST:localhost}:5432/postgres
+spring.datasource.eventstore.postgres.jdbcUrl: jdbc:postgresql://${POSTGRES_HOST:localhost}:5432/postgres
+spring.datasource.eventstore.postgres.driver-class-name: org.postgresql.Driver
+spring.datasource.eventstore.postgres.username: postgres
+spring.datasource.eventstore.postgres.password: postgres
+spring.datasource.eventstore.postgres.testOnBorrow: true
+spring.datasource.eventstore.postgres.validationQuery: SELECT 1
 # Hikari - https://github.com/brettwooldridge/HikariCP#configuration-knobs-baby
-spring.datasource.postgres.pool-name: HikariPool
-spring.datasource.postgres.connection-timeout: 20000
-spring.datasource.postgres.minimum-idle: 5
-spring.datasource.postgres.maximum-pool-size: 12
-spring.datasource.postgres.idle-timeout: 300000
-spring.datasource.postgres.max-lifetime: 1200000
-spring.datasource.postgres.auto-commit: false
+spring.datasource.eventstore.postgres.pool-name: EventStoreHikariPool
+spring.datasource.eventstore.postgres.connection-timeout: 20000
+spring.datasource.eventstore.postgres.minimum-idle: 5
+spring.datasource.eventstore.postgres.maximum-pool-size: 12
+spring.datasource.eventstore.postgres.idle-timeout: 300000
+spring.datasource.eventstore.postgres.max-lifetime: 1200000
+spring.datasource.eventstore.postgres.auto-commit: false
+
 # JPA & Hibernate properties
 spring.jpa.open-in-view: false
 #spring.jpa.properties.hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect

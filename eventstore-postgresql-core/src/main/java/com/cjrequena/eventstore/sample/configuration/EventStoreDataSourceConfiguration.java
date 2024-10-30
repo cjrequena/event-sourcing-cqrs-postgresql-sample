@@ -1,4 +1,4 @@
-package com.cjrequena.sample.configuration;
+package com.cjrequena.eventstore.sample.configuration;
 
 import com.zaxxer.hikari.HikariDataSource;
 import jakarta.persistence.EntityManagerFactory;
@@ -28,14 +28,15 @@ import javax.sql.DataSource;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(
-  entityManagerFactoryRef = "entityManagerFactoryPostgres", transactionManagerRef = "transactionManagerPostgres",
+  entityManagerFactoryRef = "entityManagerFactoryPostgres",
+  transactionManagerRef = "transactionManagerPostgres",
   basePackages = {"com.cjrequena.eventstore.sample.repository"}
 )
-public class PostgresConfiguration {
+public class EventStoreDataSourceConfiguration {
 
   @Bean(name = "dataSourcePostgres", destroyMethod = "")
   @Validated
-  @ConfigurationProperties(prefix = "spring.datasource.postgres")
+  @ConfigurationProperties(prefix = "spring.datasource.eventstore.postgres")
   @ConditionalOnClass({HikariDataSource.class})
   public HikariDataSource dataSourcePostgres() {
     return new HikariDataSource();
