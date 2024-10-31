@@ -81,38 +81,65 @@ spring:
   datasource:
     # EventStore DataSource Configuration
     eventstore:
-      postgres:
-        type: com.zaxxer.hikari.HikariDataSource
-        jdbcUrl: jdbc:postgresql://${POSTGRES_HOST:localhost}:5432/postgres
-        driver-class-name: org.postgresql.Driver
-        username: postgres
-        password: postgres
-        testOnBorrow: true
-        validationQuery: SELECT 1
-        pool-name: EventStoreHikariPool
-        connection-timeout: 20000
-        minimum-idle: 5
-        maximum-pool-size: 12
-        idle-timeout: 300000
-        max-lifetime: 1200000
-        auto-commit: false
-        jpa:
-          open-in-view: false
-          properties:
-            hibernate:
-              dialect: org.hibernate.dialect.PostgreSQLDialect
-              show_sql: false
-              format_sql: true
-              use_sql: true
-              id.new_generator_mappings: false
-              search.autoregister_listeners: false
-              bytecode.use_reflection_optimizer: false
-              jdbc.lob.non_contextual_creation: true
-              #default_schema: eventstore
-
+      type: com.zaxxer.hikari.HikariDataSource
+      jdbcUrl: jdbc:postgresql://${POSTGRES_HOST:localhost}:5432/postgres
+      driver-class-name: org.postgresql.Driver
+      username: postgres
+      password: postgres
+      testOnBorrow: true
+      validationQuery: SELECT 1
+      pool-name: EventStoreHikariPool
+      connection-timeout: 20000
+      minimum-idle: 5
+      maximum-pool-size: 12
+      idle-timeout: 300000
+      max-lifetime: 1200000
+      auto-commit: false
+      jpa:
+        open-in-view: false
+        properties:
+          hibernate:
+            dialect: org.hibernate.dialect.PostgreSQLDialect
+            show_sql: false
+            format_sql: true
+            use_sql: true
+            id.new_generator_mappings: false
+            search.autoregister_listeners: false
+            bytecode.use_reflection_optimizer: false
+            jdbc.lob.non_contextual_creation: true
+            #default_schema: eventstore
+    # ProjectionDB DataSource Configuration
+    projectiondb:
+      type: com.zaxxer.hikari.HikariDataSource
+      jdbcUrl: jdbc:postgresql://${POSTGRES_HOST:localhost}:5432/postgres
+      driver-class-name: org.postgresql.Driver
+      username: postgres
+      password: postgres
+      testOnBorrow: true
+      validationQuery: SELECT 1
+      pool-name: ProjectionDBHikariPool
+      connection-timeout: 20000
+      minimum-idle: 5
+      maximum-pool-size: 12
+      idle-timeout: 300000
+      max-lifetime: 1200000
+      auto-commit: false
+      jpa:
+        open-in-view: false
+        properties:
+          hibernate:
+            dialect: org.hibernate.dialect.PostgreSQLDialect
+            show_sql: false
+            format_sql: true
+            use_sql: true
+            id.new_generator_mappings: false
+            search.autoregister_listeners: false
+            bytecode.use_reflection_optimizer: false
+            jdbc.lob.non_contextual_creation: true
+            default_schema: account
 # flyway
 spring.flyway:
-  enabled: true
+  enabled: false
   baseline-on-migrate: true
   schemas: account
   default-schema: account

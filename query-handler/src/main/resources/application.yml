@@ -58,10 +58,11 @@ logging.pattern:
     }"
   file: "%-5p|%d{ISO8601}{GMT}|application=${spring.application.name}|traceID=%X{traceId},spanID=%X{spanId}|%c{1}|%m%ex%n"
 
+# DataSource Configuration
 spring:
   datasource:
     # ProjectionDB DataSource Configuration
-    postgres:
+    projectiondb:
       type: com.zaxxer.hikari.HikariDataSource
       jdbcUrl: jdbc:postgresql://${POSTGRES_HOST:localhost}:5432/postgres
       driver-class-name: org.postgresql.Driver

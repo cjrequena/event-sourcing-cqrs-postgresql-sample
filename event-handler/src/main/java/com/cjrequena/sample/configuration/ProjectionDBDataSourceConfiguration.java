@@ -20,23 +20,23 @@ import javax.sql.DataSource;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(
-  entityManagerFactoryRef = "entityManagerFactoryProjection",
-  transactionManagerRef = "transactionManagerProjection",
+  entityManagerFactoryRef = "entityManagerFactoryProjectionDB",
+  transactionManagerRef = "transactionManagerProjectionDB",
   basePackages = {"com.cjrequena.sample.repository"}
 )
 public class ProjectionDBDataSourceConfiguration {
 
-  @Bean(name = "dataSourceProjection", destroyMethod = "")
+  @Bean(name = "dataSourceProjectionDB", destroyMethod = "")
   @Validated
   @ConfigurationProperties(prefix = "spring.datasource.projectiondb")
   @ConditionalOnClass({HikariDataSource.class})
-  public HikariDataSource dataSourceProjection() {
+  public HikariDataSource dataSourceProjectionDB() {
     return new HikariDataSource();
   }
 
-  @Bean("entityManagerFactoryProjection")
-  public LocalContainerEntityManagerFactoryBean entityManagerFactoryProjection(
-    EntityManagerFactoryBuilder builder, @Qualifier("dataSourceProjection") DataSource dataSource) {
+  @Bean(name = "entityManagerFactoryProjectionDB")
+  public LocalContainerEntityManagerFactoryBean entityManagerFactoryProjectionDB(
+    EntityManagerFactoryBuilder builder, @Qualifier("dataSourceProjectionDB") DataSource dataSource) {
     return builder
       .dataSource(dataSource)
       .packages("com.cjrequena.sample.entity")
@@ -44,9 +44,9 @@ public class ProjectionDBDataSourceConfiguration {
       .build();
   }
 
-  @Bean("transactionManagerProjection")
-  public PlatformTransactionManager transactionManagerProjection(
-    @Qualifier("entityManagerFactoryProjection") EntityManagerFactory entityManagerFactoryProjection) {
-    return new JpaTransactionManager(entityManagerFactoryProjection);
+  @Bean("transactionManagerProjectionDB")
+  public PlatformTransactionManager transactionManagerProjectionDB(
+    @Qualifier("entityManagerFactoryProjectionDB") EntityManagerFactory entityManagerFactoryProjectionDB) {
+    return new JpaTransactionManager(entityManagerFactoryProjectionDB);
   }
 }
