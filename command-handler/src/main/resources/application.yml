@@ -59,35 +59,38 @@ logging.pattern:
   file: "%-5p|%d{ISO8601}{GMT}|application=${spring.application.name}|traceID=%X{traceId},spanID=%X{spanId}|%c{1}|%m%ex%n"
 
 # DataSource Configuration :: EventStore
-spring.datasource.eventstore.postgres.type: com.zaxxer.hikari.HikariDataSource
-#spring.datasource.eventstore.postgres.url: jdbc:postgresql://${POSTGRES_HOST:localhost}:5432/postgres
-spring.datasource.eventstore.postgres.jdbcUrl: jdbc:postgresql://${POSTGRES_HOST:localhost}:5432/postgres
-spring.datasource.eventstore.postgres.driver-class-name: org.postgresql.Driver
-spring.datasource.eventstore.postgres.username: postgres
-spring.datasource.eventstore.postgres.password: postgres
-spring.datasource.eventstore.postgres.testOnBorrow: true
-spring.datasource.eventstore.postgres.validationQuery: SELECT 1
-# Hikari - https://github.com/brettwooldridge/HikariCP#configuration-knobs-baby
-spring.datasource.eventstore.postgres.pool-name: EventStoreHikariPool
-spring.datasource.eventstore.postgres.connection-timeout: 20000
-spring.datasource.eventstore.postgres.minimum-idle: 5
-spring.datasource.eventstore.postgres.maximum-pool-size: 12
-spring.datasource.eventstore.postgres.idle-timeout: 300000
-spring.datasource.eventstore.postgres.max-lifetime: 1200000
-spring.datasource.eventstore.postgres.auto-commit: false
-
-# JPA & Hibernate properties
-spring.jpa.open-in-view: false
-#spring.jpa.properties.hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
-spring.jpa.properties.hibernate.show_sql: false
-spring.jpa.properties.hibernate.format_sql: true
-spring.jpa.properties.hibernate.use_sql: true
-spring.jpa.properties.hibernate.hibernate.dialect: true
-spring.jpa.properties.hibernate.id.new_generator_mappings: false
-spring.jpa.properties.hibernate.search.autoregister_listeners: false
-spring.jpa.properties.hibernate.bytecode.use_reflection_optimizer: false
-spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation: true
-#spring.jpa.properties.hibernate.default_schema: s_account
+spring:
+  datasource:
+    # EventStore DataSource Configuration
+    eventstore:
+      postgres:
+        type: com.zaxxer.hikari.HikariDataSource
+        jdbcUrl: jdbc:postgresql://${POSTGRES_HOST:localhost}:5432/postgres
+        driver-class-name: org.postgresql.Driver
+        username: postgres
+        password: postgres
+        testOnBorrow: true
+        validationQuery: SELECT 1
+        pool-name: EventStoreHikariPool
+        connection-timeout: 20000
+        minimum-idle: 5
+        maximum-pool-size: 12
+        idle-timeout: 300000
+        max-lifetime: 1200000
+        auto-commit: false
+        jpa:
+          open-in-view: false
+          properties:
+            hibernate:
+              dialect: org.hibernate.dialect.PostgreSQLDialect
+              show_sql: false
+              format_sql: true
+              use_sql: true
+              id.new_generator_mappings: false
+              search.autoregister_listeners: false
+              bytecode.use_reflection_optimizer: false
+              jdbc.lob.non_contextual_creation: true
+              #default_schema: eventstore
 
 # flyway
 spring.flyway:

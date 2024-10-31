@@ -17,42 +17,36 @@ import org.springframework.validation.annotation.Validated;
 
 import javax.sql.DataSource;
 
-/**
- * <p>
- * <p>
- * <p>
- * <p>
- *
- * @author cjrequena
- */
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(
-  entityManagerFactoryRef = "entityManagerFactoryPostgres",
-  transactionManagerRef = "transactionManagerPostgres",
+  entityManagerFactoryRef = "entityManagerFactoryProjection",
+  transactionManagerRef = "transactionManagerProjection",
   basePackages = {"com.cjrequena.sample.repository"}
 )
-public class DataSourceConfiguration {
+public class ProjectionDBDataSourceConfiguration {
 
-  @Bean(name = "dataSourcePostgres", destroyMethod = "")
+  @Bean(name = "dataSourceProjection", destroyMethod = "")
   @Validated
   @ConfigurationProperties(prefix = "spring.datasource.postgres")
   @ConditionalOnClass({HikariDataSource.class})
-  public HikariDataSource dataSourcePostgres() {
+  public HikariDataSource dataSourceProjection() {
     return new HikariDataSource();
   }
 
-  @Bean("entityManagerFactoryPostgres")
-  public LocalContainerEntityManagerFactoryBean entityManagerFactoryPostgres(EntityManagerFactoryBuilder builder, @Qualifier("dataSourcePostgres") DataSource dataSource) {
+  @Bean("entityManagerFactoryProjection")
+  public LocalContainerEntityManagerFactoryBean entityManagerFactoryProjection(
+    EntityManagerFactoryBuilder builder, @Qualifier("dataSourceProjection") DataSource dataSource) {
     return builder
       .dataSource(dataSource)
       .packages("com.cjrequena.sample.entity")
-      .persistenceUnit("chinook")
+      .persistenceUnit("projectionDB")
       .build();
   }
 
-  @Bean("transactionManagerPostgres")
-  public PlatformTransactionManager transactionManagerPostgres(@Qualifier("entityManagerFactoryPostgres") EntityManagerFactory entityManagerFactoryPostgres) {
-    return new JpaTransactionManager(entityManagerFactoryPostgres);
+  @Bean("transactionManagerProjection")
+  public PlatformTransactionManager transactionManagerProjection(
+    @Qualifier("entityManagerFactoryProjection") EntityManagerFactory entityManagerFactoryProjection) {
+    return new JpaTransactionManager(entityManagerFactoryProjection);
   }
 }

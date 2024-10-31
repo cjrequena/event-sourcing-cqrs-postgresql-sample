@@ -17,42 +17,36 @@ import org.springframework.validation.annotation.Validated;
 
 import javax.sql.DataSource;
 
-/**
- * <p>
- * <p>
- * <p>
- * <p>
- *
- * @author cjrequena
- */
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(
-  entityManagerFactoryRef = "entityManagerFactoryPostgres",
-  transactionManagerRef = "transactionManagerPostgres",
+  entityManagerFactoryRef = "entityManagerFactoryEventStore",
+  transactionManagerRef = "transactionManagerEventStore",
   basePackages = {"com.cjrequena.eventstore.sample.repository"}
 )
 public class EventStoreDataSourceConfiguration {
 
-  @Bean(name = "dataSourcePostgres", destroyMethod = "")
+  @Bean(name = "dataSourceEventStore", destroyMethod = "")
   @Validated
   @ConfigurationProperties(prefix = "spring.datasource.eventstore.postgres")
   @ConditionalOnClass({HikariDataSource.class})
-  public HikariDataSource dataSourcePostgres() {
+  public HikariDataSource dataSourceEventStore() {
     return new HikariDataSource();
   }
 
-  @Bean("entityManagerFactoryPostgres")
-  public LocalContainerEntityManagerFactoryBean entityManagerFactoryPostgres(EntityManagerFactoryBuilder builder, @Qualifier("dataSourcePostgres") DataSource dataSource) {
+  @Bean("entityManagerFactoryEventStore")
+  public LocalContainerEntityManagerFactoryBean entityManagerFactoryEventStore(
+    EntityManagerFactoryBuilder builder, @Qualifier("dataSourceEventStore") DataSource dataSource) {
     return builder
       .dataSource(dataSource)
       .packages("com.cjrequena.eventstore.sample.entity")
-      .persistenceUnit("chinook")
+      .persistenceUnit("eventstore")
       .build();
   }
-  
-  @Bean("transactionManagerPostgres")
-  public PlatformTransactionManager transactionManagerPostgres(@Qualifier("entityManagerFactoryPostgres") EntityManagerFactory entityManagerFactoryPostgres) {
-    return new JpaTransactionManager(entityManagerFactoryPostgres);
+
+  @Bean("transactionManagerEventStore")
+  public PlatformTransactionManager transactionManagerEventStore(
+    @Qualifier("entityManagerFactoryEventStore") EntityManagerFactory entityManagerFactoryEventStore) {
+    return new JpaTransactionManager(entityManagerFactoryEventStore);
   }
 }
