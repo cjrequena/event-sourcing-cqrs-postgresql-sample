@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import static com.cjrequena.sample.common.Constants.DATE_TIME_FORMAT;
-
 /**
  *
  * <p></p>
@@ -32,7 +30,7 @@ public class CustomExceptionHandler {
   public ResponseEntity<Object> unhandledExceptions(Exception ex) {
     log.error(EXCEPTION_LOG, ex.getMessage(), ex);
     ErrorDTO errorDTO = new ErrorDTO();
-    errorDTO.setDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)));
+    errorDTO.setDate(LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
     errorDTO.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
     errorDTO.setErrorCode(ex.getClass().getSimpleName());
     errorDTO.setMessage(ex.getMessage());
@@ -45,7 +43,7 @@ public class CustomExceptionHandler {
   public ResponseEntity<Object> handleServiceException(ServiceException ex) {
     log.error(EXCEPTION_LOG, ex.getMessage(), ex);
     ErrorDTO errorDTO = new ErrorDTO();
-    errorDTO.setDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)));
+    errorDTO.setDate(LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
     errorDTO.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
     errorDTO.setErrorCode(ex.getClass().getSimpleName());
     errorDTO.setMessage(ex.getMessage());
@@ -58,7 +56,7 @@ public class CustomExceptionHandler {
   public ResponseEntity<Object> handleEventStoreServiceException(ServiceException ex) {
     log.error(EXCEPTION_LOG, ex.getMessage(), ex);
     ErrorDTO errorDTO = new ErrorDTO();
-    errorDTO.setDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)));
+    errorDTO.setDate(LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
     errorDTO.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
     errorDTO.setErrorCode(ex.getClass().getSimpleName());
     errorDTO.setMessage(ex.getMessage());
@@ -70,7 +68,7 @@ public class CustomExceptionHandler {
   public ResponseEntity<Object> handleApiException(ApiException ex) {
     //log.error(EXCEPTION_LOG, ex.getMessage(), ex);
     ErrorDTO errorDTO = new ErrorDTO();
-    errorDTO.setDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)));
+    errorDTO.setDate(LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
     errorDTO.setStatus(ex.getHttpStatus().value());
     errorDTO.setErrorCode(ex.getClass().getSimpleName());
     errorDTO.setMessage(ex.getMessage());
