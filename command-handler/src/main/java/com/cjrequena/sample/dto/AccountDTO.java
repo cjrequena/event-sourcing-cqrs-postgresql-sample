@@ -44,7 +44,4 @@ public class AccountDTO implements Serializable {
   @Schema(description = "The balance of the account", example = "1000.00")
   private BigDecimal balance;
 
-  @JsonProperty("version")
-  @Schema(accessMode = READ_ONLY, description = "Version of the account entity for optimistic locking")
-  private Long version;
 }
