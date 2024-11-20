@@ -103,7 +103,7 @@ public abstract class Aggregate {
    */
   private void applyEvent(Event event) {
     log.info("Applying event {}", event);
-    invoke(event, "apply");
+    invoke(event, "applyEvent");
   }
 
   public void applyCommand(Command command) {

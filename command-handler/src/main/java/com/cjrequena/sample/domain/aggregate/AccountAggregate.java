@@ -74,7 +74,7 @@ public class AccountAggregate extends Aggregate {
       .build());
   }
 
-  public void apply(AccountCreatedEvent event) {
+  public void applyEvent(AccountCreatedEvent event) {
     this.account = Account.builder()
       .id(event.getData().getId())
       .owner(event.getData().getOwner())
@@ -82,11 +82,11 @@ public class AccountAggregate extends Aggregate {
       .build();
   }
 
-  public void apply(AccountCreditedEvent event) {
+  public void applyEvent(AccountCreditedEvent event) {
     this.account.setBalance(this.account.getBalance().add(event.getData().getAmount()));
   }
 
-  public void apply(AccountDebitedEvent event) {
+  public void applyEvent(AccountDebitedEvent event) {
     this.account.setBalance(this.account.getBalance().subtract(event.getData().getAmount()));
   }
 

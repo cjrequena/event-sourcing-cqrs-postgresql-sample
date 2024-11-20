@@ -8,7 +8,8 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-@Data@Builder
+@Data
+@Builder
 @NoArgsConstructor // Lombok generates a no-args constructor
 @AllArgsConstructor // Lombok generates an all-args constructor
 @ToString
