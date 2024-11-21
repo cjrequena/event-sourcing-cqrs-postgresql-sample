@@ -14,7 +14,6 @@ import com.cjrequena.sample.vo.EventExtensionVO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.mapstruct.Mapper;
 import org.mapstruct.NullValueCheckStrategy;
-import org.mapstruct.factory.Mappers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,8 +27,6 @@ import java.util.stream.Collectors;
 public interface EventMapper {
 
   Logger log = LoggerFactory.getLogger(EventMapper.class);
-
-  EventMapper INSTANCE = Mappers.getMapper(EventMapper.class);
 
   //@Mapping(source = "aggregateId", target = "aggregateId")
   EventEntity mapToEventEntity(AccountCreatedEvent event);
