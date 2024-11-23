@@ -13,8 +13,8 @@ public enum EventType {
     ACCOUNT_CREDITED_EVENT(AccountCreditedEvent.class,AccountCreditedEvent.class.getName()),
     ACCOUNT_DEBITED_EVENT(AccountDebitedEvent.class, AccountDebitedEvent.class.getName());
 
-    private final Class<? extends Event> eventClass;
-    private final String eventType;
+    private final Class<? extends Event> clazz;
+    private final String type;
 
     //private final String value;
 }

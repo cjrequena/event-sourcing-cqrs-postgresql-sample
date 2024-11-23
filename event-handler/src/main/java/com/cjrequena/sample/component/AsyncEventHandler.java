@@ -37,7 +37,7 @@ public abstract class AsyncEventHandler {
 
   protected Aggregate retrieveOrInstantiateAggregate(UUID aggregateId) {
     final EventStoreConfigurationProperties.SnapshotProperties snapshotConfiguration = eventStoreConfigurationProperties.getSnapshot(
-      AggregateType.ACCOUNT_AGGREGATE.getAggregateType());
+      AggregateType.ACCOUNT_AGGREGATE.getType());
     if (snapshotConfiguration.enabled()) {
       return retrieveAggregateFromSnapshot(aggregateId)
         .orElseGet(() -> createAndReproduceAggregate(aggregateId));
@@ -47,7 +47,7 @@ public abstract class AsyncEventHandler {
   }
 
   protected Optional<Aggregate> retrieveAggregateFromSnapshot(UUID aggregateId) {
-    Optional<Aggregate> optionalAggregate = eventStoreService.retrieveAggregateSnapshot(AggregateType.ACCOUNT_AGGREGATE.getAggregateClass(), aggregateId, null);
+    Optional<Aggregate> optionalAggregate = eventStoreService.retrieveAggregateSnapshot(AggregateType.ACCOUNT_AGGREGATE.getClazz(), aggregateId, null);
     return optionalAggregate.map(aggregate -> {
       List<Event> events = retrieveEvents(aggregateId, aggregate.getAggregateVersion());
       aggregate.reproduceFromEvents(events);
@@ -57,7 +57,7 @@ public abstract class AsyncEventHandler {
 
   protected Aggregate createAndReproduceAggregate(UUID aggregateId) {
     log.info("Snapshot not found for Aggregate ID: {}. Reconstituting from events.", aggregateId);
-    Aggregate aggregate = aggregateFactory.newInstance(AggregateType.ACCOUNT_AGGREGATE.getAggregateClass(), aggregateId);
+    Aggregate aggregate = aggregateFactory.newInstance(AggregateType.ACCOUNT_AGGREGATE.getClazz(), aggregateId);
     List<Event> events = retrieveEvents(aggregateId, null);
     aggregate.reproduceFromEvents(events);
     return aggregate;

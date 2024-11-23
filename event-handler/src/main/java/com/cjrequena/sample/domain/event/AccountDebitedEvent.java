@@ -29,7 +29,7 @@ public class AccountDebitedEvent extends Event {
   @Nonnull
   @Override
   public String getEventType() {
-    return EventType.ACCOUNT_DEBITED_EVENT.getEventType();
+    return EventType.ACCOUNT_DEBITED_EVENT.getType();
   }
 
 }

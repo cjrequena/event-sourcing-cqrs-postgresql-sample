@@ -12,8 +12,8 @@ public enum AggregateType {
 
   ACCOUNT_AGGREGATE(AccountAggregate.class,"ACCOUNT_AGGREGATE");
 
-  private final Class<? extends Aggregate> aggregateClass;
-  private final String aggregateType;
+  private final Class<? extends Aggregate> clazz;
+  private final String type;
   //private final String value;
 
 }

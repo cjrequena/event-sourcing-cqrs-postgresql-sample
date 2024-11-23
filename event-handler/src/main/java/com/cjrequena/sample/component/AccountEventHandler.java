@@ -72,7 +72,7 @@ public class AccountEventHandler extends AsyncEventHandler {
   @Nonnull
   @Override
   public String getAggregateType() {
-    return AggregateType.ACCOUNT_AGGREGATE.getAggregateType();
+    return AggregateType.ACCOUNT_AGGREGATE.getType();
   }
 
 }
