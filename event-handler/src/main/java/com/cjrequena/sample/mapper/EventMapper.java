@@ -6,7 +6,7 @@ import com.cjrequena.sample.common.util.JsonUtil;
 import com.cjrequena.sample.domain.event.AccountCreatedEvent;
 import com.cjrequena.sample.domain.event.AccountCreditedEvent;
 import com.cjrequena.sample.domain.event.AccountDebitedEvent;
-import com.cjrequena.sample.exception.service.EventMapperServiceException;
+import com.cjrequena.sample.exception.service.MapperServiceException;
 import com.cjrequena.sample.vo.AccountVO;
 import com.cjrequena.sample.vo.CreditVO;
 import com.cjrequena.sample.vo.DebitVO;
@@ -43,7 +43,7 @@ public interface EventMapper {
     } catch (JsonProcessingException ex) {
       String errorMessage = String.format("Failed to map JSON string to EventExtensionVO: %s", value);
       log.error(errorMessage);
-      throw new EventMapperServiceException(errorMessage, ex);
+      throw new MapperServiceException(errorMessage, ex);
     }
   }
 
@@ -54,7 +54,7 @@ public interface EventMapper {
     } catch (JsonProcessingException ex) {
       String errorMessage = String.format("Failed to map EventExtensionVO to JSON string: %s", value);
       log.error(errorMessage);
-      throw new EventMapperServiceException(errorMessage, ex);
+      throw new MapperServiceException(errorMessage, ex);
     }
   }
 
@@ -65,7 +65,7 @@ public interface EventMapper {
     } catch (JsonProcessingException ex) {
       String errorMessage = String.format("Failed to map JSON string to AccountVO: %s", value);
       log.error(errorMessage);
-      throw new EventMapperServiceException(errorMessage, ex);
+      throw new MapperServiceException(errorMessage, ex);
     }
   }
 
@@ -76,7 +76,7 @@ public interface EventMapper {
     } catch (JsonProcessingException ex) {
       String errorMessage = String.format("Failed to map AccountVO to JSON string: %s", value);
       log.error(errorMessage);
-      throw new EventMapperServiceException(errorMessage, ex);
+      throw new MapperServiceException(errorMessage, ex);
     }
   }
 
@@ -87,7 +87,7 @@ public interface EventMapper {
     } catch (JsonProcessingException ex) {
       String errorMessage = String.format("Failed to map JSON string to CreditVO: %s", value);
       log.error(errorMessage);
-      throw new EventMapperServiceException(errorMessage, ex);
+      throw new MapperServiceException(errorMessage, ex);
     }
   }
 
@@ -98,7 +98,7 @@ public interface EventMapper {
     } catch (JsonProcessingException ex) {
       String errorMessage = String.format("Failed to map CreditVO to JSON string: %s", value);
       log.error(errorMessage);
-      throw new EventMapperServiceException(errorMessage, ex);
+      throw new MapperServiceException(errorMessage, ex);
     }
   }
 
@@ -109,7 +109,7 @@ public interface EventMapper {
     } catch (JsonProcessingException ex) {
       String errorMessage = String.format("Failed to map JSON string to DebitVO: %s", value);
       log.error(errorMessage);
-      throw new EventMapperServiceException(errorMessage, ex);
+      throw new MapperServiceException(errorMessage, ex);
     }
   }
 
@@ -120,7 +120,7 @@ public interface EventMapper {
     } catch (JsonProcessingException ex) {
       String errorMessage = String.format("Failed to map DebitVO to JSON string: %s", value);
       log.error(errorMessage);
-      throw new EventMapperServiceException(errorMessage, ex);
+      throw new MapperServiceException(errorMessage, ex);
     }
   }
 
@@ -144,7 +144,7 @@ public interface EventMapper {
       default:
         String errorMessage = String.format("Error mapping to event, unknown event type: %s", eventEntity.getEventType());
         log.error(errorMessage);
-        throw new EventMapperServiceException(errorMessage);
+        throw new MapperServiceException(errorMessage);
     }
   }
 
