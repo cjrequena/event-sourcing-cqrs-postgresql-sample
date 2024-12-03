@@ -1,4 +1,4 @@
-package com.cjrequena.sample.entity;
+package com.cjrequena.sample.entity.postgresql;
 
 import jakarta.persistence.*;
 import lombok.*;

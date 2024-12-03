@@ -137,6 +137,13 @@ spring:
             bytecode.use_reflection_optimizer: false
             jdbc.lob.non_contextual_creation: true
             default_schema: account
+
+# MongoDB :: Projection
+spring.data.mongodb:
+  uri: mongodb://root:root@127.0.0.1:27017/account?authSource=admin
+  #uri: mongodb://127.0.0.1:27017/account?authSource=admin
+  auto-index-creation: true
+
 # flyway
 spring.flyway:
   enabled: false

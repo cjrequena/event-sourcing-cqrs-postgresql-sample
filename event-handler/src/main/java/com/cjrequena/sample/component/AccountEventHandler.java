@@ -7,7 +7,8 @@ import com.cjrequena.eventstore.sample.service.AggregateFactory;
 import com.cjrequena.eventstore.sample.service.EventStoreService;
 import com.cjrequena.sample.domain.aggregate.AccountAggregate;
 import com.cjrequena.sample.domain.aggregate.AggregateType;
-import com.cjrequena.sample.entity.AccountEntity;
+import com.cjrequena.sample.entity.mongo.MongoAccountEntity;
+import com.cjrequena.sample.entity.postgresql.AccountEntity;
 import com.cjrequena.sample.mapper.EventMapper;
 import com.cjrequena.sample.service.AccountService;
 import jakarta.annotation.Nonnull;
@@ -58,6 +59,7 @@ public class AccountEventHandler extends AsyncEventHandler {
     for (Event event : latestEventBysAggregateIdList) {
       final AccountAggregate aggregate = (AccountAggregate) this.retrieveOrInstantiateAggregate(event.getAggregateId());
       log.info("Preparing to save or update in the projection database the aggregate {}", aggregate);
+
       // Store the aggregate into the projection database.
       AccountEntity accountEntity = AccountEntity.builder()
         .id(aggregate.getAccount().getId())
@@ -66,6 +68,16 @@ public class AccountEventHandler extends AsyncEventHandler {
         .version(aggregate.getAggregateVersion())
         .build();
       this.accountService.save(accountEntity);
+
+      // Mongo
+      MongoAccountEntity mongoAccountEntity = MongoAccountEntity.builder()
+        .id(aggregate.getAccount().getId())
+        .owner(aggregate.getAccount().getOwner())
+        .balance(aggregate.getAccount().getBalance())
+        .version(aggregate.getAggregateVersion())
+        .build();
+      this.accountService.save(mongoAccountEntity).subscribe();
+
     }
   }
 

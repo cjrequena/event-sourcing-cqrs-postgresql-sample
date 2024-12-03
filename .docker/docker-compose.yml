@@ -32,6 +32,44 @@ services:
       - local-network
     restart: unless-stopped
 #---------------------------------------------------------------------------------------------------------------------
+  mongo:
+    image: mongo:${MONGO_VERSION}
+    container_name: mongo
+    hostname: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME:-root}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD:-root}
+    ports:
+      - "27017:27017"
+    networks:
+      - local-network
+    volumes:
+      - mongo-data:/data/db
+      - mongo-config:/data/configdb
+#---------------------------------------------------------------------------------------------------------------------
+  mongo-express:
+    image: mongo-express:${MONGO_EXPRESS_VERSION}
+    container_name: mongo-express
+    hostname: mongo-express
+    restart: always
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongo
+      ME_CONFIG_MONGODB_PORT: 27017
+      ME_CONFIG_MONGODB_ENABLE_ADMIN: true
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_INITDB_ROOT_USERNAME:-root}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_INITDB_ROOT_PASSWORD:-root}
+      ME_CONFIG_BASICAUTH_USERNAME: ${ME_CONFIG_BASICAUTH_USERNAME:-root}
+      ME_CONFIG_BASICAUTH_PASSWORD: ${ME_CONFIG_BASICAUTH_PASSWORD:-root}
+    ports:
+      - "8081:8081"
+    networks:
+      - local-network
+    depends_on:
+      - mongo
+    links:
+      - mongo
+#---------------------------------------------------------------------------------------------------------------------
 networks:
   local-network:
     name: sample-network.local
@@ -44,3 +82,5 @@ networks:
 volumes:
     postgres-data:
     pgadmin-data:
+    mongo-data:
+    mongo-config:
