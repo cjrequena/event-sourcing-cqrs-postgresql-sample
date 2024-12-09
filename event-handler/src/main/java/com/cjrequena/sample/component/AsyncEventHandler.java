@@ -33,11 +33,10 @@ public abstract class AsyncEventHandler {
   public abstract void handle(List<EventEntity> eventEntityList);
 
   @Nonnull
-  public abstract String getAggregateType();
+  public abstract AggregateType getAggregateType();
 
   protected Aggregate retrieveOrInstantiateAggregate(UUID aggregateId) {
-    final EventStoreConfigurationProperties.SnapshotProperties snapshotConfiguration = eventStoreConfigurationProperties.getSnapshot(
-      AggregateType.ACCOUNT_AGGREGATE.getType());
+    final EventStoreConfigurationProperties.SnapshotProperties snapshotConfiguration = eventStoreConfigurationProperties.getSnapshot(getAggregateType().getType());
     if (snapshotConfiguration.enabled()) {
       return retrieveAggregateFromSnapshot(aggregateId)
         .orElseGet(() -> createAndReproduceAggregate(aggregateId));
@@ -47,7 +46,7 @@ public abstract class AsyncEventHandler {
   }
 
   protected Optional<Aggregate> retrieveAggregateFromSnapshot(UUID aggregateId) {
-    Optional<Aggregate> optionalAggregate = eventStoreService.retrieveAggregateSnapshot(AggregateType.ACCOUNT_AGGREGATE.getClazz(), aggregateId, null);
+    Optional<Aggregate> optionalAggregate = eventStoreService.retrieveAggregateSnapshot(getAggregateType().getClazz(), aggregateId, null);
     return optionalAggregate.map(aggregate -> {
       List<Event> events = retrieveEvents(aggregateId, aggregate.getAggregateVersion());
       aggregate.reproduceFromEvents(events);
@@ -57,7 +56,7 @@ public abstract class AsyncEventHandler {
 
   protected Aggregate createAndReproduceAggregate(UUID aggregateId) {
     log.info("Snapshot not found for Aggregate ID: {}. Reconstituting from events.", aggregateId);
-    Aggregate aggregate = aggregateFactory.newInstance(AggregateType.ACCOUNT_AGGREGATE.getClazz(), aggregateId);
+    Aggregate aggregate = aggregateFactory.newInstance(getAggregateType().getClazz(), aggregateId);
     List<Event> events = retrieveEvents(aggregateId, null);
     aggregate.reproduceFromEvents(events);
     return aggregate;
