@@ -6,6 +6,7 @@ import com.cjrequena.eventstore.sample.domain.command.Command;
 import com.cjrequena.eventstore.sample.exception.service.EventStoreOptimisticConcurrencyServiceException;
 import com.cjrequena.eventstore.sample.service.AggregateFactory;
 import com.cjrequena.eventstore.sample.service.EventStoreService;
+import com.cjrequena.sample.domain.aggregate.AggregateType;
 import com.cjrequena.sample.domain.command.CreditAccountCommand;
 import com.cjrequena.sample.exception.service.AggregateNotFoundServiceException;
 import com.cjrequena.sample.exception.service.AmountServiceException;
@@ -75,4 +76,9 @@ public class CreditAccountCommandHandler extends CommandHandler<CreditAccountCom
     return CreditAccountCommand.class;
   }
 
+  @Nonnull
+  @Override
+  public AggregateType getAggregateType() {
+    return AggregateType.ACCOUNT_AGGREGATE;
+  }
 }

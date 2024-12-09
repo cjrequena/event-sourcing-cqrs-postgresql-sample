@@ -8,6 +8,7 @@ import com.cjrequena.eventstore.sample.service.AggregateFactory;
 import com.cjrequena.eventstore.sample.service.EventStoreService;
 import com.cjrequena.sample.domain.aggregate.Account;
 import com.cjrequena.sample.domain.aggregate.AccountAggregate;
+import com.cjrequena.sample.domain.aggregate.AggregateType;
 import com.cjrequena.sample.domain.command.DebitAccountCommand;
 import com.cjrequena.sample.exception.service.AccountBalanceServiceException;
 import com.cjrequena.sample.exception.service.AggregateNotFoundServiceException;
@@ -85,4 +86,9 @@ public class DebitAccountCommandHandler extends CommandHandler<DebitAccountComma
     return DebitAccountCommand.class;
   }
 
+  @Nonnull
+  @Override
+  public AggregateType getAggregateType() {
+    return AggregateType.ACCOUNT_AGGREGATE;
+  }
 }

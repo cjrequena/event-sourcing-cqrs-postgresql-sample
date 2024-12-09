@@ -6,6 +6,7 @@ import com.cjrequena.eventstore.sample.domain.command.Command;
 import com.cjrequena.eventstore.sample.exception.service.EventStoreOptimisticConcurrencyServiceException;
 import com.cjrequena.eventstore.sample.service.AggregateFactory;
 import com.cjrequena.eventstore.sample.service.EventStoreService;
+import com.cjrequena.sample.domain.aggregate.AggregateType;
 import com.cjrequena.sample.domain.command.CreateAccountCommand;
 import com.cjrequena.sample.exception.service.AccountBalanceServiceException;
 import com.cjrequena.sample.exception.service.OptimisticConcurrencyServiceException;
@@ -68,6 +69,12 @@ public class CreateAccountCommandHandler extends CommandHandler<CreateAccountCom
   @Override
   public Class<CreateAccountCommand> getCommandType() {
     return CreateAccountCommand.class;
+  }
+
+  @Nonnull
+  @Override
+  public AggregateType getAggregateType() {
+    return AggregateType.ACCOUNT_AGGREGATE;
   }
 
 }

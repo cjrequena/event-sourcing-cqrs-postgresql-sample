@@ -34,9 +34,12 @@ public abstract class CommandHandler<T extends Command> {
   @Nonnull
   public abstract Class<T> getCommandType();
 
+  @Nonnull
+  public abstract AggregateType getAggregateType();
+
   protected Aggregate retrieveOrInstantiateAggregate(UUID aggregateId) {
     final EventStoreConfigurationProperties.SnapshotProperties snapshotConfiguration = eventStoreConfigurationProperties.getSnapshot(
-      AggregateType.ACCOUNT_AGGREGATE.getAggregateType());
+      getAggregateType().getAggregateType());
     if (snapshotConfiguration.enabled()) {
       return retrieveAggregateFromSnapshot(aggregateId)
         .orElseGet(() -> createAndReproduceAggregate(aggregateId));
@@ -46,7 +49,7 @@ public abstract class CommandHandler<T extends Command> {
   }
 
   protected Optional<Aggregate> retrieveAggregateFromSnapshot(UUID aggregateId) {
-    Optional<Aggregate> optionalAggregate = eventStoreService.retrieveAggregateSnapshot(AggregateType.ACCOUNT_AGGREGATE.getAggregateClass(), aggregateId, null);
+    Optional<Aggregate> optionalAggregate = eventStoreService.retrieveAggregateSnapshot(getAggregateType().getAggregateClass(), aggregateId, null);
     return optionalAggregate.map(aggregate -> {
       List<Event> events = retrieveEvents(aggregateId, aggregate.getAggregateVersion());
       aggregate.reproduceFromEvents(events);
@@ -56,7 +59,7 @@ public abstract class CommandHandler<T extends Command> {
 
   protected Aggregate createAndReproduceAggregate(UUID aggregateId) {
     log.info("Snapshot not found for Aggregate ID: {}. Reconstituting from events.", aggregateId);
-    Aggregate aggregate = aggregateFactory.newInstance(AggregateType.ACCOUNT_AGGREGATE.getAggregateClass(), aggregateId);
+    Aggregate aggregate = aggregateFactory.newInstance(getAggregateType().getAggregateClass(), aggregateId);
     List<Event> events = retrieveEvents(aggregateId, null);
     aggregate.reproduceFromEvents(events);
     return aggregate;
