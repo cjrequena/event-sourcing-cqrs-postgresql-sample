@@ -2,7 +2,7 @@ package com.cjrequena.eventstore.sample.repository;
 
 import com.cjrequena.eventstore.sample.entity.AbstractEventEntity;
 import com.cjrequena.eventstore.sample.entity.EventEntity;
-import lombok.NonNull;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -75,8 +75,69 @@ public interface EventRepository extends CrudRepository<AbstractEventEntity, UUI
       AND event.offset_txid < pg_snapshot_xmin(pg_current_snapshot())
     ORDER BY event.offset_txid ASC, event.offset_id ASC
     """, nativeQuery = true)
-  List<EventEntity> retrieveEventsByAggregateTypeAfterOffsetTxIAndOffsetId(
-    @Param("aggregateType") @NonNull String aggregateType,
-    @Param("offsetTxId") @NonNull Long offsetTxId,
-    @Param("offsetId") @NonNull Long offsetId);
+  List<EventEntity> retrieveEventsByAggregateTypeAfterOffsetTxIdAndOffsetId(
+    @Param("aggregateType") @NotNull String aggregateType,
+    @Param("offsetTxId") @NotNull Long offsetTxId,
+    @Param("offsetId") @NotNull Long offsetId);
+
+  @Query(value = """
+    SELECT *
+    FROM (
+        SELECT 
+            event.id, 
+            event.offset_id, 
+            event.offset_txid, 
+            event.aggregate_id, 
+            event.aggregate_version, 
+            event.event_type, 
+            event.data_content_type, 
+            event.data, 
+            event.data_base64, 
+            event.offset_date_time, 
+            event.extension,
+            ROW_NUMBER() OVER (PARTITION BY event.aggregate_id, aggregate.aggregate_type 
+                               ORDER BY event.offset_txid DESC, event.offset_id DESC) AS row_num
+        FROM ES_EVENT event
+        JOIN ES_AGGREGATE aggregate ON aggregate.id = event.aggregate_id
+        WHERE aggregate.aggregate_type = :aggregateType
+          AND event.aggregate_id IN :aggregateIds
+    ) subquery
+    WHERE subquery.row_num = 1
+    ORDER BY subquery.aggregate_id ASC
+    """, nativeQuery = true)
+  List<EventEntity> retrieveLatestEventsByAggregateTypeAndAggregateIds(
+    @Param("aggregateType") @NotNull String aggregateType,
+    @Param("aggregateIds") @NotNull List<UUID> aggregateIds
+  );
+
+
+  @Query(value = """
+    SELECT *
+    FROM (
+        SELECT 
+            event.id, 
+            event.offset_id, 
+            event.offset_txid, 
+            event.aggregate_id, 
+            event.aggregate_version, 
+            event.event_type, 
+            event.data_content_type, 
+            event.data, 
+            event.data_base64, 
+            event.offset_date_time, 
+            event.extension,
+            ROW_NUMBER() OVER (PARTITION BY event.aggregate_id, aggregate.aggregate_type 
+                               ORDER BY event.offset_txid DESC, event.offset_id DESC) AS row_num
+        FROM ES_EVENT event
+        JOIN ES_AGGREGATE aggregate ON aggregate.id = event.aggregate_id
+        WHERE aggregate.aggregate_type = :aggregateType
+    ) subquery
+    WHERE subquery.row_num = 1
+    ORDER BY subquery.aggregate_id ASC
+    """, nativeQuery = true)
+  List<EventEntity> retrieveLatestEventsByAggregateTypeGroupedByAggregateId(
+    @Param("aggregateType") @NotNull String aggregateType
+  );
+
+
 }

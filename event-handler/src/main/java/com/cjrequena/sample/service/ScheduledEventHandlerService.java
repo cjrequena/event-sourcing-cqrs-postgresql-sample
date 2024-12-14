@@ -48,7 +48,7 @@ public class ScheduledEventHandlerService {
       eventSubscription -> {
         log.debug("Acquired lock on subscription {}, eventSubscription = {}", subscriptionName, eventSubscription);
 
-        List<EventEntity> events = eventStoreService.retrieveEventsByAggregateTypeAfterOffsetTxIAndOffsetId(
+        List<EventEntity> events = eventStoreService.retrieveEventsByAggregateTypeAfterOffsetTxIdAndOffsetId(
           eventHandler.getAggregateType().getType(),
           eventSubscription.getOffsetTxId(),
           eventSubscription.getOffsetId()
