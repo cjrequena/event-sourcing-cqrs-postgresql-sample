@@ -3,7 +3,7 @@ package com.cjrequena.sample.service;
 import com.cjrequena.eventstore.sample.configuration.EventStoreConfigurationProperties;
 import com.cjrequena.eventstore.sample.entity.EventEntity;
 import com.cjrequena.eventstore.sample.service.EventStoreService;
-import com.cjrequena.sample.component.AsyncEventHandler;
+import com.cjrequena.sample.component.event.AsyncEventHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
