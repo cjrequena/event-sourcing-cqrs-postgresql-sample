@@ -76,7 +76,7 @@ public class DebitAccountCommandHandler extends CommandHandler<DebitAccountComma
       throw new OptimisticConcurrencyServiceException(ex.getMessage(), ex);
     }
 
-    log.info("Successfully handled command {} and updated aggregate with ID {}", command.getClass().getSimpleName(), command.getAggregateId());
+    log.info("Successfully handled command {} for aggregate with ID {}", command.getClass().getSimpleName(), command.getAggregateId());
 
   }
 

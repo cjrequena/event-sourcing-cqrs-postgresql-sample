@@ -76,7 +76,7 @@ public class EventStoreService {
     SnapshotProperties snapshotProperties = eventStoreConfigurationProperties.getSnapshot(aggregateType);
     boolean shouldCreateSnapshot = aggregate.getAggregateVersion() % snapshotProperties.interval() == 0 || unconfirmedEventsPool.size() >= snapshotProperties.interval();
     if (shouldCreateSnapshot) {
-      log.info("Creating {} aggregate {} version {} snapshot", aggregate.getAggregateType(), aggregate.getAggregateId(), aggregate.getAggregateVersion());
+      log.info("Creating snapshot for {} with aggregate ID '{}' version {}", aggregate.getAggregateType(), aggregate.getAggregateId(), aggregate.getAggregateVersion());
       AggregateSnapshotEntity aggregateSnapshotEntity = AggregateSnapshotEntity.builder()
         .aggregateId(aggregate.getAggregateId())
         .aggregateVersion(aggregate.getAggregateVersion())
@@ -89,7 +89,7 @@ public class EventStoreService {
 
   @Transactional(readOnly = true)
   public Optional<Aggregate> retrieveAggregateSnapshot(Class<? extends Aggregate> aggregateClass, UUID aggregateId, @Nullable Long aggregateVersion) {
-    log.info("Retrieving aggregate snapshot for aggregate {}with ID {}", aggregateClass, aggregateId);
+    log.info("Retrieving aggregate snapshot for aggregate {} with ID '{}'", aggregateClass, aggregateId);
 
     return Optional.ofNullable(aggregateSnapshotRepository.retrieveAggregateSnapshot(aggregateId, aggregateVersion))
       .map(aggregateSnapshotEntity -> fromSnapshotToAggregate(aggregateSnapshotEntity, aggregateClass));
@@ -98,10 +98,12 @@ public class EventStoreService {
   @Transactional(readOnly = true)
   public List<EventEntity> retrieveEventsByAggregateId(UUID aggregateId, @Nullable Long fromAggregateVersion, @Nullable Long toAggregateVersion) {
     if (log.isInfoEnabled()) {
-      if (toAggregateVersion != null) {
-        log.info("Retrieving aggregate events for aggregatewith ID {} from version {} to version {}", aggregateId, fromAggregateVersion, toAggregateVersion);
-      } else {
-        log.info("Retrieving aggregate events for aggregatewith ID {} from version {}", aggregateId, fromAggregateVersion);
+      if (fromAggregateVersion != null && toAggregateVersion != null) {
+        log.info("Retrieving aggregate events for aggregate with ID '{}' from version {} to version {}", aggregateId, fromAggregateVersion, toAggregateVersion);
+      } else if (fromAggregateVersion != null) {
+        log.info("Retrieving aggregate events for aggregate with ID '{}' from version {}", aggregateId, fromAggregateVersion);
+      }else {
+        log.info("Retrieving aggregate events for aggregate with ID '{}'", aggregateId);
       }
     }
     // Validate input

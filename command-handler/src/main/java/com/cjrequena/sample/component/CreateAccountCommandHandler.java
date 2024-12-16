@@ -62,7 +62,7 @@ public class CreateAccountCommandHandler extends CommandHandler<CreateAccountCom
       throw new OptimisticConcurrencyServiceException(ex.getMessage(), ex);
     }
 
-    log.info("Successfully handled command {} and updated aggregate with ID {}", command.getClass().getSimpleName(), command.getAggregateId());
+    log.info("Successfully handled command {} for aggregate with ID {}", command.getClass().getSimpleName(), command.getAggregateId());
   }
 
   @Nonnull

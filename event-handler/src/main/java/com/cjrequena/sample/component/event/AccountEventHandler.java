@@ -46,8 +46,10 @@ public class AccountEventHandler extends AsyncEventHandler {
     Set<UUID> eventsIds = new HashSet<>();
 
     for (Event event : events) {
-      log.info("A new event {} is being handle for aggregate  with ID '{}' and aggregate version {}", event.getEventType(), event.getAggregateId(), event.getAggregateVersion());
-      // Here is to set the business logic to send the incoming event through an integration channel, e.g. Kafka, SNS, SQS, AWS Lambda, Webhook, etc.
+      if (log.isInfoEnabled()) {
+        log.info("Handling event {} for aggregate {} with ID '{}' and aggregate version {}", event.getEventType(), getAggregateType(), event.getAggregateId(),
+          event.getAggregateVersion());
+      }      // Here is to set the business logic to send the incoming event through an integration channel, e.g. Kafka, SNS, SQS, AWS Lambda, Webhook, etc.
 
       // Here we store in a set the aggregateId of incoming events.
       eventsIds.add(event.getAggregateId());
