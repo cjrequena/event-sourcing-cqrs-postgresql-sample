@@ -43,20 +43,21 @@ public class AccountEventHandler extends AsyncEventHandler {
   public void handle(List<EventEntity> eventEntityList) {
     final List<Event> events = this.eventMapper.mapToEventList(eventEntityList);
 
-    Set<UUID> eventsIds = new HashSet<>();
+    Set<UUID> aggregateIds = new HashSet<>();
 
     for (Event event : events) {
       if (log.isInfoEnabled()) {
-        log.info("Handling event {} for aggregate {} with ID '{}' and aggregate version {}", event.getEventType(), getAggregateType(), event.getAggregateId(),
-          event.getAggregateVersion());
-      }      // Here is to set the business logic to send the incoming event through an integration channel, e.g. Kafka, SNS, SQS, AWS Lambda, Webhook, etc.
+        log.info("Handling event {} for aggregate {} with ID '{}' and aggregate version {}", event.getEventType(), getAggregateType(), event.getAggregateId(), event.getAggregateVersion());
+      }
+
+      // Here is to set the business logic to send the incoming event through an integration channel, e.g. Kafka, SNS, SQS, AWS Lambda, Webhook, etc.
 
       // Here we store in a set the aggregateId of incoming events.
-      eventsIds.add(event.getAggregateId());
+      aggregateIds.add(event.getAggregateId());
     }
 
-    for (UUID eventId : eventsIds) {
-      final AccountAggregate aggregate = (AccountAggregate) this.retrieveOrInstantiateAggregate(eventId);
+    for (UUID aggregateId : aggregateIds) {
+      final AccountAggregate aggregate = (AccountAggregate) this.retrieveOrInstantiateAggregate(aggregateId);
       log.info("Preparing to save or update in the projection database the aggregate {}", aggregate);
 
       // Save or Update the projection database
