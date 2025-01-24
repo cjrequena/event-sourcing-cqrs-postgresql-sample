@@ -12,6 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Repository interface for accessing and managing event data stored in the event store database.
+ * This interface extends {@link CrudRepository}, providing basic CRUD operations and additional
+ * custom queries for retrieving and managing event-related data.
+ */
 @Repository
 @Transactional
 public interface EventRepository extends CrudRepository<AbstractEventEntity, UUID> {
@@ -21,24 +26,12 @@ public interface EventRepository extends CrudRepository<AbstractEventEntity, UUI
    * This query selects all events from the `es_event` table that match the given {@code aggregateId},
    * and optionally filters the results by an aggregate version range, ordering the results in ascending
    * order by the `aggregate_version`.
-   * <p>
-   * The query behaves as follows:
-   * <ul>
-   *     <li>If {@code fromAggregateVersion} is not null, only events with an {@code aggregate_version} greater
-   *         than {@code fromAggregateVersion} will be returned.</li>
-   *     <li>If {@code toAggregateVersion} is not null, only events with an {@code aggregate_version} less than
-   *         or equal to {@code toAggregateVersion} will be returned.</li>
-   *     <li>If both {@code fromAggregateVersion} and {@code toAggregateVersion} are null, all events matching
-   *         the {@code aggregateId} will be returned.</li>
-   * </ul>
    *
    * @param aggregateId the unique identifier of the aggregate whose events are being retrieved. Cannot be null.
    * @param fromAggregateVersion the lower bound of the aggregate version for filtering events. If null, no lower bound is applied.
    * @param toAggregateVersion the upper bound of the aggregate version for filtering events. If null, no upper bound is applied.
-   *
    * @return a list of {@link EventEntity} instances that match the given criteria. The list will be ordered
    *         by the {@code aggregate_version} in ascending order. Returns an empty list if no matching events are found.
-   *
    * @throws IllegalArgumentException if the {@code aggregateId} is null.
    */
   @Query(value = """
@@ -55,6 +48,17 @@ public interface EventRepository extends CrudRepository<AbstractEventEntity, UUI
     @Param("toAggregateVersion") Long toAggregateVersion
   );
 
+  /**
+   * Retrieves a list of {@link EventEntity} instances associated with a specific aggregate type
+   * and occurring after the specified offset transaction ID and offset ID. Results are ordered
+   * by offset transaction ID and offset ID in ascending order.
+   *
+   * @param aggregateType the type of aggregate whose events are being retrieved. Cannot be null.
+   * @param offsetTxId the transaction ID offset to start retrieving events from. Cannot be null.
+   * @param offsetId the offset ID to start retrieving events from. Cannot be null.
+   * @return a list of {@link EventEntity} instances matching the specified criteria.
+   * @throws IllegalArgumentException if any of the parameters are null.
+   */
   @Query(value = """
     SELECT 
         event.id, 
@@ -80,6 +84,15 @@ public interface EventRepository extends CrudRepository<AbstractEventEntity, UUI
     @Param("offsetTxId") @NotNull Long offsetTxId,
     @Param("offsetId") @NotNull Long offsetId);
 
+  /**
+   * Retrieves the latest {@link EventEntity} instances for a specific aggregate type and a list of aggregate IDs.
+   * This query groups events by aggregate ID and aggregate type and selects the most recent event for each group.
+   *
+   * @param aggregateType the type of aggregate to retrieve events for. Cannot be null.
+   * @param aggregateIds a list of aggregate IDs to filter events by. Cannot be null.
+   * @return a list of the latest {@link EventEntity} instances for each specified aggregate ID, ordered by aggregate ID.
+   * @throws IllegalArgumentException if either {@code aggregateType} or {@code aggregateIds} is null.
+   */
   @Query(value = """
     SELECT *
     FROM (
@@ -110,7 +123,14 @@ public interface EventRepository extends CrudRepository<AbstractEventEntity, UUI
     @Param("aggregateIds") @NotNull List<UUID> aggregateIds
   );
 
-
+  /**
+   * Retrieves the latest {@link EventEntity} instances for a specific aggregate type, grouped by aggregate ID.
+   * This query groups events by aggregate ID and aggregate type and selects the most recent event for each group.
+   *
+   * @param aggregateType the type of aggregate to retrieve events for. Cannot be null.
+   * @return a list of the latest {@link EventEntity} instances for each aggregate ID of the specified type.
+   * @throws IllegalArgumentException if {@code aggregateType} is null.
+   */
   @Query(value = """
     SELECT *
     FROM (
@@ -138,6 +158,5 @@ public interface EventRepository extends CrudRepository<AbstractEventEntity, UUI
   List<EventEntity> retrieveLatestEventsByAggregateTypeGroupedByAggregateId(
     @Param("aggregateType") @NotNull String aggregateType
   );
-
 
 }
