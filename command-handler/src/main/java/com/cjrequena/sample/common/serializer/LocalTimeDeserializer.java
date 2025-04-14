@@ -15,7 +15,7 @@ public class LocalTimeDeserializer extends JsonDeserializer<LocalTime> {
   private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ISO_LOCAL_TIME;
 
   @Override
-  public LocalTime deserialize(JsonParser  jsonParser, DeserializationContext context) throws IOException {
+  public LocalTime deserialize(JsonParser jsonParser, DeserializationContext context) throws IOException {
     try {
       String dateAsString = jsonParser.getText();
       if (dateAsString == null) {

@@ -1,4 +1,4 @@
-package com.cjrequena.sample.component;
+package com.cjrequena.sample.component.command;
 
 import com.cjrequena.eventstore.sample.configuration.EventStoreConfigurationProperties;
 import com.cjrequena.eventstore.sample.domain.aggregate.Aggregate;
@@ -6,13 +6,16 @@ import com.cjrequena.eventstore.sample.domain.command.Command;
 import com.cjrequena.eventstore.sample.exception.service.EventStoreOptimisticConcurrencyServiceException;
 import com.cjrequena.eventstore.sample.service.AggregateFactory;
 import com.cjrequena.eventstore.sample.service.EventStoreService;
+import com.cjrequena.sample.domain.aggregate.Account;
+import com.cjrequena.sample.domain.aggregate.AccountAggregate;
 import com.cjrequena.sample.domain.aggregate.AggregateType;
-import com.cjrequena.sample.domain.command.CreditAccountCommand;
+import com.cjrequena.sample.domain.command.DebitAccountCommand;
+import com.cjrequena.sample.exception.service.AccountBalanceServiceException;
 import com.cjrequena.sample.exception.service.AggregateNotFoundServiceException;
 import com.cjrequena.sample.exception.service.AmountServiceException;
 import com.cjrequena.sample.exception.service.OptimisticConcurrencyServiceException;
 import com.cjrequena.sample.mapper.EventMapper;
-import com.cjrequena.sample.vo.CreditVO;
+import com.cjrequena.sample.vo.DebitVO;
 import jakarta.annotation.Nonnull;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +27,10 @@ import java.math.BigDecimal;
 @Log4j2
 @Component
 @Transactional
-public class CreditAccountCommandHandler extends CommandHandler<CreditAccountCommand> {
+public class DebitAccountCommandHandler extends CommandHandler<DebitAccountCommand> {
 
   @Autowired
-  public CreditAccountCommandHandler(
+  public DebitAccountCommandHandler(
     EventStoreService eventStoreService,
     AggregateFactory aggregateFactory,
     EventMapper eventMapper,
@@ -39,8 +42,8 @@ public class CreditAccountCommandHandler extends CommandHandler<CreditAccountCom
   public void handle(@Nonnull Command command) {
     log.trace("Handling command of type {} for aggregate {}", command.getClass().getSimpleName(), command.getAggregateType());
 
-    if (!(command instanceof CreditAccountCommand)) {
-      throw new IllegalArgumentException("Expected command of type CreditAccountCommand but received " + command.getClass().getSimpleName());
+    if (!(command instanceof DebitAccountCommand)) {
+      throw new IllegalArgumentException("Expected command of type DebitAccountCommand but received " + command.getClass().getSimpleName());
     }
 
     if (!this.eventStoreService.verifyIfAggregateExist(command.getAggregateId(), command.getAggregateType())) {
@@ -52,13 +55,20 @@ public class CreditAccountCommandHandler extends CommandHandler<CreditAccountCom
       throw new AggregateNotFoundServiceException(errorMessage);
     }
 
-    final CreditVO creditVO = ((CreditAccountCommand) command).getCreditVO();
-    if (creditVO.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
-      throw new AmountServiceException("Invalid credit amount: The amount must be greater than zero.");
+    Aggregate aggregate = retrieveOrInstantiateAggregate(command.getAggregateId());
+    final Account account = ((AccountAggregate) aggregate).getAccount();
+    final DebitVO debitVO = ((DebitAccountCommand) command).getDebitVO();
+
+    if (debitVO.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
+      throw new AmountServiceException("Invalid debit amount: The amount must be greater than zero.");
+    }
+
+    if (account.getBalance().subtract(debitVO.getAmount()).compareTo(BigDecimal.ZERO) < 0) {
+      String errorMessage = String.format("Invalid account balance for account with ID '%s': Balance cannot be negative.", account.getId());
+      throw new AccountBalanceServiceException(errorMessage);
     }
 
     try {
-      Aggregate aggregate = retrieveOrInstantiateAggregate(command.getAggregateId());
       aggregate.applyCommand(command);
       eventStoreService.saveAggregate(aggregate);
       aggregate.markUnconfirmedEventsAsConfirmed();
@@ -72,8 +82,8 @@ public class CreditAccountCommandHandler extends CommandHandler<CreditAccountCom
 
   @Nonnull
   @Override
-  public Class<CreditAccountCommand> getCommandType() {
-    return CreditAccountCommand.class;
+  public Class<DebitAccountCommand> getCommandType() {
+    return DebitAccountCommand.class;
   }
 
   @Nonnull

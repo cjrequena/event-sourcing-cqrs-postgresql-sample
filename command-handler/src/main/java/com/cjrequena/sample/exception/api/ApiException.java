@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.ToString;
 import org.springframework.http.HttpStatus;
 
-
 @Getter
 @ToString
 public abstract class ApiException extends Exception {

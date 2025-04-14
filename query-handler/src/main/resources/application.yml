@@ -48,7 +48,7 @@ logging.level: # Log levels severity mapping. For instance, `logging.level.org.s
   com.cjrequena.eventstore.sample: INFO
 
 logging.pattern:
-  console:  "%highlight{%-5p|%d{ISO8601}{GMT}|application=${spring.application.name}|traceID=%X{traceId},spanID=%X{spanId}|%c{1}|%m%ex%n}{
+  console: "%highlight{%-5p|%d{ISO8601}{GMT}|application=${spring.application.name}|traceID=%X{traceId},spanID=%X{spanId}|%c{1}|%m%ex%n}{
       FATAL=bg_red, 
       ERROR=red, 
       WARN=yellow, 

@@ -10,7 +10,7 @@ import com.cjrequena.eventstore.sample.repository.AggregateSnapshotRepository;
 import com.cjrequena.eventstore.sample.repository.EventRepository;
 import com.cjrequena.eventstore.sample.service.AggregateFactory;
 import com.cjrequena.eventstore.sample.service.EventStoreService;
-import com.cjrequena.sample.component.CommandHandler;
+import com.cjrequena.sample.component.command.CommandHandler;
 import com.cjrequena.sample.domain.aggregate.AggregateType;
 import com.cjrequena.sample.domain.command.CreateAccountCommand;
 import com.cjrequena.sample.domain.command.CreditAccountCommand;
@@ -27,6 +27,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -36,6 +37,7 @@ import java.util.UUID;
 @Log4j2
 @SpringBootApplication
 @RequiredArgsConstructor
+@EnableScheduling
 @EnableAsync
 @ComponentScan(basePackages = {
   "com.cjrequena.sample",  // The main package
@@ -59,7 +61,8 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
   @Override
   public void run(String... args) {
 
-    final Optional<Aggregate> optionalAggregateSS = this.eventStoreService.retrieveAggregateSnapshot(AggregateType.ACCOUNT_AGGREGATE.getAggregateClass(), UUID.fromString("582d9889-d262-4a7e-ac3e-5d4c88c6e957"), null);
+    final Optional<Aggregate> optionalAggregateSS = this.eventStoreService.retrieveAggregateSnapshot(AggregateType.ACCOUNT_AGGREGATE.getClazz(),
+      UUID.fromString("582d9889-d262-4a7e-ac3e-5d4c88c6e957"), null);
     optionalAggregateSS
       .map(aggregate -> {
         List<Event> eventList = eventMapper.mapToEventList(
@@ -75,7 +78,7 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
       .build();
     final UUID aggregateId = createAccountCommand.getAggregateId();
 
-    Aggregate aggregate = aggregateFactory.newInstance(AggregateType.ACCOUNT_AGGREGATE.getAggregateClass(), aggregateId);
+    Aggregate aggregate = aggregateFactory.newInstance(AggregateType.ACCOUNT_AGGREGATE.getClazz(), aggregateId);
     aggregate.applyCommand(createAccountCommand);
     try {
       this.eventStoreService.saveAggregate(aggregate);
@@ -86,7 +89,7 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
     aggregate.markUnconfirmedEventsAsConfirmed();
 
     // --
-    aggregate = aggregateFactory.newInstance(AggregateType.ACCOUNT_AGGREGATE.getAggregateClass(), aggregateId);
+    aggregate = aggregateFactory.newInstance(AggregateType.ACCOUNT_AGGREGATE.getClazz(), aggregateId);
     List<EventEntity> eventEntities = this.eventStoreService.retrieveEventsByAggregateId(aggregateId, null, null);
     List<Event> events = this.eventMapper.mapToEventList(eventEntities);
     aggregate.reproduceFromEvents(events);
@@ -106,7 +109,7 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
     aggregate.markUnconfirmedEventsAsConfirmed();
 
     // --
-    aggregate = aggregateFactory.newInstance(AggregateType.ACCOUNT_AGGREGATE.getAggregateClass(), aggregateId);
+    aggregate = aggregateFactory.newInstance(AggregateType.ACCOUNT_AGGREGATE.getClazz(), aggregateId);
     eventEntities = this.eventStoreService.retrieveEventsByAggregateId(aggregateId, null, null);
     events = this.eventMapper.mapToEventList(eventEntities);
     aggregate.reproduceFromEvents(events);
@@ -119,7 +122,7 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
     aggregate.markUnconfirmedEventsAsConfirmed();
 
     // --
-    aggregate = aggregateFactory.newInstance(AggregateType.ACCOUNT_AGGREGATE.getAggregateClass(), aggregateId);
+    aggregate = aggregateFactory.newInstance(AggregateType.ACCOUNT_AGGREGATE.getClazz(), aggregateId);
     eventEntities = this.eventStoreService.retrieveEventsByAggregateId(aggregateId, null, null);
     events = this.eventMapper.mapToEventList(eventEntities);
     aggregate.reproduceFromEvents(events);
@@ -132,7 +135,7 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
     aggregate.markUnconfirmedEventsAsConfirmed();
 
     // --
-    aggregate = aggregateFactory.newInstance(AggregateType.ACCOUNT_AGGREGATE.getAggregateClass(), aggregateId);
+    aggregate = aggregateFactory.newInstance(AggregateType.ACCOUNT_AGGREGATE.getClazz(), aggregateId);
     eventEntities = this.eventStoreService.retrieveEventsByAggregateId(aggregateId, null, null);
     events = this.eventMapper.mapToEventList(eventEntities);
     aggregate.reproduceFromEvents(events);
@@ -145,7 +148,7 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
     aggregate.markUnconfirmedEventsAsConfirmed();
 
     // --
-    aggregate = aggregateFactory.newInstance(AggregateType.ACCOUNT_AGGREGATE.getAggregateClass(), aggregateId);
+    aggregate = aggregateFactory.newInstance(AggregateType.ACCOUNT_AGGREGATE.getClazz(), aggregateId);
     eventEntities = this.eventStoreService.retrieveEventsByAggregateId(aggregateId, null, null);
     events = this.eventMapper.mapToEventList(eventEntities);
     aggregate.reproduceFromEvents(events);
@@ -158,7 +161,7 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
     aggregate.markUnconfirmedEventsAsConfirmed();
 
     // --
-    aggregate = aggregateFactory.newInstance(AggregateType.ACCOUNT_AGGREGATE.getAggregateClass(), aggregateId);
+    aggregate = aggregateFactory.newInstance(AggregateType.ACCOUNT_AGGREGATE.getClazz(), aggregateId);
     eventEntities = this.eventStoreService.retrieveEventsByAggregateId(aggregateId, null, null);
     events = this.eventMapper.mapToEventList(eventEntities);
     aggregate.reproduceFromEvents(events);
@@ -171,7 +174,7 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
     aggregate.markUnconfirmedEventsAsConfirmed();
 
     // --
-    aggregate = aggregateFactory.newInstance(AggregateType.ACCOUNT_AGGREGATE.getAggregateClass(), aggregateId);
+    aggregate = aggregateFactory.newInstance(AggregateType.ACCOUNT_AGGREGATE.getClazz(), aggregateId);
     eventEntities = this.eventStoreService.retrieveEventsByAggregateId(aggregateId, null, null);
     events = this.eventMapper.mapToEventList(eventEntities);
     aggregate.reproduceFromEvents(events);
@@ -184,7 +187,7 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
     aggregate.markUnconfirmedEventsAsConfirmed();
 
     // --
-    aggregate = aggregateFactory.newInstance(AggregateType.ACCOUNT_AGGREGATE.getAggregateClass(), aggregateId);
+    aggregate = aggregateFactory.newInstance(AggregateType.ACCOUNT_AGGREGATE.getClazz(), aggregateId);
     eventEntities = this.eventStoreService.retrieveEventsByAggregateId(aggregateId, null, null);
     events = this.eventMapper.mapToEventList(eventEntities);
     aggregate.reproduceFromEvents(events);
@@ -204,7 +207,7 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
     aggregate.markUnconfirmedEventsAsConfirmed();
 
     // --
-    aggregate = aggregateFactory.newInstance(AggregateType.ACCOUNT_AGGREGATE.getAggregateClass(), aggregateId);
+    aggregate = aggregateFactory.newInstance(AggregateType.ACCOUNT_AGGREGATE.getClazz(), aggregateId);
     eventEntities = this.eventStoreService.retrieveEventsByAggregateId(aggregateId, null, null);
     events = this.eventMapper.mapToEventList(eventEntities);
     aggregate.reproduceFromEvents(events);
@@ -217,7 +220,7 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
     aggregate.markUnconfirmedEventsAsConfirmed();
 
     // --
-    aggregate = aggregateFactory.newInstance(AggregateType.ACCOUNT_AGGREGATE.getAggregateClass(), aggregateId);
+    aggregate = aggregateFactory.newInstance(AggregateType.ACCOUNT_AGGREGATE.getClazz(), aggregateId);
     eventEntities = this.eventStoreService.retrieveEventsByAggregateId(aggregateId, null, null);
     events = this.eventMapper.mapToEventList(eventEntities);
     aggregate.reproduceFromEvents(events);
@@ -230,7 +233,7 @@ public class CommandHandlerMainApplication implements CommandLineRunner {
     aggregate.markUnconfirmedEventsAsConfirmed();
 
     // --
-    aggregate = aggregateFactory.newInstance(AggregateType.ACCOUNT_AGGREGATE.getAggregateClass(), aggregateId);
+    aggregate = aggregateFactory.newInstance(AggregateType.ACCOUNT_AGGREGATE.getClazz(), aggregateId);
     eventEntities = this.eventStoreService.retrieveEventsByAggregateId(aggregateId, null, null);
     events = this.eventMapper.mapToEventList(eventEntities);
     aggregate.reproduceFromEvents(events);

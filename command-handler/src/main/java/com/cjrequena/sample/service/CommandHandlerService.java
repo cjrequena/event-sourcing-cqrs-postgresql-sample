@@ -1,7 +1,7 @@
 package com.cjrequena.sample.service;
 
 import com.cjrequena.eventstore.sample.domain.command.Command;
-import com.cjrequena.sample.component.CommandHandler;
+import com.cjrequena.sample.component.command.CommandHandler;
 import com.cjrequena.sample.exception.service.CommandHandlerNotFoundServiceException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;

@@ -8,9 +8,7 @@ import java.io.IOException;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
-
 public class LocalTimeSerializer extends JsonSerializer<LocalTime> {
-
 
   private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ISO_LOCAL_TIME;
 

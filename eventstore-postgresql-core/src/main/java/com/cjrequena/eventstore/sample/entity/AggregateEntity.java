@@ -14,7 +14,7 @@ import java.util.UUID;
 @ToString
 @Entity
 @Table(name = "es_aggregate")
-public  class AggregateEntity {
+public class AggregateEntity {
 
   // Unique id for the specific message. This id is globally unique
   @Id

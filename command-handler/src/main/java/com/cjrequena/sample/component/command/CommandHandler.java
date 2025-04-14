@@ -1,4 +1,4 @@
-package com.cjrequena.sample.component;
+package com.cjrequena.sample.component.command;
 
 import com.cjrequena.eventstore.sample.configuration.EventStoreConfigurationProperties;
 import com.cjrequena.eventstore.sample.domain.aggregate.Aggregate;
@@ -39,7 +39,7 @@ public abstract class CommandHandler<T extends Command> {
 
   protected Aggregate retrieveOrInstantiateAggregate(UUID aggregateId) {
     final EventStoreConfigurationProperties.SnapshotProperties snapshotConfiguration = eventStoreConfigurationProperties.getSnapshot(
-      getAggregateType().getAggregateType());
+      getAggregateType().getType());
     if (snapshotConfiguration.enabled()) {
       return retrieveAggregateFromSnapshot(aggregateId)
         .orElseGet(() -> createAndReproduceAggregate(aggregateId));
@@ -49,7 +49,7 @@ public abstract class CommandHandler<T extends Command> {
   }
 
   protected Optional<Aggregate> retrieveAggregateFromSnapshot(UUID aggregateId) {
-    Optional<Aggregate> optionalAggregate = eventStoreService.retrieveAggregateSnapshot(getAggregateType().getAggregateClass(), aggregateId, null);
+    Optional<Aggregate> optionalAggregate = eventStoreService.retrieveAggregateSnapshot(getAggregateType().getClazz(), aggregateId, null);
     return optionalAggregate.map(aggregate -> {
       List<Event> events = retrieveEvents(aggregateId, aggregate.getAggregateVersion());
       aggregate.reproduceFromEvents(events);
@@ -59,7 +59,7 @@ public abstract class CommandHandler<T extends Command> {
 
   protected Aggregate createAndReproduceAggregate(UUID aggregateId) {
     log.info("Snapshot not found for Aggregate ID: {}. Reconstituting from events.", aggregateId);
-    Aggregate aggregate = aggregateFactory.newInstance(getAggregateType().getAggregateClass(), aggregateId);
+    Aggregate aggregate = aggregateFactory.newInstance(getAggregateType().getClazz(), aggregateId);
     List<Event> events = retrieveEvents(aggregateId, null);
     aggregate.reproduceFromEvents(events);
     return aggregate;

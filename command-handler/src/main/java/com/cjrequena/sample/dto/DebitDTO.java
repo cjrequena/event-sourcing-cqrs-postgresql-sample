@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Schema(description = "Represents a debit transaction")
-public class DebitDTO  {
+public class DebitDTO {
 
   @NotNull(message = "Amount is required")
   @JsonProperty("amount")

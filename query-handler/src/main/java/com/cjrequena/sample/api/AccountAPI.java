@@ -46,7 +46,8 @@ public class AccountAPI {
     summary = "Retrieve bank account by account_id ",
     description = "Retrieve bank account by account_id ",
     parameters = {
-      @Parameter(name = "accept-version", required = true, in = ParameterIn.HEADER, schema = @Schema(name = "accept-version", type = "string", allowableValues = {VND_SAMPLE_SERVICE_V1}))
+      @Parameter(name = "accept-version", required = true, in = ParameterIn.HEADER,
+        schema = @Schema(name = "accept-version", type = "string", allowableValues = {VND_SAMPLE_SERVICE_V1}))
     }
   )
   @ApiResponses(
@@ -76,7 +77,8 @@ public class AccountAPI {
   @Operation(
     summary = "Get a list of fooes.",
     description = "Get a list of fooes.",
-    parameters = {@Parameter(name = "accept-version", required = true, in = ParameterIn.HEADER, schema = @Schema(name = "accept-version", type = "string", allowableValues = {VND_SAMPLE_SERVICE_V1}))}
+    parameters = {@Parameter(name = "accept-version", required = true, in = ParameterIn.HEADER,
+      schema = @Schema(name = "accept-version", type = "string", allowableValues = {VND_SAMPLE_SERVICE_V1}))}
   )
   @ApiResponses(
     value = {
@@ -94,9 +96,9 @@ public class AccountAPI {
     path = "/accounts",
     produces = {APPLICATION_JSON_VALUE}
   )
-  public ResponseEntity<List<AccountDTO>> retrieve()  {
-      final List<AccountDTO> bankAccountDTOList = this.accountService.retrieve();
-      HttpHeaders responseHeaders = new HttpHeaders();
-      return new ResponseEntity<>(bankAccountDTOList, responseHeaders, HttpStatus.OK);
+  public ResponseEntity<List<AccountDTO>> retrieve() {
+    final List<AccountDTO> bankAccountDTOList = this.accountService.retrieve();
+    HttpHeaders responseHeaders = new HttpHeaders();
+    return new ResponseEntity<>(bankAccountDTOList, responseHeaders, HttpStatus.OK);
   }
 }

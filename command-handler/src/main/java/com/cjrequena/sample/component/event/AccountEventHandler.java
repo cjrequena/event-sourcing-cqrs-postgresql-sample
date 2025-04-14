@@ -47,7 +47,8 @@ public class AccountEventHandler extends AsyncEventHandler {
 
     for (Event event : events) {
       if (log.isInfoEnabled()) {
-        log.info("Handling event {} for aggregate {} with ID '{}' and aggregate version {}", event.getEventType(), getAggregateType(), event.getAggregateId(), event.getAggregateVersion());
+        log.info("Handling event {} for aggregate {} with ID '{}' and aggregate version {}", event.getEventType(), getAggregateType(), event.getAggregateId(),
+          event.getAggregateVersion());
       }
 
       // Here is to set the business logic to send the incoming event through an integration channel, e.g. Kafka, SNS, SQS, AWS Lambda, Webhook, etc.

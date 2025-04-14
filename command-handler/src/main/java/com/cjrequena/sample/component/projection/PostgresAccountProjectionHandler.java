@@ -1,6 +1,5 @@
 package com.cjrequena.sample.component.projection;
 
-
 import com.cjrequena.eventstore.sample.domain.aggregate.Aggregate;
 import com.cjrequena.sample.domain.aggregate.Account;
 import com.cjrequena.sample.domain.aggregate.AccountAggregate;
@@ -19,25 +18,24 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class PostgresAccountProjectionHandler implements ProjectionHandler {
 
-    private final AccountService accountService;
+  private final AccountService accountService;
 
-    @Override
-    public void handle(Aggregate aggregate) {
-        log.debug("Saving or Updating read model for aggregate {}", aggregate);
-        final Account account = ((AccountAggregate) aggregate).getAccount();
-        AccountEntity accountEntity = AccountEntity.builder()
-          .id(account.getId())
-          .owner(account.getOwner())
-          .balance(account.getBalance())
-          .version(aggregate.getAggregateVersion())
-          .build();
-        this.accountService.save(accountEntity);
-    }
+  @Override
+  public void handle(Aggregate aggregate) {
+    log.debug("Saving or Updating read model for aggregate {}", aggregate);
+    final Account account = ((AccountAggregate) aggregate).getAccount();
+    AccountEntity accountEntity = AccountEntity.builder()
+      .id(account.getId())
+      .owner(account.getOwner())
+      .balance(account.getBalance())
+      .version(aggregate.getAggregateVersion())
+      .build();
+    this.accountService.save(accountEntity);
+  }
 
-
-    @Nonnull
-    @Override
-    public AggregateType getAggregateType() {
-        return AggregateType.ACCOUNT_AGGREGATE;
-    }
+  @Nonnull
+  @Override
+  public AggregateType getAggregateType() {
+    return AggregateType.ACCOUNT_AGGREGATE;
+  }
 }

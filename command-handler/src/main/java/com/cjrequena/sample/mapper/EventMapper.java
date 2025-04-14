@@ -30,10 +30,15 @@ public interface EventMapper {
 
   //@Mapping(source = "aggregateId", target = "aggregateId")
   EventEntity mapToEventEntity(AccountCreatedEvent event);
+
   EventEntity mapToEventEntity(AccountCreditedEvent event);
+
   EventEntity mapToEventEntity(AccountDebitedEvent event);
+
   AccountCreatedEvent mapToAccountCreatedEvent(EventEntity eventEntity);
+
   AccountCreditedEvent mapToAccountCreditedEvent(EventEntity eventEntity);
+
   AccountDebitedEvent mapToAccountDebitedEvent(EventEntity eventEntity);
 
   // Custom mapping method for converting String to EventExtensionVO

@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 
-
 public class OffsetDateTimeSerializer extends JsonSerializer<OffsetDateTime> {
 
   private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ISO_OFFSET_DATE_TIME;

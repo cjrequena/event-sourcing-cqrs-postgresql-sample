@@ -8,9 +8,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @SpringBootTest
 class CommandHandlerMainApplicationIT {
 
-    @Test
-    void contextLoad() {
-        // Canonical test
-        assertTrue(true);
-    }
+  @Test
+  void contextLoad() {
+    // Canonical test
+    assertTrue(true);
+  }
 }

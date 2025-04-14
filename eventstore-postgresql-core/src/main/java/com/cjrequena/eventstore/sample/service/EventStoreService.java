@@ -102,7 +102,7 @@ public class EventStoreService {
         log.info("Retrieving aggregate events for aggregate with ID '{}' from version {} to version {}", aggregateId, fromAggregateVersion, toAggregateVersion);
       } else if (fromAggregateVersion != null) {
         log.info("Retrieving aggregate events for aggregate with ID '{}' from version {}", aggregateId, fromAggregateVersion);
-      }else {
+      } else {
         log.info("Retrieving aggregate events for aggregate with ID '{}'", aggregateId);
       }
     }

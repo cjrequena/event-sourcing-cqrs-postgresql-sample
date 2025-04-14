@@ -18,7 +18,7 @@ public class DebitAccountCommand extends Command {
 
   @Builder
   public DebitAccountCommand(@Nonnull UUID aggregateId, DebitVO debitVO) {
-    super(aggregateId, AggregateType.ACCOUNT_AGGREGATE.getAggregateType());
+    super(aggregateId, AggregateType.ACCOUNT_AGGREGATE.getType());
     this.debitVO = debitVO;
   }
 

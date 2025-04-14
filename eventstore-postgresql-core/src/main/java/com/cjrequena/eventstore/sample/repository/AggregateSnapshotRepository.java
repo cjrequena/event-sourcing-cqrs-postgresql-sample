@@ -25,14 +25,14 @@ public interface AggregateSnapshotRepository extends CrudRepository<AggregateSna
   AggregateSnapshotEntity retrieveAggregateSnapshot(@Param("aggregateId") UUID aggregateId, @Param("aggregateVersion") @Nullable Long aggregateVersion);
 
   // Native query to fetch the aggregate snapshot with a limit of 1
-//  @Query(value = """
-//    SELECT s.ID, s.AGGREGATE_ID, a.AGGREGATE_TYPE, s.DATA, s.AGGREGATE_VERSION
-//    FROM ES_AGGREGATE_SNAPSHOT s
-//    JOIN ES_AGGREGATE a ON a.ID = s.AGGREGATE_ID
-//    WHERE s.AGGREGATE_ID = :aggregateId
-//    AND (:aggregateVersion IS NULL OR s.AGGREGATE_VERSION <= :aggregateVersion)
-//    ORDER BY s.AGGREGATE_VERSION DESC
-//    LIMIT 1
-//    """, nativeQuery = true)
-//  Optional<Object[]> retrieveAggregateSnapshot(@Param("aggregateId") UUID aggregateId, @Param("aggregateVersion") Integer aggregateVersion);
+  //  @Query(value = """
+  //    SELECT s.ID, s.AGGREGATE_ID, a.AGGREGATE_TYPE, s.DATA, s.AGGREGATE_VERSION
+  //    FROM ES_AGGREGATE_SNAPSHOT s
+  //    JOIN ES_AGGREGATE a ON a.ID = s.AGGREGATE_ID
+  //    WHERE s.AGGREGATE_ID = :aggregateId
+  //    AND (:aggregateVersion IS NULL OR s.AGGREGATE_VERSION <= :aggregateVersion)
+  //    ORDER BY s.AGGREGATE_VERSION DESC
+  //    LIMIT 1
+  //    """, nativeQuery = true)
+  //  Optional<Object[]> retrieveAggregateSnapshot(@Param("aggregateId") UUID aggregateId, @Param("aggregateVersion") Integer aggregateVersion);
 }

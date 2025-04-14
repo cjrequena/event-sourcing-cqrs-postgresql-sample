@@ -40,6 +40,7 @@ public abstract class Aggregate {
 
   @JsonIgnore
   protected List<Event> unconfirmedEventsPool;
+
   /**
    * Constructs an instance of the Aggregate class.
    *

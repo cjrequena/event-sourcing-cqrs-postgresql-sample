@@ -1,6 +1,5 @@
 package com.cjrequena.sample.exception.service;
 
-
 /**
  *
  * <p></p>
@@ -11,6 +10,7 @@ public class OptimisticConcurrencyServiceException extends RuntimeServiceExcepti
   public OptimisticConcurrencyServiceException(String message) {
     super(message);
   }
+
   public OptimisticConcurrencyServiceException(String message, Throwable ex) {
     super(message, ex);
   }

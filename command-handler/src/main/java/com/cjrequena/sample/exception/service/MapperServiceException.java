@@ -1,6 +1,5 @@
 package com.cjrequena.sample.exception.service;
 
-
 public class MapperServiceException extends RuntimeServiceException {
 
   public MapperServiceException(Throwable ex) {

@@ -16,7 +16,7 @@ services:
     networks:
       - local-network
     restart: unless-stopped
-#---------------------------------------------------------------------------------------------------------------------
+  #---------------------------------------------------------------------------------------------------------------------
   pgadmin:
     image: dpage/pgadmin4:${PGADMIN_VERSION}
     container_name: pgadmin
@@ -25,13 +25,13 @@ services:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin@pgadmin.org}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
     volumes:
-       - pgadmin-data:/root/.pgadmin
+      - pgadmin-data:/root/.pgadmin
     ports:
       - "${PGADMIN_PORT:-5050}:80"
     networks:
       - local-network
     restart: unless-stopped
-#---------------------------------------------------------------------------------------------------------------------
+  #---------------------------------------------------------------------------------------------------------------------
   mongo:
     image: mongo:${MONGO_VERSION}
     container_name: mongo
@@ -47,7 +47,7 @@ services:
     volumes:
       - mongo-data:/data/db
       - mongo-config:/data/configdb
-#---------------------------------------------------------------------------------------------------------------------
+  #---------------------------------------------------------------------------------------------------------------------
   mongo-express:
     image: mongo-express:${MONGO_EXPRESS_VERSION}
     container_name: mongo-express
@@ -80,7 +80,7 @@ networks:
         - subnet: 171.28.0.0/16
 #---------------------------------------------------------------------------------------------------------------------
 volumes:
-    postgres-data:
-    pgadmin-data:
-    mongo-data:
-    mongo-config:
+  postgres-data:
+  pgadmin-data:
+  mongo-data:
+  mongo-config:

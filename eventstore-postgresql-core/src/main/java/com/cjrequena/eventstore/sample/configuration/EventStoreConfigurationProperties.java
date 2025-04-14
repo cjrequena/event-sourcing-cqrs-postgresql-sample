@@ -27,7 +27,6 @@ public class EventStoreConfigurationProperties {
   @NestedConfigurationProperty
   private SubscriptionProperties subscription;
 
-
   public SnapshotProperties getSnapshot(String aggregateType) {
     return snapshot.getOrDefault(aggregateType, NO_SNAPSHOT);
   }

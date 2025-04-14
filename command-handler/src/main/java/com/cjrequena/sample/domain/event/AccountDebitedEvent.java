@@ -22,7 +22,6 @@ public class AccountDebitedEvent extends Event {
   private final EventExtensionVO extension;
   private final EventMapper eventMapper = ApplicationContextProvider.getContext().getBean(EventMapper.class);
 
-
   public EventEntity mapToEventEntity() {
     return this.eventMapper.mapToEventEntity(this);
   }

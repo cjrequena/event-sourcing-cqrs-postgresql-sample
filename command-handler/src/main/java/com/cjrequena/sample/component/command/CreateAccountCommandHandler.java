@@ -1,4 +1,4 @@
-package com.cjrequena.sample.component;
+package com.cjrequena.sample.component.command;
 
 import com.cjrequena.eventstore.sample.configuration.EventStoreConfigurationProperties;
 import com.cjrequena.eventstore.sample.domain.aggregate.Aggregate;
@@ -6,16 +6,12 @@ import com.cjrequena.eventstore.sample.domain.command.Command;
 import com.cjrequena.eventstore.sample.exception.service.EventStoreOptimisticConcurrencyServiceException;
 import com.cjrequena.eventstore.sample.service.AggregateFactory;
 import com.cjrequena.eventstore.sample.service.EventStoreService;
-import com.cjrequena.sample.domain.aggregate.Account;
-import com.cjrequena.sample.domain.aggregate.AccountAggregate;
 import com.cjrequena.sample.domain.aggregate.AggregateType;
-import com.cjrequena.sample.domain.command.DebitAccountCommand;
+import com.cjrequena.sample.domain.command.CreateAccountCommand;
 import com.cjrequena.sample.exception.service.AccountBalanceServiceException;
-import com.cjrequena.sample.exception.service.AggregateNotFoundServiceException;
-import com.cjrequena.sample.exception.service.AmountServiceException;
 import com.cjrequena.sample.exception.service.OptimisticConcurrencyServiceException;
 import com.cjrequena.sample.mapper.EventMapper;
-import com.cjrequena.sample.vo.DebitVO;
+import com.cjrequena.sample.vo.AccountVO;
 import jakarta.annotation.Nonnull;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +23,10 @@ import java.math.BigDecimal;
 @Log4j2
 @Component
 @Transactional
-public class DebitAccountCommandHandler extends CommandHandler<DebitAccountCommand> {
+public class CreateAccountCommandHandler extends CommandHandler<CreateAccountCommand> {
 
   @Autowired
-  public DebitAccountCommandHandler(
+  public CreateAccountCommandHandler(
     EventStoreService eventStoreService,
     AggregateFactory aggregateFactory,
     EventMapper eventMapper,
@@ -42,33 +38,23 @@ public class DebitAccountCommandHandler extends CommandHandler<DebitAccountComma
   public void handle(@Nonnull Command command) {
     log.trace("Handling command of type {} for aggregate {}", command.getClass().getSimpleName(), command.getAggregateType());
 
-    if (!(command instanceof DebitAccountCommand)) {
-      throw new IllegalArgumentException("Expected command of type DebitAccountCommand but received " + command.getClass().getSimpleName());
+    if (!(command instanceof CreateAccountCommand)) {
+      throw new IllegalArgumentException("Expected command of type CreateAccountCommand but received " + command.getClass().getSimpleName());
     }
 
-    if (!this.eventStoreService.verifyIfAggregateExist(command.getAggregateId(), command.getAggregateType())) {
-      String errorMessage = String.format(
-        "The aggregate '%s' with ID '%s' does not exist, which means there is not any account with ID '%s'.",
-        command.getAggregateType(),
-        command.getAggregateId(),
-        command.getAggregateId());
-      throw new AggregateNotFoundServiceException(errorMessage);
+    // Safely cast the command and retrieve AccountVO
+    AccountVO accountVO = ((CreateAccountCommand) command).getAccountVO();
+
+    // Validate account balance
+    if (accountVO.getBalance().compareTo(BigDecimal.ZERO) < 0) {
+      throw new AccountBalanceServiceException(
+        String.format("Invalid account balance for account ID %s: Balance cannot be negative.", accountVO.getId())
+      );
     }
 
-    Aggregate aggregate = retrieveOrInstantiateAggregate(command.getAggregateId());
-    final Account account = ((AccountAggregate) aggregate).getAccount();
-    final DebitVO debitVO = ((DebitAccountCommand) command).getDebitVO();
-
-    if (debitVO.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
-      throw new AmountServiceException("Invalid debit amount: The amount must be greater than zero.");
-    }
-
-    if (account.getBalance().subtract(debitVO.getAmount()).compareTo(BigDecimal.ZERO) < 0) {
-      String errorMessage = String.format("Invalid account balance for account with ID '%s': Balance cannot be negative.", account.getId());
-      throw new AccountBalanceServiceException(errorMessage);
-    }
-
+    // Apply command and persist aggregate state
     try {
+      Aggregate aggregate = retrieveOrInstantiateAggregate(command.getAggregateId());
       aggregate.applyCommand(command);
       eventStoreService.saveAggregate(aggregate);
       aggregate.markUnconfirmedEventsAsConfirmed();
@@ -77,13 +63,12 @@ public class DebitAccountCommandHandler extends CommandHandler<DebitAccountComma
     }
 
     log.info("Successfully handled command {} for aggregate with ID {}", command.getClass().getSimpleName(), command.getAggregateId());
-
   }
 
   @Nonnull
   @Override
-  public Class<DebitAccountCommand> getCommandType() {
-    return DebitAccountCommand.class;
+  public Class<CreateAccountCommand> getCommandType() {
+    return CreateAccountCommand.class;
   }
 
   @Nonnull
@@ -91,4 +76,5 @@ public class DebitAccountCommandHandler extends CommandHandler<DebitAccountComma
   public AggregateType getAggregateType() {
     return AggregateType.ACCOUNT_AGGREGATE;
   }
+
 }
