@@ -29,7 +29,7 @@ public abstract class CommandHandler<T extends Command> {
   protected final EventMapper eventMapper;
   protected final EventStoreConfigurationProperties eventStoreConfigurationProperties;
 
-  public abstract void handle(@Nonnull Command command) throws EventStoreOptimisticConcurrencyServiceException;
+  public abstract Aggregate handle(@Nonnull Command command) throws EventStoreOptimisticConcurrencyServiceException;
 
   @Nonnull
   public abstract Class<T> getCommandType();

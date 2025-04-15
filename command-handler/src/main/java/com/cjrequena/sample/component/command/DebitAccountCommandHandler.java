@@ -39,7 +39,7 @@ public class DebitAccountCommandHandler extends CommandHandler<DebitAccountComma
   }
 
   @Override
-  public void handle(@Nonnull Command command) {
+  public Aggregate handle(@Nonnull Command command) {
     log.trace("Handling command of type {} for aggregate {}", command.getClass().getSimpleName(), command.getAggregateType());
 
     if (!(command instanceof DebitAccountCommand)) {
@@ -55,6 +55,7 @@ public class DebitAccountCommandHandler extends CommandHandler<DebitAccountComma
       throw new AggregateNotFoundServiceException(errorMessage);
     }
 
+    // Get the current aggregate.
     Aggregate aggregate = retrieveOrInstantiateAggregate(command.getAggregateId());
     final Account account = ((AccountAggregate) aggregate).getAccount();
     final DebitVO debitVO = ((DebitAccountCommand) command).getDebitVO();
@@ -75,9 +76,8 @@ public class DebitAccountCommandHandler extends CommandHandler<DebitAccountComma
     } catch (EventStoreOptimisticConcurrencyServiceException ex) {
       throw new OptimisticConcurrencyServiceException(ex.getMessage(), ex);
     }
-
     log.info("Successfully handled command {} for aggregate with ID {}", command.getClass().getSimpleName(), command.getAggregateId());
-
+    return aggregate;
   }
 
   @Nonnull

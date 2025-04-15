@@ -140,7 +140,7 @@ eventstore:
     ACCOUNT_AGGREGATE:
       enabled: true
       interval: 5
-  # Available subscription: polling, postgres-channel
+  # Available subscription: polling, postgres-channel, event handler.
   subscription:
     enabled: true
     #name: event-handler

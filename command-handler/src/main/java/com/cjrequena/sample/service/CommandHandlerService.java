@@ -1,7 +1,9 @@
 package com.cjrequena.sample.service;
 
+import com.cjrequena.eventstore.sample.domain.aggregate.Aggregate;
 import com.cjrequena.eventstore.sample.domain.command.Command;
 import com.cjrequena.sample.component.command.CommandHandler;
+import com.cjrequena.sample.component.projection.ProjectionHandler;
 import com.cjrequena.sample.exception.service.CommandHandlerNotFoundServiceException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -18,6 +20,7 @@ import java.util.List;
 public class CommandHandlerService {
 
   private final List<CommandHandler<? extends Command>> commandHandlers;
+  private final List<ProjectionHandler> projectionHandlers;
 
   public void handler(Command command) {
     log.info("Processing command {}", command);
@@ -27,7 +30,14 @@ public class CommandHandlerService {
       .findFirst()
       .ifPresentOrElse(commandHandler -> {
         log.info("Handling command {} with {}", command.getClass().getSimpleName(), commandHandler.getClass().getSimpleName());
-        commandHandler.handle(command);
+
+        final Aggregate aggregate = commandHandler.handle(command);
+
+        // Save or Update the projection database
+        projectionHandlers.stream()
+          .filter(handler -> handler.getAggregateType().getType().equals(aggregate.getAggregateType()))
+          .forEach(handler -> handler.handle(aggregate));
+
       }, () -> {
         log.info("No specialized handler found with {}", command.getClass().getSimpleName());
         throw new CommandHandlerNotFoundServiceException("No specialized handler found for command: " + command.getClass().getSimpleName());

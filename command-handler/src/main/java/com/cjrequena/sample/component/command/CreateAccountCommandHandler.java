@@ -35,14 +35,15 @@ public class CreateAccountCommandHandler extends CommandHandler<CreateAccountCom
   }
 
   @Override
-  public void handle(@Nonnull Command command) {
+  public Aggregate handle(@Nonnull Command command) {
     log.trace("Handling command of type {} for aggregate {}", command.getClass().getSimpleName(), command.getAggregateType());
 
     if (!(command instanceof CreateAccountCommand)) {
       throw new IllegalArgumentException("Expected command of type CreateAccountCommand but received " + command.getClass().getSimpleName());
     }
 
-    // Safely cast the command and retrieve AccountVO
+    // Get the current aggregate.
+    Aggregate aggregate = retrieveOrInstantiateAggregate(command.getAggregateId());
     AccountVO accountVO = ((CreateAccountCommand) command).getAccountVO();
 
     // Validate account balance
@@ -54,15 +55,14 @@ public class CreateAccountCommandHandler extends CommandHandler<CreateAccountCom
 
     // Apply command and persist aggregate state
     try {
-      Aggregate aggregate = retrieveOrInstantiateAggregate(command.getAggregateId());
       aggregate.applyCommand(command);
       eventStoreService.saveAggregate(aggregate);
       aggregate.markUnconfirmedEventsAsConfirmed();
     } catch (EventStoreOptimisticConcurrencyServiceException ex) {
       throw new OptimisticConcurrencyServiceException(ex.getMessage(), ex);
     }
-
     log.info("Successfully handled command {} for aggregate with ID {}", command.getClass().getSimpleName(), command.getAggregateId());
+    return aggregate;
   }
 
   @Nonnull

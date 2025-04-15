@@ -36,7 +36,7 @@ public class CreditAccountCommandHandler extends CommandHandler<CreditAccountCom
   }
 
   @Override
-  public void handle(@Nonnull Command command) {
+  public Aggregate handle(@Nonnull Command command) {
     log.trace("Handling command of type {} for aggregate {}", command.getClass().getSimpleName(), command.getAggregateType());
 
     if (!(command instanceof CreditAccountCommand)) {
@@ -52,22 +52,23 @@ public class CreditAccountCommandHandler extends CommandHandler<CreditAccountCom
       throw new AggregateNotFoundServiceException(errorMessage);
     }
 
+    // Get the current aggregate.
+    Aggregate aggregate = retrieveOrInstantiateAggregate(command.getAggregateId());
     final CreditVO creditVO = ((CreditAccountCommand) command).getCreditVO();
+
     if (creditVO.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
       throw new AmountServiceException("Invalid credit amount: The amount must be greater than zero.");
     }
 
     try {
-      Aggregate aggregate = retrieveOrInstantiateAggregate(command.getAggregateId());
       aggregate.applyCommand(command);
       eventStoreService.saveAggregate(aggregate);
       aggregate.markUnconfirmedEventsAsConfirmed();
     } catch (EventStoreOptimisticConcurrencyServiceException ex) {
       throw new OptimisticConcurrencyServiceException(ex.getMessage(), ex);
     }
-
     log.info("Successfully handled command {} for aggregate with ID {}", command.getClass().getSimpleName(), command.getAggregateId());
-
+    return aggregate;
   }
 
   @Nonnull
