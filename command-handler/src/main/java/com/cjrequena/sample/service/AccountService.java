@@ -40,13 +40,13 @@ public class AccountService {
    * Save a MongoAccountEntity to the MongoDB database in a reactive manner.
    *
    * @param entity the Mongo account entity to save
-   * @return a Mono indicating completion
    */
-  public Mono<MongoAccountEntity> save(@Valid @NotNull MongoAccountEntity entity) {
+  public void save(@Valid @NotNull MongoAccountEntity entity) {
     log.info("Saving MongoAccountEntity to MongoDB: {}", entity);
-    return mongoAccountRepository.save(entity)
+    mongoAccountRepository.save(entity)
       .doOnNext(savedEntity -> log.info("MongoAccountEntity saved successfully: {}", savedEntity))
-      .doOnError(ex -> log.error("Error while saving MongoAccountEntity to MongoDB: {}", entity, ex));
+      .doOnError(ex -> log.error("Error while saving MongoAccountEntity to MongoDB: {}", entity, ex))
+      .subscribe();
   }
 
 }
