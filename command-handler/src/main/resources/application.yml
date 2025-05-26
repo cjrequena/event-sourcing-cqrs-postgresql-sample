@@ -1,5 +1,5 @@
 server.servlet.context-path: / # Context path of the application.
-server.port: ${SERVER_PORT:8080} # Server HTTP port.
+server.port: ${SERVER_PORT:6080} # Server HTTP port.
 spring.application.name: '@project.artifactId@'
 spring.application.version: '@project.version@'
 spring.profiles.active: ${SPRING_PROFILES_ACTIVE:local}
@@ -143,7 +143,7 @@ eventstore:
   # Available subscription: polling, postgres-channel, event handler.
   subscription:
     enabled: true
-    #name: event-handler
-    name: event-handler-${random.int(100)}
+    name: booking-order-subscription-001
+    #name: event-handler-${random.int(100)}
     polling-initial-delay: PT6S
     polling-interval: PT6S

@@ -1,5 +1,5 @@
 server.servlet.context-path: / # Context path of the application.
-server.port: ${SERVER_PORT:7080} # Server HTTP port.
+server.port: ${SERVER_PORT:5080} # Server HTTP port.
 spring.application.name: '@project.artifactId@'
 spring.application.version: '@project.version@'
 spring.profiles.active: ${SPRING_PROFILES_ACTIVE:local}
