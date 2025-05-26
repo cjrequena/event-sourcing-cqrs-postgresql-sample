@@ -2,7 +2,6 @@ package com.cjrequena.eventstore.sample.service;
 
 import com.cjrequena.eventstore.sample.common.util.JsonUtil;
 import com.cjrequena.eventstore.sample.configuration.EventStoreConfigurationProperties;
-import com.cjrequena.eventstore.sample.configuration.EventStoreConfigurationProperties.SnapshotProperties;
 import com.cjrequena.eventstore.sample.domain.aggregate.Aggregate;
 import com.cjrequena.eventstore.sample.domain.event.Event;
 import com.cjrequena.eventstore.sample.entity.AbstractEventEntity;
@@ -27,6 +26,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
+import static com.cjrequena.eventstore.sample.configuration.EventStoreConfigurationProperties.SnapshotProperties;
 
 @Service
 @Transactional
@@ -102,7 +103,7 @@ public class EventStoreService {
         log.info("Retrieving aggregate events for aggregate with ID '{}' from version {} to version {}", aggregateId, fromAggregateVersion, toAggregateVersion);
       } else if (fromAggregateVersion != null) {
         log.info("Retrieving aggregate events for aggregate with ID '{}' from version {}", aggregateId, fromAggregateVersion);
-      } else {
+      }else {
         log.info("Retrieving aggregate events for aggregate with ID '{}'", aggregateId);
       }
     }
@@ -139,8 +140,13 @@ public class EventStoreService {
   }
 
   @Transactional(readOnly = true)
-  public List<EventEntity> retrieveLatestEventsByAggregateTypeGroupedByAggregateId(@NotNull String aggregateType) {
-    return this.eventRepository.retrieveLatestEventsByAggregateTypeGroupedByAggregateId(aggregateType);
+  public Optional<EventEntity> retrieveLatestEventByAggregateTypeAndAggregateId(@NotNull String aggregateType, @NotNull UUID aggregateId) {
+    return this.eventRepository.retrieveLatestEventByAggregateTypeAndAggregateId(aggregateType, aggregateId);
+  }
+
+  @Transactional(readOnly = true)
+  public List<EventEntity> retrieveLatestEventsByAggregateType(@NotNull String aggregateType) {
+    return this.eventRepository.retrieveLatestEventsByAggregateType(aggregateType);
   }
 
   public boolean updateEventSubscription(@NotNull String subscriptionName, @NotNull Long offsetTxId, @NotNull Long offsetId) {
