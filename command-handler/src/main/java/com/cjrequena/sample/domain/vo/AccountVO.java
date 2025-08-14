@@ -36,6 +36,7 @@ public record AccountVO(
   @NotNull
   @DecimalMin(value = "0.00", message = "Account balance cannot be negative")
   BigDecimal balance
+
 ) implements Serializable {
 
   /**
@@ -147,4 +148,5 @@ public record AccountVO(
       .balance(initialBalance)
       .build(); // ID will use default
   }
+
 }

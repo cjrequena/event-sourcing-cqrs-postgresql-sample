@@ -59,11 +59,11 @@ public class DebitAccountCommandHandler extends CommandHandler<DebitAccountComma
     final Account account = ((Account) aggregate);
     final DebitVO debitVO = ((DebitAccountCommand) command).getDebitVO();
 
-    if (debitVO.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
+    if (debitVO.isAmountEqualOrLessThanZero()) {
       throw new AmountServiceException("Invalid debit amount: The amount must be greater than zero.");
     }
 
-    if (account.getBalance().subtract(debitVO.getAmount()).compareTo(BigDecimal.ZERO) < 0) {
+    if (account.getBalance().subtract(debitVO.amount()).compareTo(BigDecimal.ZERO) < 0) {
       String errorMessage = String.format("Invalid account balance for account with ID '%s': Balance cannot be negative.", account.getId());
       throw new AccountBalanceServiceException(errorMessage);
     }

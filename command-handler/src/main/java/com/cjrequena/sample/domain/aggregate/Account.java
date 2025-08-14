@@ -8,7 +8,10 @@ import com.cjrequena.sample.domain.command.DebitAccountCommand;
 import com.cjrequena.sample.domain.event.AccountCreatedEvent;
 import com.cjrequena.sample.domain.event.AccountCreditedEvent;
 import com.cjrequena.sample.domain.event.AccountDebitedEvent;
+import com.cjrequena.sample.domain.vo.CreditVO;
+import com.cjrequena.sample.domain.vo.DebitVO;
 import com.cjrequena.sample.domain.vo.EventExtensionVO;
+import com.cjrequena.sample.exception.service.AmountServiceException;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -94,12 +97,13 @@ public class Account extends Aggregate {
       this.balance = BigDecimal.ZERO;
     }
 
-    BigDecimal amount = event.getData().getAmount();
-    if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
-      throw new IllegalArgumentException("Credit amount must be positive");
+    final CreditVO creditVO = event.getData();
+
+    if (creditVO.isAmountEqualOrLessThanZero()) {
+      throw new AmountServiceException("Invalid credit amount: The amount must be greater than zero.");
     }
 
-    this.balance = this.balance.add(amount);
+    this.balance = this.balance.add(creditVO.amount());
   }
 
   public void applyEvent(AccountDebitedEvent event) {
@@ -107,12 +111,13 @@ public class Account extends Aggregate {
       this.balance = BigDecimal.ZERO;
     }
 
-    BigDecimal amount = event.getData().getAmount();
-    if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
-      throw new IllegalArgumentException("Debit amount must be positive");
+    final DebitVO debitVO = event.getData();
+
+    if (debitVO.isAmountEqualOrLessThanZero()) {
+      throw new AmountServiceException("Invalid debit amount: The amount must be greater than zero.");
     }
 
-    this.balance = this.balance.subtract(amount);
+    this.balance = this.balance.subtract(debitVO.amount());
   }
 
   @Nonnull

@@ -19,8 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-
 @Log4j2
 @Component
 @Transactional
@@ -56,7 +54,7 @@ public class CreditAccountCommandHandler extends CommandHandler<CreditAccountCom
     Aggregate aggregate = retrieveOrInstantiateAggregate(command.getAggregateId());
     final CreditVO creditVO = ((CreditAccountCommand) command).getCreditVO();
 
-    if (creditVO.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
+    if (creditVO.isAmountEqualOrLessThanZero()) {
       throw new AmountServiceException("Invalid credit amount: The amount must be greater than zero.");
     }
 
