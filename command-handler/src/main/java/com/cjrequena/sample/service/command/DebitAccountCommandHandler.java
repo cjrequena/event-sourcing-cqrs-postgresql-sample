@@ -21,8 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-
 @Log4j2
 @Component
 @Transactional
@@ -63,7 +61,7 @@ public class DebitAccountCommandHandler extends CommandHandler<DebitAccountComma
       throw new AmountServiceException("Invalid debit amount: The amount must be greater than zero.");
     }
 
-    if (account.getBalance().subtract(debitVO.amount()).compareTo(BigDecimal.ZERO) < 0) {
+    if (!account.hasSufficientBalance(debitVO.amount())) {
       String errorMessage = String.format("Invalid account balance for account with ID '%s': Balance cannot be negative.", account.getId());
       throw new AccountBalanceServiceException(errorMessage);
     }

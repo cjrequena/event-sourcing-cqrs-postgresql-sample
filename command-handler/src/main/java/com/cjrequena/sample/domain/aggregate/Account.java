@@ -26,6 +26,7 @@ import lombok.NonNull;
 import lombok.ToString;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.UUID;
 
 @Getter
@@ -118,6 +119,43 @@ public class Account extends Aggregate {
     }
 
     this.balance = this.balance.subtract(debitVO.amount());
+  }
+
+  /**
+   * Checks if the account balance is zero.
+   *
+   * @return true if balance is zero, false otherwise
+   */
+  public boolean isBalanceEqualToZero() {
+    return balance != null && balance.compareTo(BigDecimal.ZERO) == 0;
+  }
+
+  /**
+   * Checks if the account balance is less than zero.
+   *
+   * @return true if balance is zero, false otherwise
+   */
+  public boolean isBalanceLessThanZero() {
+    return balance != null && balance.compareTo(BigDecimal.ZERO) < 0;
+  }
+
+  /**
+   * Checks if the account has sufficient balance for a given amount.
+   *
+   * @param amount the amount to check
+   * @return true if balance is sufficient, false otherwise
+   */
+  public boolean hasSufficientBalance(BigDecimal amount) {
+    return balance != null && amount != null && balance.compareTo(amount) >= 0;
+  }
+
+  /**
+   * Gets the balance as a formatted string for display purposes.
+   *
+   * @return formatted balance string
+   */
+  public String getFormattedBalance() {
+    return balance != null ? balance.setScale(2, RoundingMode.HALF_UP).toString() : "0.00";
   }
 
   @Nonnull

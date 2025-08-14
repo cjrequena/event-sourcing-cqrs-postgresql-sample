@@ -18,8 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-
 @Log4j2
 @Component
 @Transactional
@@ -47,7 +45,7 @@ public class CreateAccountCommandHandler extends CommandHandler<CreateAccountCom
     AccountVO accountVO = ((CreateAccountCommand) command).getAccountVO();
 
     // Validate account balance
-    if (accountVO.balance().compareTo(BigDecimal.ZERO) < 0) {
+    if (accountVO.isBalanceLessThanZero()) {
       throw new AccountBalanceServiceException(
         String.format("Invalid account balance for account ID %s: Balance cannot be negative.", accountVO.id())
       );

@@ -1,5 +1,6 @@
 package com.cjrequena.sample.domain.vo;
 
+import com.cjrequena.sample.exception.service.AccountBalanceServiceException;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -62,7 +63,7 @@ public record AccountVO(
     } else {
       balance = balance.setScale(2, RoundingMode.HALF_UP);
       if (balance.compareTo(BigDecimal.ZERO) < 0) {
-        throw new IllegalArgumentException("Account balance cannot be negative");
+        throw new AccountBalanceServiceException("Account balance cannot be negative");
       }
     }
   }
@@ -110,8 +111,17 @@ public record AccountVO(
    *
    * @return true if balance is zero, false otherwise
    */
-  public boolean isZeroBalance() {
+  public boolean isBalanceEqualToZero() {
     return balance != null && balance.compareTo(BigDecimal.ZERO) == 0;
+  }
+
+  /**
+   * Checks if the account balance is less than zero.
+   *
+   * @return true if balance is zero, false otherwise
+   */
+  public boolean isBalanceLessThanZero() {
+    return balance != null && balance.compareTo(BigDecimal.ZERO) < 0;
   }
 
   /**
