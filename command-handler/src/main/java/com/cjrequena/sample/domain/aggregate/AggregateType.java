@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public enum AggregateType {
 
-  ACCOUNT_AGGREGATE(AccountAggregate.class, "ACCOUNT_AGGREGATE");
+  ACCOUNT_AGGREGATE(Account.class, "ACCOUNT_AGGREGATE");
 
   private final Class<? extends Aggregate> clazz;
   private final String type;

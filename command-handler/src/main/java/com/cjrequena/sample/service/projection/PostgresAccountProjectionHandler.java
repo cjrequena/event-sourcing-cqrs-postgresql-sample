@@ -2,7 +2,6 @@ package com.cjrequena.sample.service.projection;
 
 import com.cjrequena.eventstore.sample.domain.aggregate.Aggregate;
 import com.cjrequena.sample.domain.aggregate.Account;
-import com.cjrequena.sample.domain.aggregate.AccountAggregate;
 import com.cjrequena.sample.domain.aggregate.AggregateType;
 import com.cjrequena.sample.entity.postgresql.AccountEntity;
 import com.cjrequena.sample.service.AccountService;
@@ -23,7 +22,7 @@ public class PostgresAccountProjectionHandler implements ProjectionHandler {
   @Override
   public void handle(Aggregate aggregate) {
     log.debug("Saving or Updating read model for aggregate {}", aggregate);
-    final Account account = ((AccountAggregate) aggregate).getAccount();
+    final Account account = ((Account) aggregate);
     AccountEntity accountEntity = AccountEntity.builder()
       .id(account.getId())
       .owner(account.getOwner())

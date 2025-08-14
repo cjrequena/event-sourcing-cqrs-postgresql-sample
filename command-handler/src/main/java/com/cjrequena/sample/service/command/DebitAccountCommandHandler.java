@@ -7,7 +7,6 @@ import com.cjrequena.eventstore.sample.exception.service.EventStoreOptimisticCon
 import com.cjrequena.eventstore.sample.service.AggregateFactory;
 import com.cjrequena.eventstore.sample.service.EventStoreService;
 import com.cjrequena.sample.domain.aggregate.Account;
-import com.cjrequena.sample.domain.aggregate.AccountAggregate;
 import com.cjrequena.sample.domain.aggregate.AggregateType;
 import com.cjrequena.sample.domain.command.DebitAccountCommand;
 import com.cjrequena.sample.domain.vo.DebitVO;
@@ -57,7 +56,7 @@ public class DebitAccountCommandHandler extends CommandHandler<DebitAccountComma
 
     // Get the current aggregate.
     Aggregate aggregate = retrieveOrInstantiateAggregate(command.getAggregateId());
-    final Account account = ((AccountAggregate) aggregate).getAccount();
+    final Account account = ((Account) aggregate);
     final DebitVO debitVO = ((DebitAccountCommand) command).getDebitVO();
 
     if (debitVO.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
