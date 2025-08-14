@@ -1,4 +1,4 @@
-package com.cjrequena.sample.component.command;
+package com.cjrequena.sample.service.command;
 
 import com.cjrequena.eventstore.sample.configuration.EventStoreConfigurationProperties;
 import com.cjrequena.eventstore.sample.domain.aggregate.Aggregate;
@@ -8,10 +8,10 @@ import com.cjrequena.eventstore.sample.service.AggregateFactory;
 import com.cjrequena.eventstore.sample.service.EventStoreService;
 import com.cjrequena.sample.domain.aggregate.AggregateType;
 import com.cjrequena.sample.domain.command.CreateAccountCommand;
+import com.cjrequena.sample.domain.vo.AccountVO;
 import com.cjrequena.sample.exception.service.AccountBalanceServiceException;
 import com.cjrequena.sample.exception.service.OptimisticConcurrencyServiceException;
 import com.cjrequena.sample.mapper.EventMapper;
-import com.cjrequena.sample.vo.AccountVO;
 import jakarta.annotation.Nonnull;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;

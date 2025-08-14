@@ -1,4 +1,4 @@
-package com.cjrequena.sample.component.event;
+package com.cjrequena.sample.service.event;
 
 import com.cjrequena.eventstore.sample.configuration.EventStoreConfigurationProperties;
 import com.cjrequena.eventstore.sample.domain.aggregate.Aggregate;

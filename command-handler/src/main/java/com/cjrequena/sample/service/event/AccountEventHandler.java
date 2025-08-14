@@ -1,13 +1,13 @@
-package com.cjrequena.sample.component.event;
+package com.cjrequena.sample.service.event;
 
 import com.cjrequena.eventstore.sample.configuration.EventStoreConfigurationProperties;
 import com.cjrequena.eventstore.sample.domain.event.Event;
 import com.cjrequena.eventstore.sample.entity.EventEntity;
 import com.cjrequena.eventstore.sample.service.AggregateFactory;
 import com.cjrequena.eventstore.sample.service.EventStoreService;
-import com.cjrequena.sample.component.projection.ProjectionHandler;
 import com.cjrequena.sample.domain.aggregate.AggregateType;
 import com.cjrequena.sample.mapper.EventMapper;
+import com.cjrequena.sample.service.projection.ProjectionHandler;
 import jakarta.annotation.Nonnull;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;

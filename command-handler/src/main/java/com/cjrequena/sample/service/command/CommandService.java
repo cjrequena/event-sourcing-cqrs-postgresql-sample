@@ -1,10 +1,9 @@
-package com.cjrequena.sample.service;
+package com.cjrequena.sample.service.command;
 
 import com.cjrequena.eventstore.sample.domain.aggregate.Aggregate;
 import com.cjrequena.eventstore.sample.domain.command.Command;
-import com.cjrequena.sample.component.command.CommandHandler;
-import com.cjrequena.sample.component.projection.ProjectionHandler;
 import com.cjrequena.sample.exception.service.CommandHandlerNotFoundServiceException;
+import com.cjrequena.sample.service.projection.ProjectionHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +16,12 @@ import java.util.List;
 @Service
 @Transactional
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class CommandHandlerService {
+public class CommandService {
 
   private final List<CommandHandler<? extends Command>> commandHandlers;
   private final List<ProjectionHandler> projectionHandlers;
 
-  public void handler(Command command) {
+  public void process(Command command) {
     log.info("Processing command {}", command);
 
     commandHandlers.stream()

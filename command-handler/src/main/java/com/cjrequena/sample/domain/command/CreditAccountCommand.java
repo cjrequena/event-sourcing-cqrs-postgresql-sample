@@ -2,7 +2,7 @@ package com.cjrequena.sample.domain.command;
 
 import com.cjrequena.eventstore.sample.domain.command.Command;
 import com.cjrequena.sample.domain.aggregate.AggregateType;
-import com.cjrequena.sample.vo.CreditVO;
+import com.cjrequena.sample.domain.vo.CreditVO;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;

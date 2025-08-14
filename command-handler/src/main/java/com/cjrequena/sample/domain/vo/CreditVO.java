@@ -1,4 +1,4 @@
-package com.cjrequena.sample.vo;
+package com.cjrequena.sample.domain.vo;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

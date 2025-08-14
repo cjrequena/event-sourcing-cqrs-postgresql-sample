@@ -140,7 +140,7 @@ eventstore:
     ACCOUNT_AGGREGATE:
       enabled: true
       interval: 5
-  # Available subscription: polling, postgres-channel, event handler.
+  # Available subscription: polling, postgres-channel, event process.
   subscription:
     enabled: true
     #name: booking-order-subscription-001

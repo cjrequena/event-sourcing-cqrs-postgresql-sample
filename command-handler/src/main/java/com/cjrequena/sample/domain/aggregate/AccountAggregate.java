@@ -8,7 +8,7 @@ import com.cjrequena.sample.domain.command.DebitAccountCommand;
 import com.cjrequena.sample.domain.event.AccountCreatedEvent;
 import com.cjrequena.sample.domain.event.AccountCreditedEvent;
 import com.cjrequena.sample.domain.event.AccountDebitedEvent;
-import com.cjrequena.sample.vo.EventExtensionVO;
+import com.cjrequena.sample.domain.vo.EventExtensionVO;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;

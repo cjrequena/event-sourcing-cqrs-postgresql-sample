@@ -2,7 +2,7 @@ package com.cjrequena.sample.domain.command;
 
 import com.cjrequena.eventstore.sample.domain.command.Command;
 import com.cjrequena.sample.domain.aggregate.AggregateType;
-import com.cjrequena.sample.vo.DebitVO;
+import com.cjrequena.sample.domain.vo.DebitVO;
 import jakarta.annotation.Nonnull;
 import lombok.Builder;
 import lombok.Getter;

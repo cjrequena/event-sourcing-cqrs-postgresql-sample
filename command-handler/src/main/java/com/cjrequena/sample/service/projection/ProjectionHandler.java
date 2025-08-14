@@ -1,4 +1,4 @@
-package com.cjrequena.sample.component.projection;
+package com.cjrequena.sample.service.projection;
 
 import com.cjrequena.eventstore.sample.domain.aggregate.Aggregate;
 import com.cjrequena.sample.domain.aggregate.AggregateType;
