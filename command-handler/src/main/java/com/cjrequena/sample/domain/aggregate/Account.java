@@ -84,9 +84,9 @@ public class Account extends Aggregate {
   }
 
   public void applyEvent(AccountCreatedEvent event) {
-    this.id = event.getData().getId();
-    this.owner = event.getData().getOwner();
-    this.balance = event.getData().getBalance();
+    this.id = event.getData().id();
+    this.owner = event.getData().owner();
+    this.balance = event.getData().balance();
   }
 
   public void applyEvent(AccountCreditedEvent event) {

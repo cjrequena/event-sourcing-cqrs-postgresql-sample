@@ -17,17 +17,13 @@ public class CreateAccountCommand extends Command {
   private final AccountVO accountVO;
 
   @Builder
-  public CreateAccountCommand(UUID aggregateId, @NotNull AccountVO accountVO) {
-    super(generateAggregateId(), AggregateType.ACCOUNT_AGGREGATE.getType());
+  public CreateAccountCommand(@NotNull AccountVO accountVO) {
+    super(UUID.randomUUID(), AggregateType.ACCOUNT_AGGREGATE.getType());
     this.accountVO = AccountVO
       .builder()
       .id(getAggregateId())
-      .owner(accountVO.getOwner())
-      .balance(accountVO.getBalance())
+      .owner(accountVO.owner())
+      .balance(accountVO.balance())
       .build();
-  }
-
-  private static UUID generateAggregateId() {
-    return UUID.randomUUID();
   }
 }

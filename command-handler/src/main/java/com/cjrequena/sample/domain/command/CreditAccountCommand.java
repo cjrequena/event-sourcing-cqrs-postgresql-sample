@@ -22,7 +22,4 @@ public class CreditAccountCommand extends Command {
     this.creditVO = creditVO;
   }
 
-  private static UUID generateAggregateId() {
-    return UUID.randomUUID();
-  }
 }

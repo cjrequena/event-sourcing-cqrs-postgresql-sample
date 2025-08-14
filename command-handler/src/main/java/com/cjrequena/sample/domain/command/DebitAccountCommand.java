@@ -22,7 +22,4 @@ public class DebitAccountCommand extends Command {
     this.debitVO = debitVO;
   }
 
-  private static UUID generateAggregateId() {
-    return UUID.randomUUID();
-  }
 }

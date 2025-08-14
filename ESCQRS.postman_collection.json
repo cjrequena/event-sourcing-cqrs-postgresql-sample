@@ -1,0 +1,171 @@
+{
+	"info": {
+		"_postman_id": "ebcf41ef-2b72-4b54-972d-f1d1d5a32209",
+		"name": "ESCQRS",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "213723"
+	},
+	"item": [
+		{
+			"name": "command :: debit",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"amount\": 0.01\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:6080/api/command-handler/accounts/fd1a5387-3378-4c63-a8d4-e455fc7fb5c8/debit",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "6080",
+					"path": [
+						"api",
+						"command-handler",
+						"accounts",
+						"fd1a5387-3378-4c63-a8d4-e455fc7fb5c8",
+						"debit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "command :: credit",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"amount\": 10.1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:6080/api/command-handler/accounts/94d170ba-e2f2-4471-a0f4-99ee0f14ebec/credit",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "6080",
+					"path": [
+						"api",
+						"command-handler",
+						"accounts",
+						"94d170ba-e2f2-4471-a0f4-99ee0f14ebec",
+						"credit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "command :: create",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"owner\": \"{{$randomFullName}}\",\n  \"balance\": \"{{$randomPrice}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:6080/api/command-handler/accounts",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "6080",
+					"path": [
+						"api",
+						"command-handler",
+						"accounts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "retrieve :: id",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"amount\": 1000\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5080/api/query-handler/accounts/34df7e5f-d3db-4447-a8d6-72ddc9ba0e7b",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5080",
+					"path": [
+						"api",
+						"query-handler",
+						"accounts",
+						"34df7e5f-d3db-4447-a8d6-72ddc9ba0e7b"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "retrieve",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"amount\": 1000\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5080/api/query-handler/accounts",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5080",
+					"path": [
+						"api",
+						"query-handler",
+						"accounts"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

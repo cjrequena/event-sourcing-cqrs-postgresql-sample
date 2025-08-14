@@ -47,9 +47,9 @@ public class CreateAccountCommandHandler extends CommandHandler<CreateAccountCom
     AccountVO accountVO = ((CreateAccountCommand) command).getAccountVO();
 
     // Validate account balance
-    if (accountVO.getBalance().compareTo(BigDecimal.ZERO) < 0) {
+    if (accountVO.balance().compareTo(BigDecimal.ZERO) < 0) {
       throw new AccountBalanceServiceException(
-        String.format("Invalid account balance for account ID %s: Balance cannot be negative.", accountVO.getId())
+        String.format("Invalid account balance for account ID %s: Balance cannot be negative.", accountVO.id())
       );
     }
 
