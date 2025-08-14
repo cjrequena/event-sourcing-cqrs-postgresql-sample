@@ -1,35 +1,31 @@
 package com.cjrequena.sample.domain.vo;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.cjrequena.sample.exception.service.IllegalArgumentServiceException;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.extern.jackson.Jacksonized;
 
 import java.io.Serializable;
 
-@Getter
 @Builder
-//@AllArgsConstructor
-@ToString
-@JsonPropertyOrder(value = {
-  "trace_id"
-})
-public class EventExtensionVO implements Serializable {
-
-  @JsonProperty(value = "trace_id")
-  private final String traceId;
-
-  // Constructor for deserialization
-  @JsonCreator
-  public EventExtensionVO(@JsonProperty("trace_id") String traceId) {
-    this.traceId = traceId;
+@Jacksonized
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+public record EventExtensionVO(
+  @NotNull
+  String traceId
+) implements Serializable {
+  /**
+   * Canonical constructor with validation and data normalization.
+   */
+  public EventExtensionVO {
+    if (traceId == null) {
+      throw new IllegalArgumentServiceException("TraceId is required");
+    }
   }
-
-  // You can add more custom fields if needed
-  // private String customField;
-
-  // No setters to maintain immutability
-
 }
