@@ -1,6 +1,8 @@
 # event-sourcing-cqrs-postgresql-sample
 
-event-sourcing-cqrs-postgresql-sample
+![image](./image.png) 
+
+---
 
 This is an implementation based
 on [Event Sourcing with PostgreSQL](https://github.com/eugene-khyst/postgresql-event-sourcing)
