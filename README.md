@@ -1,6 +1,6 @@
 # event-sourcing-cqrs-postgresql-sample
 
-![image](./image.png) 
+![image](./img.png) 
 
 ---
 
