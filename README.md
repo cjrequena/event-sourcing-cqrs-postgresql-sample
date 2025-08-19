@@ -192,3 +192,4 @@ loosely coupled communication, enhancing the flexibility and responsiveness of t
 ### References
 
 [Event Sourcing with PostgreSQL](https://github.com/eugene-khyst/postgresql-event-sourcing)
+[Differences Between DTO and Aggregate in Domain-Driven](https://medium.com/tuanhdotnet/differences-between-dto-and-aggregate-in-domain-driven-design-best-practices-explained-ebdccd359378)
