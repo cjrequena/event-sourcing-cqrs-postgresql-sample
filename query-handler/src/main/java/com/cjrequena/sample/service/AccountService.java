@@ -33,7 +33,7 @@ public class AccountService {
       log.error("Account {} does not exist", accountId);
       throw new AccountNotFoundServiceException("Bank account {} does not exist");
     }
-    return accountMapper.mapToDTO(entity.get());
+    return accountMapper.toDTO(entity.get());
     //--
   }
 
@@ -41,7 +41,7 @@ public class AccountService {
     //--
     try {
       final List<AccountEntity> bankAccountEntities = Streamable.of(this.accountRepository.findAll()).toList();
-      return bankAccountEntities.stream().map(accountMapper::mapToDTO).collect(Collectors.toList());
+      return bankAccountEntities.stream().map(accountMapper::toDTO).collect(Collectors.toList());
     } catch (Exception ex) {
       log.error(ex.getMessage(), ex);
       throw ex;
