@@ -4,13 +4,20 @@
 
 ---
 
+## **Source**
+
+- [Event Sourcing with PostgreSQL](https://github.com/eugene-khyst/postgresql-event-sourcing)
+- [Differences Between DTO and Aggregate in Domain-Driven](https://medium.com/tuanhdotnet/differences-between-dto-and-aggregate-in-domain-driven-design-best-practices-explained-ebdccd359378)
+
+---
+
+## **Overview**
+
 This is an implementation based
 on [Event Sourcing with PostgreSQL](https://github.com/eugene-khyst/postgresql-event-sourcing)
 but using spring data jpa with native queries and also separating the command handler, event handler and query handler
 in three isolated
 microservice modules. Also, the event store is in a separated schema from the projection database.
-
----
 
 Event Sourcing, CQRS (Command Query Responsibility Segregation), and event store are closely related software patterns
 that together form a powerful way to build complex, high-performance, and resilient applications. Let's break down each
@@ -87,7 +94,7 @@ rather than update or delete them, which aligns with the principles of Event Sou
 
 ---
 
-### **Detailed Breakdown of Related Topics**
+## **Detailed Breakdown of Related Topics**
 
 1. **Command**
     - A command represents a specific action or operation requested by a user or system, such as "CreateOrder" or "
@@ -158,7 +165,7 @@ rather than update or delete them, which aligns with the principles of Event Sou
 
 ---
 
-### **How These Patterns Work Together**
+## **How These Patterns Work Together**
 
 1. **Command-Event Flow**:
     - When a command is issued, it’s handled by a Command Handler, which uses aggregates to validate and apply business
@@ -189,7 +196,3 @@ allow for efficient data access and performance. Event Subscriptions and Integra
 and
 loosely coupled communication, enhancing the flexibility and responsiveness of the entire system.
 
-### References
-
-- [Event Sourcing with PostgreSQL](https://github.com/eugene-khyst/postgresql-event-sourcing)
-- [Differences Between DTO and Aggregate in Domain-Driven](https://medium.com/tuanhdotnet/differences-between-dto-and-aggregate-in-domain-driven-design-best-practices-explained-ebdccd359378)
