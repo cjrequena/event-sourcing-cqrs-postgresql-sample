@@ -1,6 +1,7 @@
 package com.cjrequena.sample.service.event;
 
 import com.cjrequena.eventstore.sample.configuration.EventStoreConfigurationProperties;
+import com.cjrequena.eventstore.sample.domain.aggregate.Aggregate;
 import com.cjrequena.eventstore.sample.domain.event.Event;
 import com.cjrequena.eventstore.sample.entity.EventEntity;
 import com.cjrequena.eventstore.sample.service.AggregateFactory;
@@ -15,6 +16,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Component
 @Transactional
@@ -46,6 +50,19 @@ public class AccountEventHandler extends AsyncEventHandler {
       }
       // Here is to set the business logic to send the incoming event through an integration channel, e.g. Kafka, SNS, SQS, AWS Lambda, Webhook, etc.
     }
+
+    // Save or Update the projection database
+    // If you do it here, then remove the projection code from CommandBusService
+    // If you do it here, then for a new subscription this will recreate the whole projectionDB for this specific aggregate
+    //    events.parallelStream()
+    //      .map(Event::getAggregateId)
+    //      .distinct()
+    //      .forEach(aggregateId -> {
+    //        final Aggregate aggregate = retrieveOrInstantiateAggregate(aggregateId);
+    //        projectionHandlers.stream()
+    //          .filter(handler -> handler.getAggregateType().getType().equals(aggregate.getAggregateType()))
+    //          .forEach(handler -> handler.handle(aggregate));
+    //      });
 
   }
 

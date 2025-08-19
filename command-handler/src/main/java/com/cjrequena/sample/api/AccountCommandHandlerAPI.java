@@ -22,7 +22,7 @@ import com.cjrequena.sample.exception.service.AmountServiceException;
 import com.cjrequena.sample.exception.service.CommandHandlerNotFoundServiceException;
 import com.cjrequena.sample.mapper.AccountMapper;
 import com.cjrequena.sample.mapper.EventMapper;
-import com.cjrequena.sample.service.command.CommandService;
+import com.cjrequena.sample.service.command.CommandBusService;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -44,7 +44,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class AccountCommandHandlerAPI {
 
-  private final CommandService commandService;
+  private final CommandBusService commandBusService;
   private final EventStoreService eventStoreService;
   private final AggregateFactory aggregateFactory;
   private final EventMapper eventMapper;
@@ -60,7 +60,7 @@ public class AccountCommandHandlerAPI {
       Command command = CreateAccountCommand.builder()
         .accountVO(accountMapper.toAccountVO(accountDTO))
         .build();
-      this.commandService.process(command);
+      this.commandBusService.handle(command);
       return new ResponseEntity<>("Create successful", HttpStatus.OK);
     } catch (EventStoreOptimisticConcurrencyServiceException ex) {
       throw new ConflictApiException(ex.getMessage());
@@ -83,7 +83,7 @@ public class AccountCommandHandlerAPI {
           .amount(creditDTO.getAmount())
           .build())
         .build();
-      this.commandService.process(command);
+      this.commandBusService.handle(command);
       return new ResponseEntity<>("Credit successful", HttpStatus.OK);
     } catch (EventStoreOptimisticConcurrencyServiceException ex) {
       throw new ConflictApiException(ex.getMessage());
@@ -106,7 +106,7 @@ public class AccountCommandHandlerAPI {
           .amount(debitDTO.getAmount())
           .build())
         .build();
-      this.commandService.process(command);
+      this.commandBusService.handle(command);
       return new ResponseEntity<>("Debit successful", HttpStatus.OK);
     } catch (EventStoreOptimisticConcurrencyServiceException ex) {
       throw new ConflictApiException(ex.getMessage());

@@ -16,12 +16,12 @@ import java.util.List;
 @Service
 @Transactional
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class CommandService {
+public class CommandBusService {
 
   private final List<CommandHandler<? extends Command>> commandHandlers;
   private final List<ProjectionHandler> projectionHandlers;
 
-  public void process(Command command) {
+  public void handle(Command command) {
     log.info("Processing command {}", command);
 
     commandHandlers.stream()
@@ -33,7 +33,7 @@ public class CommandService {
         final Aggregate aggregate = commandHandler.handle(command);
 
         // Save or Update the projection database
-        projectionHandlers.stream()
+        projectionHandlers.parallelStream()
           .filter(handler -> handler.getAggregateType().getType().equals(aggregate.getAggregateType()))
           .forEach(handler -> handler.handle(aggregate));
 
