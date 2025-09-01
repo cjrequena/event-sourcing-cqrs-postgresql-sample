@@ -2,6 +2,7 @@ package com.cjrequena.sample.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -11,6 +12,9 @@ import lombok.experimental.Accessors;
 import lombok.extern.jackson.Jacksonized;
 
 import java.math.BigDecimal;
+import java.util.UUID;
+
+import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 
 @Data
 @Builder
@@ -24,6 +28,12 @@ import java.math.BigDecimal;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Schema(description = "Represents a credit transaction")
 public class CreditDTO {
+
+  @NotNull
+  @JsonProperty
+  @Schema(requiredMode = REQUIRED, example = "304bfb2a-7944-4eb5-baeb-cb347bfcf812", description = "The account unique identifier.")
+  private UUID accountId;
+
 
   @NotNull(message = "Amount is required")
   @Schema(description = "The transaction amount", example = "100.00")

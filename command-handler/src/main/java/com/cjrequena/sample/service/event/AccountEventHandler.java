@@ -1,7 +1,6 @@
 package com.cjrequena.sample.service.event;
 
 import com.cjrequena.eventstore.sample.configuration.EventStoreConfigurationProperties;
-import com.cjrequena.eventstore.sample.domain.aggregate.Aggregate;
 import com.cjrequena.eventstore.sample.domain.event.Event;
 import com.cjrequena.eventstore.sample.entity.EventEntity;
 import com.cjrequena.eventstore.sample.service.AggregateFactory;
@@ -16,9 +15,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Component
 @Transactional

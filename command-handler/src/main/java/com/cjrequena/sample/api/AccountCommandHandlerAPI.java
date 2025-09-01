@@ -72,10 +72,11 @@ public class AccountCommandHandlerAPI {
   }
 
   @SneakyThrows
-  @PutMapping("/accounts/{accountId}/credit")
-  public ResponseEntity<String> creditAccount(@PathVariable("accountId") UUID accountId, @RequestBody CreditDTO creditDTO) {
+  @PutMapping("/accounts/credit")
+  public ResponseEntity<String> creditAccount( @RequestBody CreditDTO creditDTO) {
     // Logic to handle crediting the account
     try {
+      final UUID accountId = creditDTO.getAccountId();
       Command command = CreditAccountCommand.builder()
         .aggregateId(accountId)
         .creditVO(CreditVO.builder()
@@ -95,10 +96,11 @@ public class AccountCommandHandlerAPI {
   }
 
   @SneakyThrows
-  @PutMapping("/accounts/{accountId}/debit")
-  public ResponseEntity<String> debitAccount(@PathVariable("accountId") UUID accountId, @RequestBody DebitDTO debitDTO) {
+  @PutMapping("/accounts/debit")
+  public ResponseEntity<String> debitAccount(@RequestBody DebitDTO debitDTO) {
     // Logic to handle debiting the account
     try {
+      final UUID accountId = debitDTO.getAccountId();
       Command command = DebitAccountCommand.builder()
         .aggregateId(accountId)
         .debitVO(DebitVO.builder()
