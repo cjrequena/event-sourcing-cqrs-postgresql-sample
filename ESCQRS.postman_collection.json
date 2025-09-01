@@ -13,7 +13,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"amount\": 0.01\n}",
+					"raw": "{\n  \"account_id\": \"2c04abe1-1c25-4a69-b054-7ab5beb20082\",\n  \"amount\": 0.01\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -21,7 +21,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:6080/api/command-handler/accounts/fd1a5387-3378-4c63-a8d4-e455fc7fb5c8/debit",
+					"raw": "http://localhost:6080/api/command-handler/accounts/debit",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -31,7 +31,6 @@
 						"api",
 						"command-handler",
 						"accounts",
-						"fd1a5387-3378-4c63-a8d4-e455fc7fb5c8",
 						"debit"
 					]
 				}
@@ -45,7 +44,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"amount\": 10.1\n}",
+					"raw": "{\n  \"account_id\": \"2c04abe1-1c25-4a69-b054-7ab5beb20082\",\n  \"amount\": 0.01\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -53,7 +52,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:6080/api/command-handler/accounts/94d170ba-e2f2-4471-a0f4-99ee0f14ebec/credit",
+					"raw": "http://localhost:6080/api/command-handler/accounts/credit",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -63,7 +62,6 @@
 						"api",
 						"command-handler",
 						"accounts",
-						"94d170ba-e2f2-4471-a0f4-99ee0f14ebec",
 						"credit"
 					]
 				}
@@ -118,7 +116,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:5080/api/query-handler/accounts/34df7e5f-d3db-4447-a8d6-72ddc9ba0e7b",
+					"raw": "http://localhost:5080/api/query-handler/accounts/3a9dca2a-5369-4a23-9966-ba76d768b51a",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -128,7 +126,7 @@
 						"api",
 						"query-handler",
 						"accounts",
-						"34df7e5f-d3db-4447-a8d6-72ddc9ba0e7b"
+						"3a9dca2a-5369-4a23-9966-ba76d768b51a"
 					]
 				}
 			},
