@@ -1,10 +1,10 @@
 package com.cjrequena.sample.service;
 
-import com.cjrequena.sample.dto.AccountDTO;
-import com.cjrequena.sample.entity.AccountEntity;
-import com.cjrequena.sample.exception.service.AccountNotFoundServiceException;
-import com.cjrequena.sample.mapper.AccountMapper;
-import com.cjrequena.sample.repository.AccountRepository;
+import com.cjrequena.sample.controller.dto.AccountDTO;
+import com.cjrequena.sample.domain.exception.AccountNotFoundException;
+import com.cjrequena.sample.domain.mapper.AccountMapper;
+import com.cjrequena.sample.persistence.entity.AccountEntity;
+import com.cjrequena.sample.persistence.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
@@ -31,7 +31,7 @@ public class AccountService {
     Optional<AccountEntity> entity = this.accountRepository.findById(accountId);
     if (entity.isEmpty()) {
       log.error("Account {} does not exist", accountId);
-      throw new AccountNotFoundServiceException("Bank account {} does not exist");
+      throw new AccountNotFoundException("Bank account {} does not exist");
     }
     return accountMapper.toDTO(entity.get());
     //--

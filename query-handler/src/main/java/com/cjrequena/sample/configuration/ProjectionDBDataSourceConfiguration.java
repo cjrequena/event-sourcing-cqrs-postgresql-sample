@@ -22,7 +22,7 @@ import javax.sql.DataSource;
 @EnableJpaRepositories(
   entityManagerFactoryRef = "entityManagerFactoryProjection",
   transactionManagerRef = "transactionManagerProjection",
-  basePackages = {"com.cjrequena.sample.repository"}
+  basePackages = {"com.cjrequena.sample.persistence.repository"}
 )
 public class ProjectionDBDataSourceConfiguration {
 
@@ -39,7 +39,7 @@ public class ProjectionDBDataSourceConfiguration {
     EntityManagerFactoryBuilder builder, @Qualifier("dataSourceProjection") DataSource dataSource) {
     return builder
       .dataSource(dataSource)
-      .packages("com.cjrequena.sample.entity")
+      .packages("com.cjrequena.sample.persistence.entity")
       .persistenceUnit("projectionDB")
       .build();
   }
