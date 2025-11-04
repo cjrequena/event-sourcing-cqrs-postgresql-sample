@@ -5,7 +5,7 @@ import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRep
 
 @Configuration
 @EnableReactiveMongoRepositories(
-  basePackages = {"com.cjrequena.sample.repository.mongo"}
+  basePackages = {"com.cjrequena.sample.persistence.repository.mongo"}
 )
 public class ProjectionDBMongoConfiguration {
 }

@@ -1,9 +1,9 @@
 package com.cjrequena.sample.service;
 
-import com.cjrequena.sample.entity.mongo.MongoAccountEntity;
-import com.cjrequena.sample.entity.postgresql.AccountEntity;
-import com.cjrequena.sample.repository.mongo.MongoAccountRepository;
-import com.cjrequena.sample.repository.postgresql.AccountRepository;
+import com.cjrequena.sample.persistence.entity.mongo.MongoAccountEntity;
+import com.cjrequena.sample.persistence.entity.postgresql.AccountEntity;
+import com.cjrequena.sample.persistence.repository.mongo.MongoAccountRepository;
+import com.cjrequena.sample.persistence.repository.postgresql.AccountRepository;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;

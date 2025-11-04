@@ -2,7 +2,7 @@ package com.cjrequena.sample.service.command;
 
 import com.cjrequena.eventstore.sample.domain.aggregate.Aggregate;
 import com.cjrequena.eventstore.sample.domain.command.Command;
-import com.cjrequena.sample.exception.service.CommandHandlerNotFoundServiceException;
+import com.cjrequena.sample.domain.exception.CommandHandlerNotFoundException;
 import com.cjrequena.sample.service.projection.ProjectionHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -39,7 +39,7 @@ public class CommandBusService {
 
       }, () -> {
         log.info("No specialized handler found with {}", command.getClass().getSimpleName());
-        throw new CommandHandlerNotFoundServiceException("No specialized handler found for command: " + command.getClass().getSimpleName());
+        throw new CommandHandlerNotFoundException("No specialized handler found for command: " + command.getClass().getSimpleName());
       });
   }
 }

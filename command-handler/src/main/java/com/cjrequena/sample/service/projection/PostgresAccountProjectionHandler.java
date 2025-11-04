@@ -1,9 +1,9 @@
 package com.cjrequena.sample.service.projection;
 
 import com.cjrequena.eventstore.sample.domain.aggregate.Aggregate;
-import com.cjrequena.sample.domain.aggregate.Account;
-import com.cjrequena.sample.domain.aggregate.AggregateType;
-import com.cjrequena.sample.entity.postgresql.AccountEntity;
+import com.cjrequena.sample.domain.model.aggregate.Account;
+import com.cjrequena.sample.domain.model.aggregate.AggregateType;
+import com.cjrequena.sample.persistence.entity.postgresql.AccountEntity;
 import com.cjrequena.sample.service.AccountService;
 import jakarta.annotation.Nonnull;
 import lombok.RequiredArgsConstructor;

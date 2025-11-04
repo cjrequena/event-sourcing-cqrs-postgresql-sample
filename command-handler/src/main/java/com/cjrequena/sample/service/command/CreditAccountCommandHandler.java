@@ -6,13 +6,13 @@ import com.cjrequena.eventstore.sample.domain.command.Command;
 import com.cjrequena.eventstore.sample.exception.service.EventStoreOptimisticConcurrencyServiceException;
 import com.cjrequena.eventstore.sample.service.AggregateFactory;
 import com.cjrequena.eventstore.sample.service.EventStoreService;
-import com.cjrequena.sample.domain.aggregate.AggregateType;
-import com.cjrequena.sample.domain.command.CreditAccountCommand;
-import com.cjrequena.sample.domain.vo.CreditVO;
-import com.cjrequena.sample.exception.service.AggregateNotFoundServiceException;
-import com.cjrequena.sample.exception.service.AmountServiceException;
-import com.cjrequena.sample.exception.service.OptimisticConcurrencyServiceException;
-import com.cjrequena.sample.mapper.EventMapper;
+import com.cjrequena.sample.domain.exception.AggregateNotFoundException;
+import com.cjrequena.sample.domain.exception.AmountException;
+import com.cjrequena.sample.domain.exception.OptimisticConcurrencyException;
+import com.cjrequena.sample.domain.mapper.EventMapper;
+import com.cjrequena.sample.domain.model.aggregate.AggregateType;
+import com.cjrequena.sample.domain.model.command.CreditAccountCommand;
+import com.cjrequena.sample.domain.model.vo.CreditVO;
 import jakarta.annotation.Nonnull;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +47,7 @@ public class CreditAccountCommandHandler extends CommandHandler<CreditAccountCom
         command.getAggregateType(),
         command.getAggregateId(),
         command.getAggregateId());
-      throw new AggregateNotFoundServiceException(errorMessage);
+      throw new AggregateNotFoundException(errorMessage);
     }
 
     // Get the current aggregate.
@@ -55,7 +55,7 @@ public class CreditAccountCommandHandler extends CommandHandler<CreditAccountCom
     final CreditVO creditVO = ((CreditAccountCommand) command).getCreditVO();
 
     if (creditVO.isAmountEqualOrLessThanZero()) {
-      throw new AmountServiceException("Invalid credit amount: The amount must be greater than zero.");
+      throw new AmountException("Invalid credit amount: The amount must be greater than zero.");
     }
 
     try {
@@ -63,7 +63,7 @@ public class CreditAccountCommandHandler extends CommandHandler<CreditAccountCom
       eventStoreService.saveAggregate(aggregate);
       aggregate.markUnconfirmedEventsAsConfirmed();
     } catch (EventStoreOptimisticConcurrencyServiceException ex) {
-      throw new OptimisticConcurrencyServiceException(ex.getMessage(), ex);
+      throw new OptimisticConcurrencyException(ex.getMessage(), ex);
     }
     log.info("Successfully handled command {} for aggregate with ID {}", command.getClass().getSimpleName(), command.getAggregateId());
     return aggregate;

@@ -6,7 +6,7 @@ import com.cjrequena.eventstore.sample.repository.AggregateSnapshotRepository;
 import com.cjrequena.eventstore.sample.repository.EventRepository;
 import com.cjrequena.eventstore.sample.service.AggregateFactory;
 import com.cjrequena.eventstore.sample.service.EventStoreService;
-import com.cjrequena.sample.mapper.EventMapper;
+import com.cjrequena.sample.domain.mapper.EventMapper;
 import com.cjrequena.sample.service.command.CommandHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;

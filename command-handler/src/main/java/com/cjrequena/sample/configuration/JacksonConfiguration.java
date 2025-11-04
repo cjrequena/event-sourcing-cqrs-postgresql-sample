@@ -37,7 +37,7 @@ public class JacksonConfiguration {
     return builder;
   }
 
-  public static ObjectMapper buildPrimaryObjectMapper() {
+  public static ObjectMapper buildObjectMapper() {
     ObjectMapper objectMapper = jackson2ObjectMapperBuilder()
       .serializationInclusion(NON_NULL)
       .serializationInclusion(NON_EMPTY)
@@ -55,10 +55,10 @@ public class JacksonConfiguration {
     return objectMapper;
   }
 
-  @Bean(name = {"primaryObjectMapper"})
+  @Bean(name = {"objectMapper"})
   @Primary
-  public ObjectMapper primaryObjectMapper() {
-    return buildPrimaryObjectMapper();
+  public ObjectMapper objectMapper() {
+    return buildObjectMapper();
   }
 
 }
