@@ -3,7 +3,6 @@ package com.cjrequena.sample.service.event;
 import com.cjrequena.eventstore.sample.configuration.EventStoreConfigurationProperties;
 import com.cjrequena.eventstore.sample.domain.event.Event;
 import com.cjrequena.eventstore.sample.entity.EventEntity;
-import com.cjrequena.eventstore.sample.service.AggregateFactory;
 import com.cjrequena.eventstore.sample.service.EventStoreService;
 import com.cjrequena.sample.domain.mapper.EventMapper;
 import com.cjrequena.sample.domain.model.aggregate.AggregateType;
@@ -26,12 +25,11 @@ public class AccountEventHandler extends AsyncEventHandler {
   @Autowired
   public AccountEventHandler(
     EventStoreService eventStoreService,
-    AggregateFactory aggregateFactory,
     EventMapper eventMapper,
     EventStoreConfigurationProperties eventStoreConfigurationProperties,
     List<ProjectionHandler> projectionHandlers
   ) {
-    super(eventStoreService, aggregateFactory, eventMapper, eventStoreConfigurationProperties);
+    super(eventStoreService, eventMapper, eventStoreConfigurationProperties);
     this.projectionHandlers = projectionHandlers;
   }
 

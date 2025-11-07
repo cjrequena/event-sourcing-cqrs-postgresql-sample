@@ -2,7 +2,6 @@ package com.cjrequena.sample.controller;
 
 import com.cjrequena.eventstore.sample.domain.command.Command;
 import com.cjrequena.eventstore.sample.exception.service.EventStoreOptimisticConcurrencyServiceException;
-import com.cjrequena.eventstore.sample.service.AggregateFactory;
 import com.cjrequena.eventstore.sample.service.EventStoreService;
 import com.cjrequena.sample.controller.dto.AccountDTO;
 import com.cjrequena.sample.controller.dto.CreditDTO;
@@ -50,7 +49,6 @@ public class AccountCommandController {
 
   private final CommandBusService commandBusService;
   private final EventStoreService eventStoreService;
-  private final AggregateFactory aggregateFactory;
   private final EventMapper eventMapper;
   private final AccountMapper accountMapper;
 

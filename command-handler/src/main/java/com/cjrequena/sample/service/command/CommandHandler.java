@@ -25,7 +25,6 @@ import java.util.UUID;
 public abstract class CommandHandler<T extends Command> {
 
   protected final EventStoreService eventStoreService;
-  protected final AggregateFactory aggregateFactory;
   protected final EventMapper eventMapper;
   protected final EventStoreConfigurationProperties eventStoreConfigurationProperties;
 
@@ -59,7 +58,7 @@ public abstract class CommandHandler<T extends Command> {
 
   protected Aggregate createAndReproduceAggregate(UUID aggregateId) {
     log.info("Snapshot not found for Aggregate ID: {}. Reconstituting from events.", aggregateId);
-    Aggregate aggregate = aggregateFactory.newInstance(getAggregateType().getClazz(), aggregateId);
+    Aggregate aggregate = AggregateFactory.newInstance(getAggregateType().getClazz(), aggregateId);
     List<Event> events = retrieveEvents(aggregateId, null);
     aggregate.reproduceFromEvents(events);
     return aggregate;

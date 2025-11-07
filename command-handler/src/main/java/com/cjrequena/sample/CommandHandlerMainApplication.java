@@ -1,10 +1,8 @@
 package com.cjrequena.sample;
 
 import com.cjrequena.eventstore.sample.domain.command.Command;
-import com.cjrequena.eventstore.sample.repository.AggregateRepository;
 import com.cjrequena.eventstore.sample.repository.AggregateSnapshotRepository;
 import com.cjrequena.eventstore.sample.repository.EventRepository;
-import com.cjrequena.eventstore.sample.service.AggregateFactory;
 import com.cjrequena.eventstore.sample.service.EventStoreService;
 import com.cjrequena.sample.domain.mapper.EventMapper;
 import com.cjrequena.sample.service.command.CommandHandler;
@@ -32,12 +30,11 @@ import java.util.List;
 public class CommandHandlerMainApplication implements CommandLineRunner {
 
   private final EventRepository eventRepository;
-  private final AggregateRepository aggregateRepository;
   private final AggregateSnapshotRepository aggregateSnapshotRepository;
   private final List<CommandHandler<? extends Command>> commandHandlers;
   private final EventStoreService eventStoreService;
   private final EventMapper eventMapper;
-  private final AggregateFactory aggregateFactory;
+
 
   public static void main(String... args) {
     SpringApplication.run(CommandHandlerMainApplication.class, args);

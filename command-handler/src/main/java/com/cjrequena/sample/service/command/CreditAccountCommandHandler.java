@@ -4,7 +4,6 @@ import com.cjrequena.eventstore.sample.configuration.EventStoreConfigurationProp
 import com.cjrequena.eventstore.sample.domain.aggregate.Aggregate;
 import com.cjrequena.eventstore.sample.domain.command.Command;
 import com.cjrequena.eventstore.sample.exception.service.EventStoreOptimisticConcurrencyServiceException;
-import com.cjrequena.eventstore.sample.service.AggregateFactory;
 import com.cjrequena.eventstore.sample.service.EventStoreService;
 import com.cjrequena.sample.domain.exception.AggregateNotFoundException;
 import com.cjrequena.sample.domain.exception.AmountException;
@@ -27,10 +26,9 @@ public class CreditAccountCommandHandler extends CommandHandler<CreditAccountCom
   @Autowired
   public CreditAccountCommandHandler(
     EventStoreService eventStoreService,
-    AggregateFactory aggregateFactory,
     EventMapper eventMapper,
     EventStoreConfigurationProperties eventStoreConfigurationProperties) {
-    super(eventStoreService, aggregateFactory, eventMapper, eventStoreConfigurationProperties);
+    super(eventStoreService, eventMapper, eventStoreConfigurationProperties);
   }
 
   @Override
