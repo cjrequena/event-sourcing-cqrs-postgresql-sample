@@ -69,6 +69,72 @@ services:
       - mongo
     links:
       - mongo
+  #---------------------------------------------------------------------------------------------------------------------
+  kafka:
+    image: confluentinc/cp-kafka:${KAFKA_VERSION}
+    hostname: kafka
+    container_name: kafka
+    user: root
+    networks:
+      local-network:
+    ports:
+      - "9092:9092"
+      - "9101:9101"
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT'
+      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092'
+      KAFKA_LISTENERS: 'PLAINTEXT://kafka:29092,CONTROLLER://kafka:29093,PLAINTEXT_HOST://0.0.0.0:9092'
+      KAFKA_INTER_BROKER_LISTENER_NAME: 'PLAINTEXT'
+      KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
+      KAFKA_CONTROLLER_QUORUM_VOTERS: '1@kafka:29093'
+      KAFKA_PROCESS_ROLES: 'broker,controller'
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_JMX_PORT: 9101
+      KAFKA_JMX_HOSTNAME: localhost
+      KAFKA_CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS: kafka:29092
+      KAFKA_CONFLUENT_METRICS_REPORTER_TOPIC_REPLICAS: 1
+      KAFKA_CONFLUENT_METRICS_ENABLE: 'true'
+      KAFKA_CONFLUENT_SUPPORT_CUSTOMER_ID: anonymous
+      KAFKA_LOG_DIRS: '/var/lib/kafka/data'
+      CLUSTER_ID: ${CLUSTER_ID}
+    volumes:
+      - kafka-data:/var/lib/kafka/data
+    command: >
+      bash -c "
+      mkdir -p /var/lib/kafka/data &&
+      chown -R appuser:appuser /var/lib/kafka/data &&
+      /etc/confluent/docker/run
+      "
+  #---------------------------------------------------------------------------------------------------------------------
+  kafbat-ui:
+    image: ghcr.io/kafbat/kafka-ui:${KAFBAT_UI_VERSION}
+    container_name: kafbat-ui
+    hostname: kafbat-ui
+    depends_on:
+      - kafka
+    networks:
+      local-network:
+        ipv4_address: 171.28.1.9
+    ports:
+      - "18080:8080"
+    environment:
+      DYNAMIC_CONFIG_ENABLED: 'true'
+      # Define your Kafka cluster (this matches your setup)
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092
+      # Optional: Connect Schema Registry for Avro/Protobuf decoding
+      # KAFKA_CLUSTERS_0_SCHEMAREGISTRY: http://schema-registry:8081
+      # Optional: enable basic auth (disabled by default)
+      # AUTH_TYPE: 'LOGIN_FORM'
+      # SPRING_SECURITY_USER_NAME: admin
+      # SPRING_SECURITY_USER_PASSWORD: admin
+    volumes:
+      - kafbat-data:/etc/kafkaui
+      #- .provision/kafbat-dynamic-config.yaml:/etc/kafkaui/dynamic_config.yaml # Optional: store UI config for persistence
 #---------------------------------------------------------------------------------------------------------------------
 networks:
   local-network:
@@ -84,3 +150,5 @@ volumes:
   pgadmin-data:
   mongo-data:
   mongo-config:
+  kafka-data:
+  kafbat-data:

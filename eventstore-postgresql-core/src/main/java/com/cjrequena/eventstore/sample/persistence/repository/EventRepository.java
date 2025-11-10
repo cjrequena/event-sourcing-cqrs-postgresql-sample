@@ -1,7 +1,7 @@
-package com.cjrequena.eventstore.sample.repository;
+package com.cjrequena.eventstore.sample.persistence.repository;
 
-import com.cjrequena.eventstore.sample.entity.AbstractEventEntity;
-import com.cjrequena.eventstore.sample.entity.EventEntity;
+import com.cjrequena.eventstore.sample.persistence.entity.AbstractEventEntity;
+import com.cjrequena.eventstore.sample.persistence.entity.EventEntity;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;

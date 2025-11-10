@@ -1,6 +1,6 @@
 package com.cjrequena.sample.domain.model.command;
 
-import com.cjrequena.eventstore.sample.domain.command.Command;
+import com.cjrequena.eventstore.sample.domain.model.command.Command;
 import com.cjrequena.sample.domain.model.aggregate.AggregateType;
 import com.cjrequena.sample.domain.model.vo.AccountVO;
 import jakarta.validation.constraints.NotNull;

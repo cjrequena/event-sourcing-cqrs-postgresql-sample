@@ -1,6 +1,6 @@
 package com.cjrequena.eventstore.sample.service;
 
-import com.cjrequena.eventstore.sample.domain.aggregate.Aggregate;
+import com.cjrequena.eventstore.sample.domain.model.aggregate.Aggregate;
 import lombok.NonNull;
 
 import java.lang.reflect.Constructor;
@@ -16,7 +16,7 @@ public final class AggregateFactory {
   }
 
   /**
-   * Creates a new instance of the given {@link com.cjrequena.eventstore.sample.domain.aggregate.Aggregate} class with the specified ID.
+   * Creates a new instance of the given {@link Aggregate} class with the specified ID.
    *
    * @param aggregateClass the class type of the aggregate
    * @param aggregateId    the unique identifier for the aggregate

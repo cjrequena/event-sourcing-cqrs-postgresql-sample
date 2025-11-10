@@ -23,7 +23,7 @@ import javax.sql.DataSource;
 @EnableJpaRepositories(
   entityManagerFactoryRef = "entityManagerFactoryEventStore",
   transactionManagerRef = "transactionManagerEventStore",
-  basePackages = {"com.cjrequena.eventstore.sample.repository"}
+  basePackages = {"com.cjrequena.eventstore.sample.persistence.repository"}
 )
 public class EventStoreDataSourceConfiguration {
 
@@ -42,7 +42,7 @@ public class EventStoreDataSourceConfiguration {
     EntityManagerFactoryBuilder builder, @Qualifier("dataSourceEventStore") DataSource dataSource) {
     return builder
       .dataSource(dataSource)
-      .packages("com.cjrequena.eventstore.sample.entity")
+      .packages("com.cjrequena.eventstore.sample.persistence.entity")
       .persistenceUnit("eventstore")
       .build();
   }

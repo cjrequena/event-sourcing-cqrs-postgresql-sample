@@ -1,12 +1,14 @@
 package com.cjrequena.sample.persistence.entity.converter;
 
+import com.cjrequena.sample.shared.common.util.ApplicationContextProvider;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.AttributeConverter;
 
 public class GenericJsonConverter<T> implements AttributeConverter<T, String> {
 
-  private static final ObjectMapper objectMapper = new ObjectMapper();
+  private static final ObjectMapper objectMapper = ApplicationContextProvider.getContext().getBean("objectMapper", ObjectMapper.class);
+
   private final Class<T> clazz;
 
   public GenericJsonConverter(Class<T> clazz) {

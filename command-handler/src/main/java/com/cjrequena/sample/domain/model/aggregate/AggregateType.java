@@ -1,6 +1,6 @@
 package com.cjrequena.sample.domain.model.aggregate;
 
-import com.cjrequena.eventstore.sample.domain.aggregate.Aggregate;
+import com.cjrequena.eventstore.sample.domain.model.aggregate.Aggregate;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

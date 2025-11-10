@@ -1,10 +1,10 @@
 package com.cjrequena.sample.service.command;
 
 import com.cjrequena.eventstore.sample.configuration.EventStoreConfigurationProperties;
-import com.cjrequena.eventstore.sample.domain.aggregate.Aggregate;
-import com.cjrequena.eventstore.sample.domain.command.Command;
-import com.cjrequena.eventstore.sample.domain.event.Event;
-import com.cjrequena.eventstore.sample.exception.service.EventStoreOptimisticConcurrencyServiceException;
+import com.cjrequena.eventstore.sample.domain.exception.OptimisticConcurrencyException;
+import com.cjrequena.eventstore.sample.domain.model.aggregate.Aggregate;
+import com.cjrequena.eventstore.sample.domain.model.command.Command;
+import com.cjrequena.eventstore.sample.domain.model.event.Event;
 import com.cjrequena.eventstore.sample.service.AggregateFactory;
 import com.cjrequena.eventstore.sample.service.EventStoreService;
 import com.cjrequena.sample.domain.mapper.EventMapper;
@@ -28,7 +28,7 @@ public abstract class CommandHandler<T extends Command> {
   protected final EventMapper eventMapper;
   protected final EventStoreConfigurationProperties eventStoreConfigurationProperties;
 
-  public abstract Aggregate handle(@Nonnull Command command) throws EventStoreOptimisticConcurrencyServiceException;
+  public abstract Aggregate handle(@Nonnull Command command) throws OptimisticConcurrencyException;
 
   @Nonnull
   public abstract Class<T> getCommandType();

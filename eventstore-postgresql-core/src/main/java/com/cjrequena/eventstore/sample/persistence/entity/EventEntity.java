@@ -1,4 +1,4 @@
-package com.cjrequena.eventstore.sample.entity;
+package com.cjrequena.eventstore.sample.persistence.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

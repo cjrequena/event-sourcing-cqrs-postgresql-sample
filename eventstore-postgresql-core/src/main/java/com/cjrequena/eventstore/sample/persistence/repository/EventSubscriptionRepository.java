@@ -1,6 +1,6 @@
-package com.cjrequena.eventstore.sample.repository;
+package com.cjrequena.eventstore.sample.persistence.repository;
 
-import com.cjrequena.eventstore.sample.entity.EventSubscriptionEntity;
+import com.cjrequena.eventstore.sample.persistence.entity.EventSubscriptionEntity;
 import jakarta.annotation.Nonnull;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

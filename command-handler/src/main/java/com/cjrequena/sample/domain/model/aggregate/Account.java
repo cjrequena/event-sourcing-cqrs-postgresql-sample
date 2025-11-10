@@ -1,6 +1,6 @@
 package com.cjrequena.sample.domain.model.aggregate;
 
-import com.cjrequena.eventstore.sample.domain.aggregate.Aggregate;
+import com.cjrequena.eventstore.sample.domain.model.aggregate.Aggregate;
 import com.cjrequena.sample.domain.exception.AmountException;
 import com.cjrequena.sample.domain.model.command.CreateAccountCommand;
 import com.cjrequena.sample.domain.model.command.CreditAccountCommand;

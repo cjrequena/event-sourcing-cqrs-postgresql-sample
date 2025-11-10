@@ -1,8 +1,8 @@
 package com.cjrequena.sample;
 
-import com.cjrequena.eventstore.sample.domain.command.Command;
-import com.cjrequena.eventstore.sample.repository.AggregateSnapshotRepository;
-import com.cjrequena.eventstore.sample.repository.EventRepository;
+import com.cjrequena.eventstore.sample.domain.model.command.Command;
+import com.cjrequena.eventstore.sample.persistence.repository.AggregateSnapshotRepository;
+import com.cjrequena.eventstore.sample.persistence.repository.EventRepository;
 import com.cjrequena.eventstore.sample.service.EventStoreService;
 import com.cjrequena.sample.domain.mapper.EventMapper;
 import com.cjrequena.sample.service.command.CommandHandler;

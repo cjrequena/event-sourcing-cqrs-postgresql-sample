@@ -1,18 +1,18 @@
 package com.cjrequena.eventstore.sample.service;
 
-import com.cjrequena.eventstore.sample.common.util.JsonUtil;
 import com.cjrequena.eventstore.sample.configuration.EventStoreConfigurationProperties;
-import com.cjrequena.eventstore.sample.domain.aggregate.Aggregate;
-import com.cjrequena.eventstore.sample.domain.event.Event;
-import com.cjrequena.eventstore.sample.entity.AbstractEventEntity;
-import com.cjrequena.eventstore.sample.entity.AggregateSnapshotEntity;
-import com.cjrequena.eventstore.sample.entity.EventEntity;
-import com.cjrequena.eventstore.sample.entity.EventSubscriptionEntity;
-import com.cjrequena.eventstore.sample.exception.service.EventStoreOptimisticConcurrencyServiceException;
-import com.cjrequena.eventstore.sample.repository.AggregateRepository;
-import com.cjrequena.eventstore.sample.repository.AggregateSnapshotRepository;
-import com.cjrequena.eventstore.sample.repository.EventRepository;
-import com.cjrequena.eventstore.sample.repository.EventSubscriptionRepository;
+import com.cjrequena.eventstore.sample.domain.exception.OptimisticConcurrencyException;
+import com.cjrequena.eventstore.sample.domain.model.aggregate.Aggregate;
+import com.cjrequena.eventstore.sample.domain.model.event.Event;
+import com.cjrequena.eventstore.sample.persistence.entity.AbstractEventEntity;
+import com.cjrequena.eventstore.sample.persistence.entity.AggregateSnapshotEntity;
+import com.cjrequena.eventstore.sample.persistence.entity.EventEntity;
+import com.cjrequena.eventstore.sample.persistence.entity.EventSubscriptionEntity;
+import com.cjrequena.eventstore.sample.persistence.repository.AggregateRepository;
+import com.cjrequena.eventstore.sample.persistence.repository.AggregateSnapshotRepository;
+import com.cjrequena.eventstore.sample.persistence.repository.EventRepository;
+import com.cjrequena.eventstore.sample.persistence.repository.EventSubscriptionRepository;
+import com.cjrequena.eventstore.sample.shared.common.util.JsonUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
@@ -43,7 +43,7 @@ public class EventStoreService {
   private final ObjectMapper objectMapper;
 
   @SneakyThrows
-  public void saveAggregate(Aggregate aggregate) throws EventStoreOptimisticConcurrencyServiceException {
+  public void saveAggregate(Aggregate aggregate) throws OptimisticConcurrencyException {
     String aggregateType = aggregate.getAggregateType();
     UUID aggregateId = aggregate.getAggregateId();
 
@@ -62,7 +62,7 @@ public class EventStoreService {
         expectedAggregateVersion
       );
       log.warn(errorMessage);
-      throw new EventStoreOptimisticConcurrencyServiceException(errorMessage);
+      throw new OptimisticConcurrencyException(errorMessage);
     }
 
     // Append new events

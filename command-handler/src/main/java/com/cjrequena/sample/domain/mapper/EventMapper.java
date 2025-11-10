@@ -1,7 +1,7 @@
 package com.cjrequena.sample.domain.mapper;
 
-import com.cjrequena.eventstore.sample.domain.event.Event;
-import com.cjrequena.eventstore.sample.entity.EventEntity;
+import com.cjrequena.eventstore.sample.domain.model.event.Event;
+import com.cjrequena.eventstore.sample.persistence.entity.EventEntity;
 import com.cjrequena.sample.domain.exception.MapperException;
 import com.cjrequena.sample.domain.model.event.AccountCreatedEvent;
 import com.cjrequena.sample.domain.model.event.AccountCreditedEvent;

@@ -1,9 +1,9 @@
 package com.cjrequena.sample.service.event;
 
 import com.cjrequena.eventstore.sample.configuration.EventStoreConfigurationProperties;
-import com.cjrequena.eventstore.sample.domain.aggregate.Aggregate;
-import com.cjrequena.eventstore.sample.domain.event.Event;
-import com.cjrequena.eventstore.sample.entity.EventEntity;
+import com.cjrequena.eventstore.sample.domain.model.aggregate.Aggregate;
+import com.cjrequena.eventstore.sample.domain.model.event.Event;
+import com.cjrequena.eventstore.sample.persistence.entity.EventEntity;
 import com.cjrequena.eventstore.sample.service.AggregateFactory;
 import com.cjrequena.eventstore.sample.service.EventStoreService;
 import com.cjrequena.sample.domain.mapper.EventMapper;

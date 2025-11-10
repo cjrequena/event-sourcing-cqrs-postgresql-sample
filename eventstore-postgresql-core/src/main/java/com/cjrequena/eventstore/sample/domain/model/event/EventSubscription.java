@@ -1,4 +1,4 @@
-package com.cjrequena.eventstore.sample.domain.event;
+package com.cjrequena.eventstore.sample.domain.model.event;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Builder;

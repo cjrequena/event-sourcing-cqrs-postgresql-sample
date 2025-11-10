@@ -1,7 +1,7 @@
 package com.cjrequena.sample.controller;
 
-import com.cjrequena.eventstore.sample.domain.command.Command;
-import com.cjrequena.eventstore.sample.exception.service.EventStoreOptimisticConcurrencyServiceException;
+import com.cjrequena.eventstore.sample.domain.exception.OptimisticConcurrencyException;
+import com.cjrequena.eventstore.sample.domain.model.command.Command;
 import com.cjrequena.eventstore.sample.service.EventStoreService;
 import com.cjrequena.sample.controller.dto.AccountDTO;
 import com.cjrequena.sample.controller.dto.CreditDTO;
@@ -64,7 +64,7 @@ public class AccountCommandController {
         .build();
       this.commandBusService.handle(command);
       return new ResponseEntity<>("Create successful", HttpStatus.OK);
-    } catch (EventStoreOptimisticConcurrencyServiceException ex) {
+    } catch (OptimisticConcurrencyException ex) {
       throw new ConflictException(ex.getMessage());
     } catch (CommandHandlerNotFoundException ex) {
       throw new NotImplementedException(ex.getMessage());
@@ -88,7 +88,7 @@ public class AccountCommandController {
         .build();
       this.commandBusService.handle(command);
       return new ResponseEntity<>("Credit successful", HttpStatus.OK);
-    } catch (EventStoreOptimisticConcurrencyServiceException ex) {
+    } catch (OptimisticConcurrencyException ex) {
       throw new ConflictException(ex.getMessage());
     } catch (CommandHandlerNotFoundException ex) {
       throw new NotImplementedException(ex.getMessage());
@@ -114,7 +114,7 @@ public class AccountCommandController {
         .build();
       this.commandBusService.handle(command);
       return new ResponseEntity<>("Debit successful", HttpStatus.OK);
-    } catch (EventStoreOptimisticConcurrencyServiceException ex) {
+    } catch (OptimisticConcurrencyException ex) {
       throw new ConflictException(ex.getMessage());
     } catch (CommandHandlerNotFoundException ex) {
       throw new NotImplementedException(ex.getMessage());

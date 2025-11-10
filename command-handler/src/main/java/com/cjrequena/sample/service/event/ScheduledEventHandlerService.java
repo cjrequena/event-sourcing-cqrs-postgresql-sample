@@ -1,7 +1,7 @@
 package com.cjrequena.sample.service.event;
 
 import com.cjrequena.eventstore.sample.configuration.EventStoreConfigurationProperties;
-import com.cjrequena.eventstore.sample.entity.EventEntity;
+import com.cjrequena.eventstore.sample.persistence.entity.EventEntity;
 import com.cjrequena.eventstore.sample.service.EventStoreService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;

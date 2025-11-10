@@ -1,7 +1,7 @@
 package com.cjrequena.sample.service.command;
 
-import com.cjrequena.eventstore.sample.domain.aggregate.Aggregate;
-import com.cjrequena.eventstore.sample.domain.command.Command;
+import com.cjrequena.eventstore.sample.domain.model.aggregate.Aggregate;
+import com.cjrequena.eventstore.sample.domain.model.command.Command;
 import com.cjrequena.sample.domain.exception.CommandHandlerNotFoundException;
 import com.cjrequena.sample.service.projection.ProjectionHandler;
 import lombok.RequiredArgsConstructor;

@@ -1,6 +1,6 @@
-package com.cjrequena.eventstore.sample.repository;
+package com.cjrequena.eventstore.sample.persistence.repository;
 
-import com.cjrequena.eventstore.sample.entity.AggregateSnapshotEntity;
+import com.cjrequena.eventstore.sample.persistence.entity.AggregateSnapshotEntity;
 import jakarta.annotation.Nullable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;

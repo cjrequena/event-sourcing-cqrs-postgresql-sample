@@ -1,6 +1,6 @@
-package com.cjrequena.eventstore.sample.domain.event;
+package com.cjrequena.eventstore.sample.domain.model.event;
 
-import com.cjrequena.eventstore.sample.entity.AbstractEventEntity;
+import com.cjrequena.eventstore.sample.persistence.entity.AbstractEventEntity;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;

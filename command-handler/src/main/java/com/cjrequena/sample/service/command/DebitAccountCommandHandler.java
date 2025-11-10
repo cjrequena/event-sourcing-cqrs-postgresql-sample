@@ -1,14 +1,13 @@
 package com.cjrequena.sample.service.command;
 
 import com.cjrequena.eventstore.sample.configuration.EventStoreConfigurationProperties;
-import com.cjrequena.eventstore.sample.domain.aggregate.Aggregate;
-import com.cjrequena.eventstore.sample.domain.command.Command;
-import com.cjrequena.eventstore.sample.exception.service.EventStoreOptimisticConcurrencyServiceException;
+import com.cjrequena.eventstore.sample.domain.exception.OptimisticConcurrencyException;
+import com.cjrequena.eventstore.sample.domain.model.aggregate.Aggregate;
+import com.cjrequena.eventstore.sample.domain.model.command.Command;
 import com.cjrequena.eventstore.sample.service.EventStoreService;
 import com.cjrequena.sample.domain.exception.AccountBalanceException;
 import com.cjrequena.sample.domain.exception.AggregateNotFoundException;
 import com.cjrequena.sample.domain.exception.AmountException;
-import com.cjrequena.sample.domain.exception.OptimisticConcurrencyException;
 import com.cjrequena.sample.domain.mapper.EventMapper;
 import com.cjrequena.sample.domain.model.aggregate.Account;
 import com.cjrequena.sample.domain.model.aggregate.AggregateType;
@@ -68,8 +67,8 @@ public class DebitAccountCommandHandler extends CommandHandler<DebitAccountComma
       aggregate.applyCommand(command);
       eventStoreService.saveAggregate(aggregate);
       aggregate.markUnconfirmedEventsAsConfirmed();
-    } catch (EventStoreOptimisticConcurrencyServiceException ex) {
-      throw new OptimisticConcurrencyException(ex.getMessage(), ex);
+    } catch (OptimisticConcurrencyException ex) {
+      throw new com.cjrequena.sample.domain.exception.OptimisticConcurrencyException(ex.getMessage(), ex);
     }
     log.info("Successfully handled command {} for aggregate with ID {}", command.getClass().getSimpleName(), command.getAggregateId());
     return aggregate;

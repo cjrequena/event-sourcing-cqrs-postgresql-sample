@@ -1,6 +1,6 @@
 package com.cjrequena.sample.persistence.entity;
 
-import com.cjrequena.eventstore.sample.entity.AbstractEventEntity;
+import com.cjrequena.eventstore.sample.persistence.entity.AbstractEventEntity;
 import com.cjrequena.sample.domain.model.vo.AccountVO;
 import com.cjrequena.sample.domain.model.vo.EventExtensionVO;
 import com.cjrequena.sample.persistence.entity.converter.AccountConverter;
